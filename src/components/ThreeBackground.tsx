@@ -128,7 +128,7 @@ function AtmosphericParticles() {
 
 export default function ThreeBackground() {
   return (
-    <div className="fixed inset-0 -z-10 bg-[#F5F2ED]">
+    <div className="absolute inset-0 -z-10">
       <Canvas camera={{ position: [0, 2, 8], fov: 60 }}>
         <fog attach="fog" args={['#F5F2ED', 5, 20]} />
         <ambientLight intensity={0.5} />

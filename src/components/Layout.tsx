@@ -2,7 +2,6 @@ import { motion, useScroll, useSpring } from 'motion/react';
 import { MessageCircle } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import ThreeBackground from './ThreeBackground';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { scrollYProgress } = useScroll();
@@ -19,7 +18,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         style={{ scaleX }}
       />
       
-      <ThreeBackground />
       <Navbar />
       
       <main className="flex-grow">
