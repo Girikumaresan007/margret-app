@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Poppins", sans-serif;
+  
+  --color-gold: #B8860B; /* Deeper gold for better contrast on light bg */
+  --color-gold-light: #DAA520;
+  --color-beige: #F5F2ED;
+  --color-ink: #1A1A1A;
+  
+  --animate-float: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+:root {
+  background-color: #F5F2ED;
+  color: #1A1A1A;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: #1A1A1A;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.glass-gold {
+  background: rgba(184, 134, 11, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(184, 134, 11, 0.2);
+}
+
+.text-gradient-gold {
+  background: linear-gradient(to right, #B8860B, #DAA520, #B8860B);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F5F2ED;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D1C7B7;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B8860B;
+}
