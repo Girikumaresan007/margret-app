@@ -57,7 +57,7 @@ function DigitalWaveGrid() {
         sizeAttenuation={true}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
-        opacity={0.4}
+        opacity={0.6}
       />
     </Points>
   );
