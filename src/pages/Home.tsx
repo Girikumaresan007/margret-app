@@ -6,7 +6,7 @@ import * as Icons from 'lucide-react';
 import { SERVICES, TESTIMONIALS, PACKAGES } from '../constants';
 import { cn } from '../lib/utils';
 import { useState, useEffect } from 'react';
-import ThreeBackground from '../components/ThreeBackground';
+// import ThreeBackground from '../components/ThreeBackground';
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -33,35 +33,49 @@ export default function Home() {
   return (
     <div className="relative">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden">
-        <ThreeBackground />
-        
-        <div className="max-w-7xl mx-auto text-center z-10 sm:mt-24">
+   <section className="relative min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden">
+        {/* <ThreeBackground /> */}
+        {/* Background Image */}
+<div className="absolute inset-0 z-0">
+  <img
+    src="/hero3.jpeg"
+    alt="Hero Background"
+   className="w-full h-full object-cover object-[center_20%]"
+    fetchPriority="high"
+  />
+</div>
+
+{/* Dark Overlay */}
+<div className="absolute inset-0 bg-black/10 z-0"></div>
+
+        <div className="max-w-7xl mx-auto text-center z-10 flex flex-col items-center justify-center gap-8 -translate-y-4 md:-translate-y-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-gold/10 border border-gold/20 backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gold/20 backdrop-blur-md"
           >
             <span className="w-2 h-2 bg-gold rounded-full animate-pulse"></span>
             <span className="text-sm font-semibold text-gold tracking-wide uppercase">
               Premium Event Solutions
             </span>
           </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl md:text-7xl font-display font-extrabold mb-8 leading-tight text-ink"
+         <motion.h1
+           initial={{ opacity: 0, y: 30 }}
+           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+           className="text-4xl md:text-6xl font-display font-extrabold leading-tight text-ink"
           >
-            Professional <span className="text-gold">LED & Audio Visual</span> Solution for Every Event
-          </motion.h1>
+         <span className="text-gray-50">Professional</span>{" "}
+         <span className="text-gold-light">LED & Audio Visual</span><br />
+         <span className="text-gray-50">Solution for Every Event</span>
+         </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-gray-600 text-lg md:text-xl max-w-3xl mx-auto mb-12 leading-relaxed"
+            className="text-white text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
           >
             Transform your events with cutting-edge LED screens, crystal-clear audio systems and professional lighting solutions. Crafting unforgettable experiences.
           </motion.p>
@@ -70,14 +84,17 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 md:mt-8"
           >
             <a href="#services" className="w-full sm:w-auto bg-gold text-black px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-gold-light transition-all group">
               Explore Services <ArrowRight className="group-hover:translate-x-1 transition-transform" />
             </a>
-            <Link to="/book" className="w-full sm:w-auto glass px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-all">
-              Book Now
-            </Link>
+                 <a
+               href="#packages"
+             className="w-full sm:w-auto text-[#f7f7f7] px-8 py-4 rounded-full font-bold border border-[#FFD700]"
+             >
+             Packages
+             </a>
           </motion.div>
         </div>
 
@@ -136,105 +153,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Us */}
-      <section id="about" className="py-20 px-6 bg-[#F5F2ED]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-          {/* IMAGE */}
-          <motion.div
-            {...fadeInUp}
-            className="relative"
-          >
-
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              transition={{ duration: 0.4 }}
-              className="rounded-3xl overflow-hidden shadow-lg"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=1200"
-                alt="Margret AV Production"
-                className="w-full h-full object-cover"
-              />
-            </motion.div>
-
-            {/* FLOATING BADGE 🔥 */}
-            <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 md:-bottom-6 md:-left-6 
-         bg-gradient-to-br from-gold to-gold-light text-black 
-         px-4 py-3 sm:px-5 sm:py-4 md:px-6 md:py-4 
-        rounded-xl sm:rounded-2xl 
-        shadow-lg sm:shadow-xl 
-       max-w-[180px] sm:max-w-none"
-            >
-              <div className="text-xl sm:text-2xl md:text-3xl font-bold">15+</div>
-              <div className="text-[10px] sm:text-xs uppercase tracking-wider font-semibold">
-                Years Experience
-              </div>
-            </motion.div>
-
-          </motion.div>
-
-          {/* CONTENT */}
-          <motion.div
-            variants={staggerContainer}
-            initial="initial"
-            whileInView="whileInView"
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-
-            <motion.div {...fadeInUp} className="text-gold font-bold text-sm uppercase tracking-widest">
-              About US
-            </motion.div>
-
-            <motion.h2 {...fadeInUp} className="text-4xl md:text-5xl font-bold text-ink leading-tight">
-              Excellence in <span className="text-gold">Production</span>
-            </motion.h2>
-
-            <motion.p {...fadeInUp} className="text-gray-600 leading-relaxed">
-              Founded on the principles of technical precision and creative vision, Margret Audio Visual has grown into a premier event production partner. We don't just provide equipment; we craft atmospheres that resonate with your audience.
-            </motion.p>
-
-            <motion.p {...fadeInUp} className="text-gray-600 leading-relaxed">
-              Our team of expert engineers and designers work tirelessly to ensure every pixel is perfect and every note is pure. From intimate corporate gatherings to massive outdoor concerts, we bring the same level of dedication and high-end technology to every project.
-            </motion.p>
-
-            {/* FEATURES */}
-            <motion.div
-              variants={staggerContainer}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6"
-            >
-              {[
-                "Certified Engineers",
-                "24/7 Support",
-                "Global Reach",
-                "Latest Tech"
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  variants={fadeInUp}
-                  whileHover={{ scale: 1.05 }}
-                  className="flex items-center gap-3 p-4 rounded-xl bg-white hover:bg-gold/10 transition-all duration-300 border border-black/5"
-                >
-                  <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gold/10">
-                    <CheckCircle2 className="text-gold w-4 h-4" />
-                  </div>
-                  <span className="font-medium text-ink text-sm">
-                    {item}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
-
-          </motion.div>
-        </div>
-      </section>
 
       {/* Mission Section */}
-      <section className="py-24 px-6">
+      <section id="about" className="py-24 px-6">
         <div className="max-w-7xl mx-auto text-center mb-16">
           <motion.h2 {...fadeInUp} className="text-4xl font-bold mb-4 text-ink">Our <span className="text-gold">Mission</span></motion.h2>
           <motion.div
@@ -392,13 +314,14 @@ export default function Home() {
                     alt={service.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
+                    loading="lazy"
                   />
 
-                  {/* DARK OVERLAY (ONLY ON HOVER) */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 z-10" />
+                  {/* DARK OVERLAY (ONLY ON HOVER DETECTED BY SCREEN SIZE) */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-500 z-10" />
 
-                  {/* CONTENT (HIDDEN INITIALLY) */}
-                  <div className="absolute inset-0 p-8 flex flex-col justify-end opacity-0 group-hover:opacity-100 transition-all duration-500 z-20">
+                  {/* CONTENT (VISIBLE BY DEFAULT ON MOBILE/TABLET, HIDDEN INITIALLY ON DESKTOP) */}
+                  <div className="absolute inset-0 p-8 flex flex-col justify-end lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-500 z-20">
                     {/* ICON */}
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-[#F2EDE2]/10 backdrop-blur-md">
                       <Icon size={24} className="text-[#F2EDE2]" />
@@ -410,7 +333,7 @@ export default function Home() {
                     </h3>
 
                     {/* DESCRIPTION */}
-                    <p className="text-white/80 text-sm leading-relaxed translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+                    <p className="text-white/80 text-sm leading-relaxed lg:translate-y-4 lg:group-hover:translate-y-0 transition-all duration-500">
                       {service.description}
                     </p>
                   </div>
@@ -512,25 +435,27 @@ export default function Home() {
             {/* Video 1 */}
             <div className="group aspect-video rounded-3xl overflow-hidden glass p-2 transition-all duration-500 hover:shadow-[0_0_40px_rgba(218,165,32,0.2)]">
               <iframe
-                className="w-full h-full rounded-2xl transition-transform duration-500 group-hover:scale-[1.02]"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="Margret AV Showcase 1"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+             className="w-full h-full rounded-2xl transition-transform duration-500 group-hover:scale-[1.02]"
+             src="https://www.youtube.com/embed/0DvvfhOgYPM?autoplay=1&mute=1&start=10"
+             title="Margret AV Showcase 1"
+             frameBorder="0"
+             allow="autoplay; encrypted-media"
+             allowFullScreen
+             loading="lazy"
+            />
             </div>
 
             {/* Video 2 */}
             <div className="group aspect-video rounded-3xl overflow-hidden glass p-2 transition-all duration-500 hover:shadow-[0_0_40px_rgba(218,165,32,0.2)]">
               <iframe
-                className="w-full h-full rounded-2xl transition-transform duration-500 group-hover:scale-[1.02]"
-                src="https://www.youtube.com/embed/VIDEO_ID_HERE"
-                title="Margret AV Showcase 2"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+  className="w-full h-full rounded-2xl transition-transform duration-500 group-hover:scale-[1.02]"
+  src="https://www.youtube.com/embed/YFtGs1QSQ6A?autoplay=1&mute=1&start=10"
+  title="Margret AV Showcase 2"
+  frameBorder="0"
+  allow="autoplay; encrypted-media"
+  allowFullScreen
+  loading="lazy"
+/>
             </div>
 
           </div>
@@ -549,12 +474,12 @@ export default function Home() {
             Let's discuss your vision and create a technical masterpiece together. Our team is ready to bring your ideas to life.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
-            <Link to="/book" className="w-full sm:w-auto bg-gold text-black px-10 py-5 rounded-full font-bold text-lg hover:bg-gold-light transition-all">
-              Start Booking
+            <Link to="/contact" className="w-full sm:w-auto bg-gold text-black px-10 py-5 rounded-full font-bold text-lg hover:bg-gold-light transition-all">
+               Contact Us
             </Link>
-            <Link to="/contact" className="w-full sm:w-auto glass px-10 py-5 rounded-full font-bold text-lg hover:bg-ink/5 text-ink transition-all">
+            {/* <Link to="/contact" className="w-full sm:w-auto glass px-10 py-5 rounded-full font-bold text-lg hover:bg-ink/5 text-ink transition-all">
               Contact Us
-            </Link>
+            </Link> */}
           </div>
         </div>
       </section>

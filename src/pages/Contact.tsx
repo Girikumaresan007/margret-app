@@ -10,12 +10,30 @@ export default function Contact() {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert('Thank you for your message! We will get back to you shortly.');
-    setFormState({ name: '', email: '', phone: '', message: '' });
-  };
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
 
+  const { name, email, phone, message } = formState;
+
+  const subject = `New Contact from ${name}`;
+  const body = `
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+
+Message:
+${message}
+`;
+
+  const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=hello@margretav.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+  window.open(gmailLink, "_blank");
+
+  // ⏳ clear after 3 seconds
+  setTimeout(() => {
+    setFormState({ name: '', email: '', phone: '', message: '' });
+  }, 3000);
+};
   return (
     <div className="pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
@@ -82,12 +100,24 @@ export default function Contact() {
             <div className="space-y-6">
               <h3 className="text-xl font-bold text-ink">Follow Our Journey</h3>
               <div className="flex gap-4">
-                {[Instagram, Facebook, Youtube, Twitter].map((Icon, i) => (
-                  <a key={i} href="#" className="w-12 h-12 glass rounded-xl flex items-center justify-center hover:bg-gold hover:text-black transition-all text-ink">
-                    <Icon size={20} />
-                  </a>
-                ))}
-              </div>
+  {[Instagram, Facebook, Youtube, Twitter].map((Icon, i) => (
+    <a
+      key={i}
+      href="#"
+      className="group w-12 h-12 rounded-xl flex items-center justify-center 
+                 bg-white/70 backdrop-blur-md 
+                 border border-gray-200
+                 transition-all duration-300 
+                 hover:bg-gold hover:scale-110 hover:shadow-lg hover:shadow-gold/30"
+    >
+      <Icon 
+        size={20} 
+        className="text-ink transition-all duration-300 
+                   group-hover:text-black group-hover:rotate-12 group-hover:scale-110"
+      />
+    </a>
+  ))}
+</div>
             </div>
 
             <div className="h-64 rounded-3xl overflow-hidden glass p-2">

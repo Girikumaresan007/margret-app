@@ -109,11 +109,11 @@ export default function PackageDetails() {
               </div>
 
               <Link
-                to="/book"
+                to="/contact"
                 state={{ packageId: pkg.id }}
                 className="block w-full bg-gold text-black py-5 rounded-2xl font-bold text-center hover:bg-gold-light transition-all shadow-lg shadow-gold/20"
               >
-                Book This Package
+                Contact Us
               </Link>
               
               <p className="text-center text-xs text-gray-500 mt-6">

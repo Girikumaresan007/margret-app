@@ -6,10 +6,10 @@ import { cn } from '@/src/lib/utils';
 
 const NAV_LINKS = [
   { name: 'Home', path: '/' },
-  { name: 'About', path: '/#about' },
+  { name: 'About', path: '/about' },
   { name: 'Services', path: '/#services' },
   { name: 'Packages', path: '/#packages' },
-  { name: 'Contact', path: '/contact' },
+  // { name: 'Contact', path: '/contact' },
 ];
 
 export default function Navbar() {
@@ -28,19 +28,19 @@ export default function Navbar() {
   }, [location]);
 
   return (
-    <nav
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4',
-        scrolled ? 'glass py-3' : 'bg-transparent'
-      )}
-    >
+<nav
+  className={cn(
+    'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4 bg-white shadow-sm',
+    scrolled && 'py-3'
+  )}
+>
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
           <div className="w-10 h-10 bg-gold rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform">
             <span className="text-white font-bold text-xl">M</span>
           </div>
           <span className="font-display font-bold text-xl tracking-tighter text-ink">
-            MARGRET <span className="text-gold">AV</span>
+            MARGRET <span className="text-gold">AUDIO VISUAL</span>
           </span>
         </Link>
 
@@ -57,10 +57,10 @@ export default function Navbar() {
             </Link>
           ))}
           <Link
-            to="/book"
+            to="/contact"
             className="bg-gold text-black px-6 py-2 rounded-full text-sm font-bold hover:bg-gold-light transition-colors"
           >
-            Book Now
+            Contact Us
           </Link>
         </div>
 
@@ -77,7 +77,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 right-0 glass border-t border-black/5 p-6 md:hidden flex flex-col gap-4"
+            className="absolute top-full left-0 right-0 bg-white border-t border-black/5 p-6 md:hidden flex flex-col gap-4 shadow-md"
           >
             {NAV_LINKS.map((link) => (
               <Link
@@ -89,10 +89,10 @@ export default function Navbar() {
               </Link>
             ))}
             <Link
-              to="/book"
+              to="/contact"
               className="bg-gold text-white px-6 py-3 rounded-xl text-center font-bold"
             >
-              Book Now
+             Contact Us
             </Link>
             <div className="flex justify-center gap-6 mt-4">
               <Instagram className="w-5 h-5 text-gray-600" />

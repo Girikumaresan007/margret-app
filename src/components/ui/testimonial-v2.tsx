@@ -78,92 +78,106 @@ const TestimonialsColumn = (props: {
   className?: string;
   testimonials: Testimonial[];
   duration?: number;
+  columnIndex: number;
+  activeId: string | null;
+  setActiveId: (id: string | null) => void;
 }) => {
   return (
     <div className={props.className}>
-      <motion.ul
-        animate={{
-          translateY: "-50%",
+      <ul
+        style={{
+          animation: `scroll-vertical ${props.duration || 10}s linear infinite`,
+          animationPlayState: props.activeId ? "paused" : "running",
+          willChange: "transform",
         }}
-        transition={{
-          duration: props.duration || 10,
-          repeat: Infinity,
-          ease: "linear",
-          repeatType: "loop",
-        }}
-        className="flex flex-col gap-6 pb-6 bg-transparent transition-colors duration-300 list-none m-0 p-0"
+        className="flex flex-col gap-6 pb-6 bg-transparent list-none m-0 p-0"
       >
         {[
           ...new Array(2).fill(0).map((_, index) => (
             <React.Fragment key={index}>
-              {props.testimonials.map(({ text, image, name, role }, i) => (
-                <motion.li 
-                  key={`${index}-${i}`}
-                  aria-hidden={index === 1 ? "true" : "false"}
-                  tabIndex={index === 1 ? -1 : 0}
-                  whileHover={{ 
-                    scale: 1.03,
-                    y: -8,
-                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05)",
-                    transition: { type: "spring", stiffness: 400, damping: 17 }
-                  }}
-                  whileFocus={{ 
-                    scale: 1.03,
-                    y: -8,
-                    boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.05)",
-                    transition: { type: "spring", stiffness: 400, damping: 17 }
-                  }}
-                 className="p-6 rounded-2xl border border-black/5 shadow-sm max-w-xs w-full bg-white transition-all duration-300"
-                >
-                  <blockquote className="m-0 p-0">
-                 <p className="text-gray-500 text-lg leading-relaxed font-medium m-0">
-  
-  <span className="text-gold text-2xl font-bold mr-1">“</span>
-  
-  {text}
-  
-  <span className="text-gold text-2xl font-bold ml-1">”</span>
+              {props.testimonials.map(({ text, image, name, role }, i) => {
+                const cardId = `col-${props.columnIndex}-copy-${index}-item-${i}`;
+                const isSelected = props.activeId === cardId;
+                const isOtherSelected = props.activeId !== null && !isSelected;
 
-</p>
-                    <footer className="flex items-start gap-4 mt-6">
-                      <img
-                        width={48}
-                        height={48}
-                        src={image}
-                        alt={`Avatar of ${name}`}
-                        className="h-12 w-12 rounded-full object-cover ring-2 ring-gold/20 group-hover:ring-gold transition-all duration-300 ease-in-out shrink-0"
-                      />
-                      <div className="flex flex-col pt-1">
-                        <cite className="font-bold not-italic tracking-tight text-ink text-base transition-colors duration-300">
-                          {name}
-                        </cite>
-                        <span className="text-sm tracking-tight text-ink/70 mt-0.5 transition-colors duration-300">
-                          {role}
-                        </span>
-                        <div className="flex gap-1 mt-2">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star key={i} size={14} className="text-gold fill-gold" />
-                          ))}
+                return (
+                  <motion.li 
+                    key={cardId}
+                    aria-hidden={index === 1 ? "true" : "false"}
+                    tabIndex={index === 1 ? -1 : 0}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      props.setActiveId(isSelected ? null : cardId);
+                    }}
+                    animate={{
+                      scale: isSelected ? 1.08 : isOtherSelected ? 0.95 : 1,
+                      opacity: isOtherSelected ? 0.4 : 1,
+                      zIndex: isSelected ? 50 : 1,
+                    }}
+                    whileHover={!props.activeId ? { 
+                      scale: 1.03,
+                      y: -8,
+                      boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.12)",
+                    } : {}}
+                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    className={`p-6 rounded-2xl border border-black/5 max-w-xs w-full bg-white relative cursor-pointer md:cursor-pointer touch-manipulation shadow-sm transition-shadow duration-300 ${isSelected ? "shadow-2xl ring-2 ring-gold border-transparent" : ""}`}
+                  >
+                    <blockquote className="m-0 p-0 pointer-events-none">
+                      <p className="text-gray-500 text-lg leading-relaxed font-medium m-0">
+                        <span className="text-gold text-2xl font-bold mr-1">“</span>
+                        {text}
+                        <span className="text-gold text-2xl font-bold ml-1">”</span>
+                      </p>
+                      <footer className="flex items-start gap-4 mt-6">
+                        <img
+                          width={48}
+                          height={48}
+                          src={image}
+                          alt={`Avatar of ${name}`}
+                          className="h-12 w-12 rounded-full object-cover ring-2 ring-gold/20 shrink-0"
+                        />
+                        <div className="flex flex-col pt-1">
+                          <cite className="font-bold not-italic tracking-tight text-ink text-base">
+                            {name}
+                          </cite>
+                          <span className="text-sm tracking-tight text-ink/70 mt-0.5">
+                            {role}
+                          </span>
+                          <div className="flex gap-1 mt-2">
+                            {Array.from({ length: 5 }).map((_, stIndex) => (
+                              <Star key={stIndex} size={14} className="text-gold fill-gold" />
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    </footer>
-                  </blockquote>
-                </motion.li>
-              ))}
+                      </footer>
+                    </blockquote>
+                  </motion.li>
+                );
+              })}
             </React.Fragment>
           )),
         ]}
-      </motion.ul>
+      </ul>
     </div>
   );
 };
 
 export const TestimonialsSection = () => {
+  const [activeId, setActiveId] = useState<string | null>(null);
+
   return (
     <section 
       aria-labelledby="testimonials-heading"
-     className="bg-[#F2EDE2] py-24 relative overflow-hidden"
+      className="bg-[#F2EDE2] py-24 relative overflow-hidden"
+      onClick={() => setActiveId(null)}
     >
+      <style>{`
+        @keyframes scroll-vertical {
+          from { transform: translateY(0); }
+          to { transform: translateY(-50%); }
+        }
+      `}</style>
+
       <motion.div 
         initial={{ opacity: 0, y: 50, rotate: -2 }}
         whileInView={{ opacity: 1, y: 0, rotate: 0 }}
@@ -173,27 +187,21 @@ export const TestimonialsSection = () => {
           ease: [0.16, 1, 0.3, 1],
           opacity: { duration: 0.8 }
         }}
-        className="container px-4 z-10 mx-auto"
+        className="container px-4 z-10 mx-auto relative"
       >
-        <div className="flex flex-col items-center justify-center max-w-[540px] mx-auto mb-16">
-          <div className="flex justify-center">
-            {/* <div className="border border-neutral-300 dark:border-neutral-700 py-1 px-4 rounded-full text-xs font-semibold tracking-wide uppercase text-neutral-600 dark:text-neutral-400 bg-neutral-100/50 dark:bg-neutral-800/50 transition-colors">
-              Testimonials
-            </div> */}
-          </div>
-
-           <h2 className="text-4xl md:text-5xl font-bold text-ink">
-        Client <span className="text-gold">Stories</span>
-      </h2>
-             <motion.div
-    initial={{ width: 0, opacity: 0 }}
-    whileInView={{ width: "60px", opacity: 1 }}
-    transition={{ duration: 0.5 }}
-    className="h-[2px] mx-auto my-3 rounded-full bg-gradient-to-r from-[#1A1A1A] via-[#B8860B] to-[#F5F2ED]"
-  />
-         <p className="text-gray-600 mt-4 text-center ">
-          Discover how thousands of teams streamline their operations with our platform.
-      </p>
+        <div className="flex flex-col items-center justify-center max-w-[540px] mx-auto mb-16 relative z-30 pointer-events-none">
+          <h2 className="text-4xl md:text-5xl font-bold text-ink">
+            Client <span className="text-gold">Stories</span>
+          </h2>
+          <motion.div
+            initial={{ width: 0, opacity: 0 }}
+            whileInView={{ width: "60px", opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="h-[2px] mx-auto my-3 rounded-full bg-gradient-to-r from-[#1A1A1A] via-[#B8860B] to-[#F5F2ED]"
+          />
+          <p className="text-gray-600 mt-4 text-center">
+            Discover how thousands of teams streamline their operations with our platform.
+          </p>
         </div>
 
         <div 
@@ -201,9 +209,9 @@ export const TestimonialsSection = () => {
           role="region"
           aria-label="Scrolling Testimonials"
         >
-          <TestimonialsColumn testimonials={firstColumn} duration={15} />
-          <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
-          <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
+          <TestimonialsColumn testimonials={firstColumn} duration={15} columnIndex={1} activeId={activeId} setActiveId={setActiveId} />
+          <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} columnIndex={2} activeId={activeId} setActiveId={setActiveId} />
+          <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} columnIndex={3} activeId={activeId} setActiveId={setActiveId} />
         </div>
       </motion.div>
     </section>

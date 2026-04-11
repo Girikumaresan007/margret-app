@@ -6,10 +6,17 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     if (hash) {
-      const element = document.getElementById(hash.slice(1));
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
+      let retries = 0;
+      const tryScroll = () => {
+        const element = document.getElementById(hash.slice(1));
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        } else if (retries < 10) {
+          retries++;
+          setTimeout(tryScroll, 100);
+        }
+      };
+      tryScroll();
     } else {
       window.scrollTo(0, 0);
     }

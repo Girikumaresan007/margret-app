@@ -16,7 +16,7 @@ export default function LoadingScreen() {
       >
         <span className="text-black font-bold text-5xl">M</span>
       </motion.div>
-      
+
       <div className="w-48 h-1 bg-ink/10 rounded-full overflow-hidden">
         <motion.div
           initial={{ x: '-100%' }}
@@ -25,7 +25,7 @@ export default function LoadingScreen() {
           className="w-full h-full bg-gold"
         />
       </div>
-      
+
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
