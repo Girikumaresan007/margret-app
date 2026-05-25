@@ -37,9 +37,9 @@ export default function Footer() {
           <h4 className="font-display font-bold mb-6 text-ink">Quick Links</h4>
           <ul className="space-y-4 text-sm text-gray-600">
             <li><Link to="/" className="hover:text-gold transition-colors">Home</Link></li>
-            <li><a href="#about" className="hover:text-gold transition-colors">About Us</a></li>
-            <li><a href="#services" className="hover:text-gold transition-colors">Our Services</a></li>
-            <li><a href="#packages" className="hover:text-gold transition-colors">Pricing Packages</a></li>
+            <li><Link to="/about" className="hover:text-gold transition-colors">About Us</Link></li>
+            <li><Link to="/#services" className="hover:text-gold transition-colors">Our Services</Link></li>
+            <li><Link to="/#packages" className="hover:text-gold transition-colors">Pricing Packages</Link></li>
             <li><Link to="/contact" className="hover:text-gold transition-colors">Contact Us</Link></li>
           </ul>
         </div>
@@ -47,11 +47,11 @@ export default function Footer() {
         <div>
           <h4 className="font-display font-bold mb-6 text-ink">Services</h4>
           <ul className="space-y-4 text-sm text-gray-600">
-            <li><a href="#" className="hover:text-gold transition-colors">LED Wall Setup</a></li>
-            <li><a href="#" className="hover:text-gold transition-colors">Audio Engineering</a></li>
-            <li><a href="#" className="hover:text-gold transition-colors">Lighting Design</a></li>
-            <li><a href="#" className="hover:text-gold transition-colors">Live Streaming</a></li>
-            <li><a href="#" className="hover:text-gold transition-colors">Event Management</a></li>
+            <li><Link to="/#led-wall" className="hover:text-gold transition-colors">LED Wall Setup</Link></li>
+            <li><Link to="/#Wedding Events" className="hover:text-gold transition-colors">College Event</Link></li>
+            <li><Link to="/#live-streaming" className="hover:text-gold transition-colors">Award Ceremony</Link></li>
+            <li><Link to="/#dj-setup" className="hover:text-gold transition-colors">Political Event</Link></li>
+            <li><Link to="/#event-management" className="hover:text-gold transition-colors">Wedding Function</Link></li>
           </ul>
         </div>
 

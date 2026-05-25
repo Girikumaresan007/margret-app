@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ArrowRight, CheckCircle2, CalendarCheck, Mic2, Users, MapPin, MonitorPlay, Zap } from 'lucide-react';
+import { ArrowRight, CheckCircle2, CalendarCheck,Headphones, Mic2, Users, MapPin, MonitorPlay, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ScrollGallery } from '../components/ui/scroll-gallery';
 
@@ -165,9 +165,9 @@ export default function About() {
           >
             {[
               { num: "15+", label: "Years Experience", icon: CalendarCheck, desc: "Delivering perfection consistently." },
-              { num: "500+", label: "Events Completed", icon: MonitorPlay, desc: "From corporate AV to massive stages." },
+              { num: "1000+", label: "Events Completed", icon: MonitorPlay, desc: "From corporate AV to massive stages." },
               { num: "120+", label: "Happy Clients", icon: Users, desc: "Trusted by top industry brands." },
-              { num: "10+", label: "Cities Covered", icon: MapPin, desc: "Providing premium rentals nationwide." }
+               { num: "24/7", label: "Customer Support", icon: Headphones, desc: "Always available for your event support." }
             ].map((stat, i) => {
               const Icon = stat.icon;
               return (

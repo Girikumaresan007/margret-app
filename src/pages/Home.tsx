@@ -33,20 +33,23 @@ export default function Home() {
   return (
     <div className="relative">
       {/* Hero Section */}
-   <section className="relative min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden">
         {/* <ThreeBackground /> */}
         {/* Background Image */}
-<div className="absolute inset-0 z-0">
-  <img
-    src="/hero3.jpeg"
-    alt="Hero Background"
-   className="w-full h-full object-cover object-[center_20%]"
-    fetchPriority="high"
-  />
-</div>
+        <div className="absolute inset-0 z-0">
+          <picture>
+            <source media="(min-width: 768px)" srcSet="/hero3.webp" />
+            <img
+              src="/mobile 3.webp"
+              alt="Hero Background"
+              className="w-full h-full object-cover object-[center_20%]"
+              fetchPriority="high"
+            />
+          </picture>
+        </div>
 
-{/* Dark Overlay */}
-<div className="absolute inset-0 bg-black/10 z-0"></div>
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/40 to-black/80 md:bg-none md:bg-black/10 z-0"></div>
 
         <div className="max-w-7xl mx-auto text-center z-10 flex flex-col items-center justify-center gap-8 -translate-y-4 md:-translate-y-6">
           <motion.div
@@ -60,22 +63,22 @@ export default function Home() {
               Premium Event Solutions
             </span>
           </motion.div>
-         <motion.h1
-           initial={{ opacity: 0, y: 30 }}
-           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-           className="text-4xl md:text-6xl font-display font-extrabold leading-tight text-ink"
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-4xl md:text-6xl font-display font-extrabold leading-tight text-ink drop-shadow-[0_4px_12px_rgba(0,0,0,0.7)] md:drop-shadow-none"
           >
-         <span className="text-gray-50">Professional</span>{" "}
-         <span className="text-gold-light">LED & Audio Visual</span><br />
-         <span className="text-gray-50">Solution for Every Event</span>
-         </motion.h1>
+            <span className="text-gray-50">Professional</span>{" "}
+            <span className="text-gold-light">LED & Audio Visual</span><br />
+            <span className="text-gray-50">Solution for Every Event</span>
+          </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-white text-lg md:text-xl max-w-3xl mx-auto leading-relaxed"
+            className="text-white text-lg md:text-xl max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] md:drop-shadow-none"
           >
             Transform your events with cutting-edge LED screens, crystal-clear audio systems and professional lighting solutions. Crafting unforgettable experiences.
           </motion.p>
@@ -89,12 +92,12 @@ export default function Home() {
             <a href="#services" className="w-full sm:w-auto bg-gold text-black px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-gold-light transition-all group">
               Explore Services <ArrowRight className="group-hover:translate-x-1 transition-transform" />
             </a>
-                 <a
-               href="#packages"
-             className="w-full sm:w-auto text-[#f7f7f7] px-8 py-4 rounded-full font-bold border border-[#FFD700]"
-             >
-             Packages
-             </a>
+            <a
+              href="#packages"
+              className="w-full sm:w-auto text-[#f7f7f7] px-8 py-4 rounded-full font-bold border border-[#FFD700]"
+            >
+              Packages
+            </a>
           </motion.div>
         </div>
 
@@ -302,6 +305,7 @@ export default function Home() {
               return (
                 <motion.div
                   key={service.id}
+                  id={service.id}
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.1 }}
@@ -323,7 +327,7 @@ export default function Home() {
                   {/* CONTENT (VISIBLE BY DEFAULT ON MOBILE/TABLET, HIDDEN INITIALLY ON DESKTOP) */}
                   <div className="absolute inset-0 p-8 flex flex-col justify-end lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-500 z-20">
                     {/* ICON */}
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-[#F2EDE2]/10 backdrop-blur-md">
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-[#F2EDE2]/15 border border-[#F2EDE2]/20">
                       <Icon size={24} className="text-[#F2EDE2]" />
                     </div>
 
@@ -435,27 +439,27 @@ export default function Home() {
             {/* Video 1 */}
             <div className="group aspect-video rounded-3xl overflow-hidden glass p-2 transition-all duration-500 hover:shadow-[0_0_40px_rgba(218,165,32,0.2)]">
               <iframe
-             className="w-full h-full rounded-2xl transition-transform duration-500 group-hover:scale-[1.02]"
-             src="https://www.youtube.com/embed/0DvvfhOgYPM?autoplay=1&mute=1&start=10"
-             title="Margret AV Showcase 1"
-             frameBorder="0"
-             allow="autoplay; encrypted-media"
-             allowFullScreen
-             loading="lazy"
-            />
+                className="w-full h-full rounded-2xl transition-transform duration-500 group-hover:scale-[1.02]"
+                src="https://www.youtube.com/embed/0DvvfhOgYPM?autoplay=1&mute=1&start=10"
+                title="Margret AV Showcase 1"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                loading="lazy"
+              />
             </div>
 
             {/* Video 2 */}
             <div className="group aspect-video rounded-3xl overflow-hidden glass p-2 transition-all duration-500 hover:shadow-[0_0_40px_rgba(218,165,32,0.2)]">
               <iframe
-  className="w-full h-full rounded-2xl transition-transform duration-500 group-hover:scale-[1.02]"
-  src="https://www.youtube.com/embed/YFtGs1QSQ6A?autoplay=1&mute=1&start=10"
-  title="Margret AV Showcase 2"
-  frameBorder="0"
-  allow="autoplay; encrypted-media"
-  allowFullScreen
-  loading="lazy"
-/>
+                className="w-full h-full rounded-2xl transition-transform duration-500 group-hover:scale-[1.02]"
+                src="https://www.youtube.com/embed/YFtGs1QSQ6A?autoplay=1&mute=1&start=10"
+                title="Margret AV Showcase 2"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                loading="lazy"
+              />
             </div>
 
           </div>
@@ -475,7 +479,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
             <Link to="/contact" className="w-full sm:w-auto bg-gold text-black px-10 py-5 rounded-full font-bold text-lg hover:bg-gold-light transition-all">
-               Contact Us
+              Contact Us
             </Link>
             {/* <Link to="/contact" className="w-full sm:w-auto glass px-10 py-5 rounded-full font-bold text-lg hover:bg-ink/5 text-ink transition-all">
               Contact Us
