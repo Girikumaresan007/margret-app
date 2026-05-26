@@ -16,18 +16,27 @@ const handleSubmit = (e: React.FormEvent) => {
   const { name, email, phone, message } = formState;
 
   const subject = `New Contact from ${name}`;
-  const body = `
-Name: ${name}
+  const body = `Name: ${name}
 Email: ${email}
 Phone: ${phone}
 
 Message:
-${message}
-`;
+${message}`;
 
-  const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=hello@margretav.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  // Detect if the user is on a mobile device (Android, iOS, etc.)
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  );
 
-  window.open(gmailLink, "_blank");
+  if (isMobile) {
+    // Standard mailto triggers the default mail client (Gmail App, Apple Mail) on mobile devices
+    const mailtoLink = `mailto:hello@margretav.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoLink;
+  } else {
+    // Open Gmail web compose in a new tab on desktop
+    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=hello@margretav.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(gmailLink, "_blank");
+  }
 
   // ⏳ clear after 3 seconds
   setTimeout(() => {

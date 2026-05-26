@@ -67,10 +67,10 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl md:text-6xl font-display font-extrabold leading-tight text-ink drop-shadow-[0_4px_12px_rgba(0,0,0,0.7)] md:drop-shadow-none"
+            className="text-3xl sm:text-4xl md:text-6xl font-display font-extrabold leading-tight text-ink drop-shadow-[0_4px_12px_rgba(0,0,0,0.7)] md:drop-shadow-none px-2"
           >
             <span className="text-gray-50">Professional</span>{" "}
-            <span className="text-gold-light">LED & Audio Visual</span><br />
+            <span className="text-gold-light">LED & Audio Visual</span><br className="hidden md:inline" />
             <span className="text-gray-50">Solution for Every Event</span>
           </motion.h1>
 
@@ -78,7 +78,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-white text-lg md:text-xl max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] md:drop-shadow-none"
+            className="text-white text-base md:text-xl max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] md:drop-shadow-none px-4"
           >
             Transform your events with cutting-edge LED screens, crystal-clear audio systems and professional lighting solutions. Crafting unforgettable experiences.
           </motion.p>
@@ -87,14 +87,17 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 md:mt-8"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 md:mt-8 w-full px-4"
           >
-            <a href="#services" className="w-full sm:w-auto bg-gold text-black px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-gold-light transition-all group">
+            <a 
+              href="#services" 
+              className="w-full max-w-[280px] sm:max-w-none sm:w-auto bg-gold text-black px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-gold-light transition-all group shadow-md"
+            >
               Explore Services <ArrowRight className="group-hover:translate-x-1 transition-transform" />
             </a>
             <a
               href="#packages"
-              className="w-full sm:w-auto text-[#f7f7f7] px-8 py-4 rounded-full font-bold border border-[#FFD700]"
+              className="w-full max-w-[280px] sm:max-w-none sm:w-auto text-[#f7f7f7] px-8 py-4 rounded-full font-bold border border-[#FFD700] flex items-center justify-center gap-2 hover:bg-white/10 transition-all shadow-md"
             >
               Packages
             </a>

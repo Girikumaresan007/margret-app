@@ -90,7 +90,7 @@ export default function Navbar() {
             ))}
             <Link
               to="/contact"
-              className="bg-gold text-white px-6 py-3 rounded-xl text-center font-bold"
+              className="bg-gold text-black px-6 py-3 rounded-xl text-center font-bold hover:bg-gold-light transition-colors"
             >
              Contact Us
             </Link>
