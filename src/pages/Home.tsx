@@ -56,7 +56,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gold/20 backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gold/20 backdrop-blur-md mb-2 md:mb-0"
           >
             <span className="w-2 h-2 bg-gold rounded-full animate-pulse"></span>
             <span className="text-sm font-semibold text-gold tracking-wide uppercase">
