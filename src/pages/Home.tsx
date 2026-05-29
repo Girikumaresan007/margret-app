@@ -69,11 +69,11 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/40 to-black/80 md:bg-none md:bg-black/10 z-0"></div>
 
         {/* Large Colorful Logo Watermark (Using user-provided logo-icon.png directly, perfectly centered) */}
-        <div className="absolute inset-0 z-[1] pointer-events-none flex items-center justify-center -translate-y-20">
+        <div className="absolute inset-0 z-[1] pointer-events-none flex items-center justify-center -translate-y-2 md:-translate-y-6">
           <img
             src="/logo-icon.png"
             alt=""
-            className="w-[360px] h-[360px] md:w-[540px] md:h-[540px] lg:w-[680px] lg:h-[680px] object-contain opacity-35 mix-blend-overlay"
+            className="w-[160px] h-[160px] sm:w-[220px] sm:h-[220px] md:w-[280px] md:h-[280px] lg:w-[380px] lg:h-[380px] object-contain opacity-35 mix-blend-overlay"
           />
         </div>
 
