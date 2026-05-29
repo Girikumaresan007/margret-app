@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { TestimonialsSection } from '../components/ui/testimonial-v2';
-import { ArrowRight, Star, CheckCircle2, Play, Users, ShieldCheck, Zap, Heart, Settings } from 'lucide-react';
+import { ArrowRight, Star, CheckCircle2, Play, Users, ShieldCheck, Zap, Heart, Settings, Briefcase, Music, Disc, Gift, Rocket, GraduationCap, Sparkles, Trophy, MonitorPlay, Volume2, Lightbulb, Cpu, Layers, Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { SERVICES, TESTIMONIALS, PACKAGES } from '../constants';
@@ -12,13 +12,30 @@ const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.6 }
+  transition: { duration: 0.9 }
 };
 
 const staggerContainer = {
   initial: {},
   whileInView: { transition: { staggerChildren: 0.1 } }
 };
+
+const eventMarqueeItems = [
+  { name: "Wedding Events", icon: Heart },
+  { name: "Corporate Shows", icon: Briefcase },
+  { name: "Live Concerts", icon: Music },
+  { name: "DJ & Club Nights", icon: Disc },
+  { name: "Product Launches", icon: Rocket },
+  { name: "Awards & Gala Dinners", icon: Trophy }
+];
+
+const techMarqueeItems = [
+  { name: "P3.9 LED Screens", icon: MonitorPlay },
+  { name: "L-Acoustics Sound", icon: Volume2 },
+  { name: "Intelligent Lighting", icon: Lightbulb },
+  { name: "Fail-Safe Redundancy", icon: ShieldCheck },
+  { name: "Professional Crew", icon: Users }
+];
 
 export default function Home() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -50,6 +67,16 @@ export default function Home() {
 
         {/* Dark Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/40 to-black/80 md:bg-none md:bg-black/10 z-0"></div>
+
+        {/* Large Colorful Logo Watermark (Using user-provided logo-icon.png directly, perfectly centered) */}
+        <div className="absolute inset-0 z-[1] pointer-events-none flex items-center justify-center -translate-y-20">
+          <img
+            src="/logo-icon.png"
+            alt=""
+            className="w-[360px] h-[360px] md:w-[540px] md:h-[540px] lg:w-[680px] lg:h-[680px] object-contain opacity-35 mix-blend-overlay"
+          />
+        </div>
+
 
         <div className="max-w-7xl mx-auto text-center z-10 flex flex-col items-center justify-center gap-4 md:gap-8 -translate-y-2 md:-translate-y-6">
           <motion.div
@@ -90,8 +117,8 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mt-2 md:mt-8 w-full px-4"
           >
-            <a 
-              href="#services" 
+            <a
+              href="#services"
               className="w-full max-w-[280px] sm:max-w-none sm:w-auto bg-gold text-black px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-gold-light transition-all group shadow-md"
             >
               Explore Services <ArrowRight className="group-hover:translate-x-1 transition-transform" />
@@ -116,46 +143,62 @@ export default function Home() {
         </motion.div> */}
       </section>
 
-      {/* Marquee Section */}
-      <section className="py-6 bg-[#EFE7D7] overflow-hidden border-y border-black/5 relative">
+      {/* High-Contrast Professional Dual-Track Marquee Section */}
+      <section className="py-5.5 bg-gradient-to-r from-[#12100E] via-[#080705] to-[#12100E] overflow-hidden border-y border-gold/30 relative shadow-[inset_0_1px_0_rgba(255,215,0,0.1),inset_0_-1px_0_rgba(255,215,0,0.1),0_4px_30px_rgba(0,0,0,0.15)]">
 
         {/* Fade edges */}
-        <div className="absolute left-0 top-0 w-24 h-full bg-gradient-to-r from-[#F5F2ED] to-transparent z-10" />
-        <div className="absolute right-0 top-0 w-24 h-full bg-gradient-to-l from-[#F5F2ED] to-transparent z-10" />
+        <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-[#12100E] to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-[#12100E] to-transparent z-10 pointer-events-none" />
 
-        <div className="flex gap-12 whitespace-nowrap animate-marquee">
+        <div className="flex flex-col gap-4.5 relative z-10">
 
-          {[
-            "Wedding Events",
-            "Corporate Events",
-            "Live Concerts",
-            "DJ Nights",
-            "Birthday Parties",
-            "Product Launch",
-            "College Events",
-            "Fashion Shows",
-            "Award Functions"
-          ]
-            .concat([
-              "Wedding Events",
-              "Corporate Events",
-              "Live Concerts",
-              "DJ Nights",
-              "Birthday Parties",
-              "Product Launch",
-              "College Events",
-              "Fashion Shows",
-              "Award Functions"
-            ])
-            .map((item, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-3 text-lg font-semibold text-ink tracking-wide hover:text-gold transition"
-              >
-                <span className="w-2 h-2 bg-gold rounded-full animate-pulse"></span>
-                {item}
-              </div>
-            ))}
+          {/* Row 1: Left Scrolling (Event Categories) */}
+          <div className="flex overflow-hidden">
+            <div className="flex gap-6 whitespace-nowrap animate-marquee py-0.5">
+              {[...Array(2)].map((_, idx) => (
+                <div key={idx} className="flex gap-6 items-center">
+                  {eventMarqueeItems.map((item, i) => {
+                    const Icon = item.icon;
+                    return (
+                      <div
+                        key={i}
+                        className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/50 transition-all duration-300 group cursor-default shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_0_15px_rgba(218,165,32,0.2)] hover:-translate-y-0.5"
+                      >
+                        <Icon size={16} className="text-gold group-hover:scale-110 transition-transform duration-300" />
+                        <span className="text-xs md:text-sm font-bold text-white/95 tracking-wider group-hover:text-white transition-colors duration-300 uppercase">
+                          {item.name}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Row 2: Right Scrolling (Technical Highlights) */}
+          <div className="flex overflow-hidden">
+            <div className="flex gap-6 whitespace-nowrap animate-marquee-reverse py-0.5">
+              {[...Array(4)].map((_, idx) => (
+                <div key={idx} className="flex gap-6 items-center">
+                  {techMarqueeItems.map((item, i) => {
+                    const Icon = item.icon;
+                    return (
+                      <div
+                        key={i}
+                        className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.03] hover:bg-gold/10 border border-white/10 hover:border-gold/50 transition-all duration-300 group cursor-default shadow-[0_2px_8px_rgba(0,0,0,0.3)] hover:shadow-[0_0_15px_rgba(218,165,32,0.2)] hover:-translate-y-0.5"
+                      >
+                        <Icon size={16} className="text-gold group-hover:scale-110 transition-transform duration-300" />
+                        <span className="text-xs md:text-sm font-bold text-white/95 tracking-wider group-hover:text-white transition-colors duration-300 uppercase">
+                          {item.name}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
 
         </div>
       </section>

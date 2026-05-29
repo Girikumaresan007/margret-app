@@ -79,11 +79,26 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-.animate-marquee {
-  width: max-content;
-  animation: marquee 25s linear infinite;
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
 }
 
-.animate-marquee:hover {
+.animate-marquee {
+  width: max-content;
+  animation: marquee 60s linear infinite;
+}
+
+.animate-marquee-reverse {
+  width: max-content;
+  animation: marquee-reverse 60s linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee-reverse:hover {
   animation-play-state: paused;
 }

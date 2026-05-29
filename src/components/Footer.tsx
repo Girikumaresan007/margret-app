@@ -6,12 +6,14 @@ export default function Footer() {
     <footer className="bg-[#EBE6DE] border-t border-black/5 pt-20 pb-10 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
         <div className="space-y-6">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-gold rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">M</span>
-            </div>
-            <span className="font-display font-bold text-xl tracking-tighter text-ink">
-              MARGRET <span className="text-gold">AV</span>
+          <Link to="/" className="flex items-center gap-2 group">
+            <img
+              src="/logo-icon.png?v=2"
+              alt="Margret AV Logo"
+              className="h-14 w-auto object-contain flex-shrink-0 group-hover:scale-105 transition-transform duration-300 -translate-y-[2px]"
+            />
+            <span className="font-display font-bold text-2xl tracking-tight text-ink mt-[1px]">
+              MARGRET <span className="text-gold">AUDIO VISUAL</span>
             </span>
           </Link>
           <p className="text-gray-600 text-sm leading-relaxed">

@@ -28,18 +28,20 @@ export default function Navbar() {
   }, [location]);
 
   return (
-<nav
-  className={cn(
-    'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4 bg-white shadow-sm',
-    scrolled && 'py-3'
-  )}
->
+    <nav
+      className={cn(
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-2 bg-white shadow-sm',
+        scrolled && 'py-1.5'
+      )}
+    >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 bg-gold rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform">
-            <span className="text-white font-bold text-xl">M</span>
-          </div>
-          <span className="font-display font-bold text-xl tracking-tighter text-ink">
+          <img
+            src="/logo-icon.png?v=2"
+            alt="Margret AV Logo"
+            className="h-14 w-auto object-contain flex-shrink-0 group-hover:scale-105 transition-transform duration-300 -translate-y-[2px]"
+          />
+          <span className="font-display font-bold text-2xl tracking-tight text-ink mt-[1px]">
             MARGRET <span className="text-gold">AUDIO VISUAL</span>
           </span>
         </Link>
@@ -92,7 +94,7 @@ export default function Navbar() {
               to="/contact"
               className="bg-gold text-black px-6 py-3 rounded-xl text-center font-bold hover:bg-gold-light transition-colors"
             >
-             Contact Us
+              Contact Us
             </Link>
             <div className="flex justify-center gap-6 mt-4">
               <Instagram className="w-5 h-5 text-gray-600" />
