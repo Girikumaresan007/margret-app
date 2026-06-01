@@ -53,6 +53,16 @@ export default function Home() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [playVideo1, setPlayVideo1] = useState(false);
   const [playVideo2, setPlayVideo2] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -94,172 +104,176 @@ export default function Home() {
 
         <div className="relative w-full max-w-7xl mx-auto text-center z-10 flex flex-col items-center justify-center gap-4 md:gap-8 -translate-y-2 md:-translate-y-6">
           {/* Left LED Wall Panel — Logo Display */}
-          <motion.div
-            initial={{ opacity: 0, x: -50, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="hidden lg:flex absolute -left-2 xl:-left-4 top-[74%] -translate-y-1/2 flex-col items-center pointer-events-none"
-          >
-            {/* LED Wall Frame with Module Grid */}
-            <div className="relative w-[220px] h-[165px] rounded-[2px] overflow-hidden shadow-[0_0_40px_rgba(0,100,255,0.2),0_0_80px_rgba(0,100,255,0.08),inset_0_0_20px_rgba(0,0,0,0.5)]">
-              {/* Thick industrial outer bezel */}
-              <div className="absolute inset-0 border-[4px] border-[#1a1a1a] rounded-[2px] z-30"></div>
-              {/* Metallic bezel highlight */}
-              <div className="absolute inset-0 border-t-[1px] border-l-[1px] border-[#444] rounded-[2px] z-30 opacity-40"></div>
-              {/* Corner mounting bolts */}
-              <div className="absolute top-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-              <div className="absolute top-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-              <div className="absolute bottom-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-              <div className="absolute bottom-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-              {/* Inner edge glow */}
-              <div className="absolute inset-[4px] border border-[#0077ff]/25 z-20"></div>
-              {/* Screen content - Logo */}
-              <div className="absolute inset-[5px] bg-gradient-to-br from-[#050510] via-[#0a0a18] to-[#060612] flex items-center justify-center">
-                <img
-                  src="/logo-icon.png?v=2"
-                  alt="Margret AV"
-                  className="w-[110px] h-[110px] object-contain brightness-125 drop-shadow-[0_0_20px_rgba(255,215,0,0.35)]"
-                />
+          {isDesktop && (
+            <motion.div
+              initial={{ opacity: 0, x: -50, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className="hidden lg:flex absolute -left-2 xl:-left-4 top-[74%] -translate-y-1/2 flex-col items-center pointer-events-none"
+            >
+              {/* LED Wall Frame with Module Grid */}
+              <div className="relative w-[220px] h-[165px] rounded-[2px] overflow-hidden shadow-[0_0_40px_rgba(0,100,255,0.2),0_0_80px_rgba(0,100,255,0.08),inset_0_0_20px_rgba(0,0,0,0.5)]">
+                {/* Thick industrial outer bezel */}
+                <div className="absolute inset-0 border-[4px] border-[#1a1a1a] rounded-[2px] z-30"></div>
+                {/* Metallic bezel highlight */}
+                <div className="absolute inset-0 border-t-[1px] border-l-[1px] border-[#444] rounded-[2px] z-30 opacity-40"></div>
+                {/* Corner mounting bolts */}
+                <div className="absolute top-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
+                <div className="absolute top-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
+                <div className="absolute bottom-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
+                <div className="absolute bottom-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
+                {/* Inner edge glow */}
+                <div className="absolute inset-[4px] border border-[#0077ff]/25 z-20"></div>
+                {/* Screen content - Logo */}
+                <div className="absolute inset-[5px] bg-gradient-to-br from-[#050510] via-[#0a0a18] to-[#060612] flex items-center justify-center">
+                  <img
+                    src="/logo-icon.png?v=2"
+                    alt="Margret AV"
+                    className="w-[110px] h-[110px] object-contain brightness-125 drop-shadow-[0_0_20px_rgba(255,215,0,0.35)]"
+                  />
+                </div>
+                {/* LED Module Grid Lines (simulating 2x2 panel segments) */}
+                <div className="absolute inset-[5px] z-10 pointer-events-none">
+                  <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#111]/60"></div>
+                  <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-[#111]/60"></div>
+                </div>
+                {/* RGB Sub-pixel Pattern Overlay */}
+                <div
+                  className="absolute inset-[5px] z-10 opacity-[0.04] pointer-events-none"
+                  style={{
+                    backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px), repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px)`
+                  }}
+                ></div>
+                {/* LED Scan Line */}
+                <motion.div
+                  animate={{ y: ["-100%", "250%"] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  className="absolute left-[5px] right-[5px] h-[1.5px] bg-gradient-to-r from-transparent via-white/8 to-transparent z-10 pointer-events-none"
+                ></motion.div>
+                {/* Subtle screen flicker */}
+                <motion.div
+                  animate={{ opacity: [0.97, 1, 0.98, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-[5px] bg-transparent z-[5]"
+                ></motion.div>
               </div>
-              {/* LED Module Grid Lines (simulating 2x2 panel segments) */}
-              <div className="absolute inset-[5px] z-10 pointer-events-none">
-                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#111]/60"></div>
-                <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-[#111]/60"></div>
+              {/* ── Premium Truss Stand ── */}
+              <div className="flex flex-col items-center">
+                {/* Top mounting plate */}
+                <div className="w-[70px] h-[4px] bg-gradient-to-b from-[#555] to-[#333] rounded-sm shadow-[0_1px_3px_rgba(0,0,0,0.5)]"></div>
+                {/* Upper pole section */}
+                <div className="w-[4px] h-[22px] bg-gradient-to-b from-[#555] via-[#444] to-[#3a3a3a] relative">
+                  <div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#4a4a4a] rounded-[1px] border-t border-[#666]/40"></div>
+                </div>
+                {/* Adjustment clamp ring */}
+                <div className="w-[10px] h-[5px] bg-gradient-to-b from-[#555] to-[#3a3a3a] rounded-[1px] border border-[#666]/30"></div>
+                {/* Lower pole section */}
+                <div className="w-[4px] h-[28px] bg-gradient-to-b from-[#444] to-[#2a2a2a] relative">
+                  <div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#3a3a3a] rounded-[1px] border-t border-[#555]/30"></div>
+                </div>
+                {/* Tripod base hub */}
+                <div className="w-[12px] h-[5px] bg-gradient-to-b from-[#444] to-[#333] rounded-sm"></div>
+                {/* Tripod legs */}
+                <div className="relative w-[70px] h-[6px]">
+                  <div className="absolute left-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-l from-[#444] to-[#333] rounded-full -rotate-[15deg] origin-right"></div>
+                  <div className="absolute right-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-r from-[#444] to-[#333] rounded-full rotate-[15deg] origin-left"></div>
+                  <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[2px] h-[4px] bg-[#3a3a3a]"></div>
+                </div>
               </div>
-              {/* RGB Sub-pixel Pattern Overlay */}
-              <div
-                className="absolute inset-[5px] z-10 opacity-[0.04] pointer-events-none"
-                style={{
-                  backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px), repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px)`
-                }}
-              ></div>
-              {/* LED Scan Line */}
-              <motion.div
-                animate={{ y: ["-100%", "250%"] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                className="absolute left-[5px] right-[5px] h-[1.5px] bg-gradient-to-r from-transparent via-white/8 to-transparent z-10 pointer-events-none"
-              ></motion.div>
-              {/* Subtle screen flicker */}
-              <motion.div
-                animate={{ opacity: [0.97, 1, 0.98, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-[5px] bg-transparent z-[5]"
-              ></motion.div>
-            </div>
-            {/* ── Premium Truss Stand ── */}
-            <div className="flex flex-col items-center">
-              {/* Top mounting plate */}
-              <div className="w-[70px] h-[4px] bg-gradient-to-b from-[#555] to-[#333] rounded-sm shadow-[0_1px_3px_rgba(0,0,0,0.5)]"></div>
-              {/* Upper pole section */}
-              <div className="w-[4px] h-[22px] bg-gradient-to-b from-[#555] via-[#444] to-[#3a3a3a] relative">
-                <div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#4a4a4a] rounded-[1px] border-t border-[#666]/40"></div>
+              {/* Label */}
+              <div className="mt-1.5 flex flex-col items-center gap-0.5">
+                <span className="text-white/80 text-[10px] font-bold tracking-[0.25em] uppercase">LED Display</span>
+                <span className="text-white/40 text-[8px] tracking-wider">P3.9 Indoor</span>
               </div>
-              {/* Adjustment clamp ring */}
-              <div className="w-[10px] h-[5px] bg-gradient-to-b from-[#555] to-[#3a3a3a] rounded-[1px] border border-[#666]/30"></div>
-              {/* Lower pole section */}
-              <div className="w-[4px] h-[28px] bg-gradient-to-b from-[#444] to-[#2a2a2a] relative">
-                <div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#3a3a3a] rounded-[1px] border-t border-[#555]/30"></div>
-              </div>
-              {/* Tripod base hub */}
-              <div className="w-[12px] h-[5px] bg-gradient-to-b from-[#444] to-[#333] rounded-sm"></div>
-              {/* Tripod legs */}
-              <div className="relative w-[70px] h-[6px]">
-                <div className="absolute left-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-l from-[#444] to-[#333] rounded-full -rotate-[15deg] origin-right"></div>
-                <div className="absolute right-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-r from-[#444] to-[#333] rounded-full rotate-[15deg] origin-left"></div>
-                <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[2px] h-[4px] bg-[#3a3a3a]"></div>
-              </div>
-            </div>
-            {/* Label */}
-            <div className="mt-1.5 flex flex-col items-center gap-0.5">
-              <span className="text-white/80 text-[10px] font-bold tracking-[0.25em] uppercase">LED Display</span>
-              <span className="text-white/40 text-[8px] tracking-wider">P3.9 Indoor</span>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
 
           {/* Right LED Wall Panel — Event Showcase */}
-          <motion.div
-            initial={{ opacity: 0, x: 50, scale: 0.9 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="hidden lg:flex absolute -right-2 xl:-right-4 top-[74%] -translate-y-1/2 flex-col items-center pointer-events-none"
-          >
-            {/* LED Wall Frame with Module Grid */}
-            <div className="relative w-[220px] h-[165px] rounded-[2px] overflow-hidden shadow-[0_0_40px_rgba(0,100,255,0.2),0_0_80px_rgba(0,100,255,0.08),inset_0_0_20px_rgba(0,0,0,0.5)]">
-              {/* Thick industrial outer bezel */}
-              <div className="absolute inset-0 border-[4px] border-[#1a1a1a] rounded-[2px] z-30"></div>
-              {/* Metallic bezel highlight */}
-              <div className="absolute inset-0 border-t-[1px] border-l-[1px] border-[#444] rounded-[2px] z-30 opacity-40"></div>
-              {/* Corner mounting bolts */}
-              <div className="absolute top-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-              <div className="absolute top-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-              <div className="absolute bottom-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-              <div className="absolute bottom-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-              {/* Inner edge glow */}
-              <div className="absolute inset-[4px] border border-[#0077ff]/25 z-20"></div>
-              {/* Screen content - YouTube Video */}
-              <div className="absolute inset-[5px] bg-[#050510] overflow-hidden">
-                <iframe
-                  src="https://www.youtube.com/embed/0DvvfhOgYPM?autoplay=1&mute=1&loop=1&playlist=0DvvfhOgYPM&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1"
-                  title="LED Wall Showcase"
-                  className="w-full h-full border-0 scale-[1.5] pointer-events-auto"
-                  allow="autoplay; encrypted-media"
-                  loading="lazy"
-                ></iframe>
+          {isDesktop && (
+            <motion.div
+              initial={{ opacity: 0, x: 50, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className="hidden lg:flex absolute -right-2 xl:-right-4 top-[74%] -translate-y-1/2 flex-col items-center pointer-events-none"
+            >
+              {/* LED Wall Frame with Module Grid */}
+              <div className="relative w-[220px] h-[165px] rounded-[2px] overflow-hidden shadow-[0_0_40px_rgba(0,100,255,0.2),0_0_80px_rgba(0,100,255,0.08),inset_0_0_20px_rgba(0,0,0,0.5)]">
+                {/* Thick industrial outer bezel */}
+                <div className="absolute inset-0 border-[4px] border-[#1a1a1a] rounded-[2px] z-30"></div>
+                {/* Metallic bezel highlight */}
+                <div className="absolute inset-0 border-t-[1px] border-l-[1px] border-[#444] rounded-[2px] z-30 opacity-40"></div>
+                {/* Corner mounting bolts */}
+                <div className="absolute top-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
+                <div className="absolute top-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
+                <div className="absolute bottom-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
+                <div className="absolute bottom-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
+                {/* Inner edge glow */}
+                <div className="absolute inset-[4px] border border-[#0077ff]/25 z-20"></div>
+                {/* Screen content - YouTube Video */}
+                <div className="absolute inset-[5px] bg-[#050510] overflow-hidden">
+                  <iframe
+                    src="https://www.youtube.com/embed/0DvvfhOgYPM?autoplay=1&mute=1&loop=1&playlist=0DvvfhOgYPM&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1"
+                    title="LED Wall Showcase"
+                    className="w-full h-full border-0 scale-[1.5] pointer-events-auto"
+                    allow="autoplay; encrypted-media"
+                    loading="lazy"
+                  ></iframe>
+                </div>
+                {/* LED Module Grid Lines (simulating 2x2 panel segments) */}
+                <div className="absolute inset-[5px] z-10 pointer-events-none">
+                  <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#111]/60"></div>
+                  <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-[#111]/60"></div>
+                </div>
+                {/* RGB Sub-pixel Pattern Overlay */}
+                <div
+                  className="absolute inset-[5px] z-10 opacity-[0.04] pointer-events-none"
+                  style={{
+                    backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px), repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px)`
+                  }}
+                ></div>
+                {/* LED Scan Line */}
+                <motion.div
+                  animate={{ y: ["-100%", "250%"] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1.5 }}
+                  className="absolute left-[5px] right-[5px] h-[1.5px] bg-gradient-to-r from-transparent via-white/8 to-transparent z-10 pointer-events-none"
+                ></motion.div>
+                {/* Subtle screen flicker */}
+                <motion.div
+                  animate={{ opacity: [0.97, 1, 0.98, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  className="absolute inset-[5px] bg-transparent z-[5]"
+                ></motion.div>
               </div>
-              {/* LED Module Grid Lines (simulating 2x2 panel segments) */}
-              <div className="absolute inset-[5px] z-10 pointer-events-none">
-                <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#111]/60"></div>
-                <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-[#111]/60"></div>
+              {/* ── Premium Truss Stand ── */}
+              <div className="flex flex-col items-center">
+                {/* Top mounting plate */}
+                <div className="w-[70px] h-[4px] bg-gradient-to-b from-[#555] to-[#333] rounded-sm shadow-[0_1px_3px_rgba(0,0,0,0.5)]"></div>
+                {/* Upper pole section */}
+                <div className="w-[4px] h-[22px] bg-gradient-to-b from-[#555] via-[#444] to-[#3a3a3a] relative">
+                  <div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#4a4a4a] rounded-[1px] border-t border-[#666]/40"></div>
+                </div>
+                {/* Adjustment clamp ring */}
+                <div className="w-[10px] h-[5px] bg-gradient-to-b from-[#555] to-[#3a3a3a] rounded-[1px] border border-[#666]/30"></div>
+                {/* Lower pole section */}
+                <div className="w-[4px] h-[28px] bg-gradient-to-b from-[#444] to-[#2a2a2a] relative">
+                  <div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#3a3a3a] rounded-[1px] border-t border-[#555]/30"></div>
+                </div>
+                {/* Tripod base hub */}
+                <div className="w-[12px] h-[5px] bg-gradient-to-b from-[#444] to-[#333] rounded-sm"></div>
+                {/* Tripod legs */}
+                <div className="relative w-[70px] h-[6px]">
+                  <div className="absolute left-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-l from-[#444] to-[#333] rounded-full -rotate-[15deg] origin-right"></div>
+                  <div className="absolute right-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-r from-[#444] to-[#333] rounded-full rotate-[15deg] origin-left"></div>
+                  <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[2px] h-[4px] bg-[#3a3a3a]"></div>
+                </div>
               </div>
-              {/* RGB Sub-pixel Pattern Overlay */}
-              <div
-                className="absolute inset-[5px] z-10 opacity-[0.04] pointer-events-none"
-                style={{
-                  backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px), repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px)`
-                }}
-              ></div>
-              {/* LED Scan Line */}
-              <motion.div
-                animate={{ y: ["-100%", "250%"] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1.5 }}
-                className="absolute left-[5px] right-[5px] h-[1.5px] bg-gradient-to-r from-transparent via-white/8 to-transparent z-10 pointer-events-none"
-              ></motion.div>
-              {/* Subtle screen flicker */}
-              <motion.div
-                animate={{ opacity: [0.97, 1, 0.98, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-[5px] bg-transparent z-[5]"
-              ></motion.div>
-            </div>
-            {/* ── Premium Truss Stand ── */}
-            <div className="flex flex-col items-center">
-              {/* Top mounting plate */}
-              <div className="w-[70px] h-[4px] bg-gradient-to-b from-[#555] to-[#333] rounded-sm shadow-[0_1px_3px_rgba(0,0,0,0.5)]"></div>
-              {/* Upper pole section */}
-              <div className="w-[4px] h-[22px] bg-gradient-to-b from-[#555] via-[#444] to-[#3a3a3a] relative">
-                <div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#4a4a4a] rounded-[1px] border-t border-[#666]/40"></div>
+              {/* Label */}
+              <div className="mt-1.5 flex flex-col items-center gap-0.5">
+                <span className="text-white/80 text-[10px] font-bold tracking-[0.25em] uppercase">Live Preview</span>
+                <span className="text-white/40 text-[8px] tracking-wider">Event Showcase</span>
               </div>
-              {/* Adjustment clamp ring */}
-              <div className="w-[10px] h-[5px] bg-gradient-to-b from-[#555] to-[#3a3a3a] rounded-[1px] border border-[#666]/30"></div>
-              {/* Lower pole section */}
-              <div className="w-[4px] h-[28px] bg-gradient-to-b from-[#444] to-[#2a2a2a] relative">
-                <div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#3a3a3a] rounded-[1px] border-t border-[#555]/30"></div>
-              </div>
-              {/* Tripod base hub */}
-              <div className="w-[12px] h-[5px] bg-gradient-to-b from-[#444] to-[#333] rounded-sm"></div>
-              {/* Tripod legs */}
-              <div className="relative w-[70px] h-[6px]">
-                <div className="absolute left-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-l from-[#444] to-[#333] rounded-full -rotate-[15deg] origin-right"></div>
-                <div className="absolute right-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-r from-[#444] to-[#333] rounded-full rotate-[15deg] origin-left"></div>
-                <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[2px] h-[4px] bg-[#3a3a3a]"></div>
-              </div>
-            </div>
-            {/* Label */}
-            <div className="mt-1.5 flex flex-col items-center gap-0.5">
-              <span className="text-white/80 text-[10px] font-bold tracking-[0.25em] uppercase">Live Preview</span>
-              <span className="text-white/40 text-[8px] tracking-wider">Event Showcase</span>
-            </div>
-          </motion.div>
+            </motion.div>
+          )}
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
