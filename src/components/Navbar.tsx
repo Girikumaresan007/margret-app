@@ -37,7 +37,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
           <img
-            src="/logo-icon.png?v=2"
+            src="/logo.png"
             alt="Margret AV Logo"
             className="h-14 w-auto object-contain flex-shrink-0 group-hover:scale-105 transition-transform duration-300 -translate-y-[2px]"
           />

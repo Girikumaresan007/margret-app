@@ -8,6 +8,7 @@ import Contact from './pages/Contact';
 // import Book from './pages/Book';
 import About from './pages/About';
 import LoadingScreen from './components/LoadingScreen';
+import SplashScreen from './components/SplashScreen';
 import ScrollToTop from './components/ScrollToTop';
 
 function AnimatedRoutes() {
@@ -27,21 +28,33 @@ function AnimatedRoutes() {
 }
 
 export default function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  // Three phases: 'loading' -> 'splash' -> 'ready'
+  const [phase, setPhase] = useState<'loading' | 'splash' | 'ready'>('loading');
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 2000);
+    // Loading screen shows for 2 seconds, then transitions to splash
+    const timer = setTimeout(() => setPhase('splash'), 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleSplashComplete = () => {
+    setPhase('ready');
+  };
 
   return (
     <Router>
       <ScrollToTop />
       <AnimatePresence>
-        {isLoading && <LoadingScreen key="loader" />}
+        {phase === 'loading' && <LoadingScreen key="loader" />}
       </AnimatePresence>
-      
-      {!isLoading && (
+
+      <AnimatePresence>
+        {phase === 'splash' && (
+          <SplashScreen key="splash" onComplete={handleSplashComplete} />
+        )}
+      </AnimatePresence>
+
+      {(phase === 'splash' || phase === 'ready') && (
         <Layout>
           <AnimatedRoutes />
         </Layout>

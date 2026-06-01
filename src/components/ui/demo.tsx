@@ -1,5 +1,5 @@
-import Component from "./testimonial-v2";
+import { HoloPulse } from "./holo-pulse-loader";
 
 export default function DemoOne() {
-  return <Component />;
+  return <HoloPulse />;
 }
