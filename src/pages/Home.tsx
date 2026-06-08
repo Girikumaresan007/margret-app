@@ -4,8 +4,11 @@ import { ArrowRight, Star, CheckCircle2, Play, Users, ShieldCheck, Zap, Heart, S
 import { Link } from 'react-router-dom';
 import { SERVICES, TESTIMONIALS, PACKAGES } from '../constants';
 import { cn } from '../lib/utils';
-import { useState, useEffect } from 'react';
-// import ThreeBackground from '../components/ThreeBackground';
+import { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const ServiceIconMap: Record<string, React.ComponentType<any>> = {
   Monitor,
@@ -21,15 +24,15 @@ const ServiceIconMap: Record<string, React.ComponentType<any>> = {
 
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
+  initial: { opacity: 0, y: 36 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.9 }
+  transition: { duration: 0.75, ease: 'easeOut' as const }
 };
 
 const staggerContainer = {
   initial: {},
-  whileInView: { transition: { staggerChildren: 0.1 } }
+  whileInView: { transition: { staggerChildren: 0.12 } }
 };
 
 const eventMarqueeItems = [
@@ -54,11 +57,12 @@ export default function Home() {
   const [playVideo1, setPlayVideo1] = useState(false);
   const [playVideo2, setPlayVideo2] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const heroContentRef = useRef<HTMLDivElement>(null);
+  const missionRef = useRef<HTMLElement>(null);
+  const servicesRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
+    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
@@ -69,6 +73,74 @@ export default function Home() {
       setActiveTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
     }, 4000);
     return () => clearInterval(timer);
+  }, []);
+
+  // GSAP: Cinematic hero entrance
+  useEffect(() => {
+    if (!heroContentRef.current) return;
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ delay: 0.3 });
+      tl.fromTo('.home-badge',
+        { opacity: 0, y: 20, scale: 0.88 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.65, ease: 'back.out(1.5)' }
+      )
+      .fromTo('.home-h1',
+        { opacity: 0, y: 55, skewY: 2 },
+        { opacity: 1, y: 0, skewY: 0, duration: 1, ease: 'power3.out' },
+        '-=0.3'
+      )
+      .fromTo('.home-p',
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' },
+        '-=0.45'
+      )
+      .fromTo('.home-btns',
+        { opacity: 0, y: 22 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+        '-=0.35'
+      );
+    }, heroContentRef);
+    return () => ctx.revert();
+  }, []);
+
+  // GSAP ScrollTrigger: Mission cards scrub reveal
+  useEffect(() => {
+    if (!missionRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo('.mission-card',
+        { opacity: 0, y: 50, scale: 0.94 },
+        {
+          opacity: 1, y: 0, scale: 1,
+          duration: 0.7, stagger: 0.18, ease: 'power3.out',
+          scrollTrigger: {
+            trigger: missionRef.current,
+            start: 'top 78%',
+            once: true,
+          },
+        }
+      );
+    }, missionRef);
+    return () => ctx.revert();
+  }, []);
+
+  // GSAP ScrollTrigger: Service cards stagger
+  useEffect(() => {
+    if (!servicesRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo('.service-card',
+        { opacity: 0, y: 40, scale: 0.92 },
+        {
+          opacity: 1, y: 0, scale: 1,
+          duration: 0.65, stagger: 0.1, ease: 'power2.out',
+          scrollTrigger: {
+            trigger: servicesRef.current,
+            start: 'top 80%',
+            once: true,
+          },
+        }
+      );
+    }, servicesRef);
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -102,241 +174,137 @@ export default function Home() {
         </div>
 
 
-        <div className="relative w-full max-w-7xl mx-auto text-center z-10 flex flex-col items-center justify-center gap-4 md:gap-8 -translate-y-2 md:-translate-y-6">
-          {/* Left LED Wall Panel — Logo Display */}
-          {isDesktop && (
-            <motion.div
-              initial={{ opacity: 0, x: -50, scale: 0.9 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ duration: 1, delay: 0.8 }}
-              className="hidden lg:flex absolute -left-2 xl:-left-4 top-[74%] -translate-y-1/2 flex-col items-center pointer-events-none"
-            >
-              {/* LED Wall Frame with Module Grid */}
-              <div className="relative w-[220px] h-[165px] rounded-[2px] overflow-hidden shadow-[0_0_40px_rgba(0,100,255,0.2),0_0_80px_rgba(0,100,255,0.08),inset_0_0_20px_rgba(0,0,0,0.5)]">
-                {/* Thick industrial outer bezel */}
-                <div className="absolute inset-0 border-[4px] border-[#1a1a1a] rounded-[2px] z-30"></div>
-                {/* Metallic bezel highlight */}
-                <div className="absolute inset-0 border-t-[1px] border-l-[1px] border-[#444] rounded-[2px] z-30 opacity-40"></div>
-                {/* Corner mounting bolts */}
-                <div className="absolute top-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-                <div className="absolute top-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-                <div className="absolute bottom-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-                <div className="absolute bottom-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-                {/* Inner edge glow */}
-                <div className="absolute inset-[4px] border border-[#0077ff]/25 z-20"></div>
-                {/* Screen content - Logo */}
-                <div className="absolute inset-[5px] bg-gradient-to-br from-[#050510] via-[#0a0a18] to-[#060612] flex items-center justify-center">
-                  <img
-                    src="/logo-icon.png?v=2"
-                    alt="Margret AV"
-                    className="w-[110px] h-[110px] object-contain brightness-125 drop-shadow-[0_0_20px_rgba(255,215,0,0.35)]"
-                  />
+          {/* Hero content â€” GSAP animates .home-badge .home-h1 .home-p .home-btns */}
+          <div ref={heroContentRef} className="relative w-full max-w-7xl mx-auto text-center z-10 flex flex-col items-center justify-center gap-4 md:gap-8 -translate-y-2 md:-translate-y-6">
+            {/* Left LED Panel */}
+            {isDesktop && (
+              <motion.div
+                initial={{ opacity: 0, x: -50, scale: 0.9 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ duration: 1, delay: 1.1 }}
+                className="hidden lg:flex absolute -left-2 xl:-left-4 top-[74%] -translate-y-1/2 flex-col items-center pointer-events-none"
+              >
+                <div className="relative w-[220px] h-[165px] rounded-[2px] overflow-hidden shadow-[0_0_40px_rgba(0,100,255,0.2),0_0_80px_rgba(0,100,255,0.08),inset_0_0_20px_rgba(0,0,0,0.5)]">
+                  <div className="absolute inset-0 border-[4px] border-[#1a1a1a] rounded-[2px] z-30" />
+                  <div className="absolute inset-0 border-t-[1px] border-l-[1px] border-[#444] rounded-[2px] z-30 opacity-40" />
+                  <div className="absolute top-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
+                  <div className="absolute top-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
+                  <div className="absolute bottom-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
+                  <div className="absolute bottom-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
+                  <div className="absolute inset-[4px] border border-[#0077ff]/25 z-20" />
+                  <div className="absolute inset-[5px] bg-gradient-to-br from-[#050510] via-[#0a0a18] to-[#060612] flex items-center justify-center">
+                    <img src="/logo-icon.png?v=2" alt="Margret AV" className="w-[110px] h-[110px] object-contain brightness-125 drop-shadow-[0_0_20px_rgba(255,215,0,0.35)]" />
+                  </div>
+                  <div className="absolute inset-[5px] z-10 pointer-events-none">
+                    <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#111]/60" />
+                    <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-[#111]/60" />
+                  </div>
+                  <div className="absolute inset-[5px] z-10 opacity-[0.04] pointer-events-none" style={{ backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px), repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px)` }} />
+                  <motion.div animate={{ y: ["-100%", "250%"] }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="absolute left-[5px] right-[5px] h-[1.5px] bg-gradient-to-r from-transparent via-white/8 to-transparent z-10 pointer-events-none" />
+                  <motion.div animate={{ opacity: [0.97, 1, 0.98, 1] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="absolute inset-[5px] bg-transparent z-[5]" />
                 </div>
-                {/* LED Module Grid Lines (simulating 2x2 panel segments) */}
-                <div className="absolute inset-[5px] z-10 pointer-events-none">
-                  <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#111]/60"></div>
-                  <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-[#111]/60"></div>
+                <div className="flex flex-col items-center">
+                  <div className="w-[70px] h-[4px] bg-gradient-to-b from-[#555] to-[#333] rounded-sm shadow-[0_1px_3px_rgba(0,0,0,0.5)]" />
+                  <div className="w-[4px] h-[22px] bg-gradient-to-b from-[#555] via-[#444] to-[#3a3a3a] relative"><div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#4a4a4a] rounded-[1px] border-t border-[#666]/40" /></div>
+                  <div className="w-[10px] h-[5px] bg-gradient-to-b from-[#555] to-[#3a3a3a] rounded-[1px] border border-[#666]/30" />
+                  <div className="w-[4px] h-[28px] bg-gradient-to-b from-[#444] to-[#2a2a2a] relative"><div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#3a3a3a] rounded-[1px] border-t border-[#555]/30" /></div>
+                  <div className="w-[12px] h-[5px] bg-gradient-to-b from-[#444] to-[#333] rounded-sm" />
+                  <div className="relative w-[70px] h-[6px]">
+                    <div className="absolute left-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-l from-[#444] to-[#333] rounded-full -rotate-[15deg] origin-right" />
+                    <div className="absolute right-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-r from-[#444] to-[#333] rounded-full rotate-[15deg] origin-left" />
+                    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[2px] h-[4px] bg-[#3a3a3a]" />
+                  </div>
                 </div>
-                {/* RGB Sub-pixel Pattern Overlay */}
-                <div
-                  className="absolute inset-[5px] z-10 opacity-[0.04] pointer-events-none"
-                  style={{
-                    backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px), repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px)`
-                  }}
-                ></div>
-                {/* LED Scan Line */}
-                <motion.div
-                  animate={{ y: ["-100%", "250%"] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                  className="absolute left-[5px] right-[5px] h-[1.5px] bg-gradient-to-r from-transparent via-white/8 to-transparent z-10 pointer-events-none"
-                ></motion.div>
-                {/* Subtle screen flicker */}
-                <motion.div
-                  animate={{ opacity: [0.97, 1, 0.98, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-[5px] bg-transparent z-[5]"
-                ></motion.div>
-              </div>
-              {/* ── Premium Truss Stand ── */}
-              <div className="flex flex-col items-center">
-                {/* Top mounting plate */}
-                <div className="w-[70px] h-[4px] bg-gradient-to-b from-[#555] to-[#333] rounded-sm shadow-[0_1px_3px_rgba(0,0,0,0.5)]"></div>
-                {/* Upper pole section */}
-                <div className="w-[4px] h-[22px] bg-gradient-to-b from-[#555] via-[#444] to-[#3a3a3a] relative">
-                  <div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#4a4a4a] rounded-[1px] border-t border-[#666]/40"></div>
+                <div className="mt-1.5 flex flex-col items-center gap-0.5">
+                  <span className="text-white/80 text-[10px] font-bold tracking-[0.25em] uppercase">LED Display</span>
+                  <span className="text-white/40 text-[8px] tracking-wider">P3.9 Indoor</span>
                 </div>
-                {/* Adjustment clamp ring */}
-                <div className="w-[10px] h-[5px] bg-gradient-to-b from-[#555] to-[#3a3a3a] rounded-[1px] border border-[#666]/30"></div>
-                {/* Lower pole section */}
-                <div className="w-[4px] h-[28px] bg-gradient-to-b from-[#444] to-[#2a2a2a] relative">
-                  <div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#3a3a3a] rounded-[1px] border-t border-[#555]/30"></div>
-                </div>
-                {/* Tripod base hub */}
-                <div className="w-[12px] h-[5px] bg-gradient-to-b from-[#444] to-[#333] rounded-sm"></div>
-                {/* Tripod legs */}
-                <div className="relative w-[70px] h-[6px]">
-                  <div className="absolute left-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-l from-[#444] to-[#333] rounded-full -rotate-[15deg] origin-right"></div>
-                  <div className="absolute right-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-r from-[#444] to-[#333] rounded-full rotate-[15deg] origin-left"></div>
-                  <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[2px] h-[4px] bg-[#3a3a3a]"></div>
-                </div>
-              </div>
-              {/* Label */}
-              <div className="mt-1.5 flex flex-col items-center gap-0.5">
-                <span className="text-white/80 text-[10px] font-bold tracking-[0.25em] uppercase">LED Display</span>
-                <span className="text-white/40 text-[8px] tracking-wider">P3.9 Indoor</span>
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
 
-          {/* Right LED Wall Panel — Event Showcase */}
-          {isDesktop && (
-            <motion.div
-              initial={{ opacity: 0, x: 50, scale: 0.9 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ duration: 1, delay: 0.8 }}
-              className="hidden lg:flex absolute -right-2 xl:-right-4 top-[74%] -translate-y-1/2 flex-col items-center pointer-events-none"
-            >
-              {/* LED Wall Frame with Module Grid */}
-              <div className="relative w-[220px] h-[165px] rounded-[2px] overflow-hidden shadow-[0_0_40px_rgba(0,100,255,0.2),0_0_80px_rgba(0,100,255,0.08),inset_0_0_20px_rgba(0,0,0,0.5)]">
-                {/* Thick industrial outer bezel */}
-                <div className="absolute inset-0 border-[4px] border-[#1a1a1a] rounded-[2px] z-30"></div>
-                {/* Metallic bezel highlight */}
-                <div className="absolute inset-0 border-t-[1px] border-l-[1px] border-[#444] rounded-[2px] z-30 opacity-40"></div>
-                {/* Corner mounting bolts */}
-                <div className="absolute top-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-                <div className="absolute top-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-                <div className="absolute bottom-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-                <div className="absolute bottom-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30"></div>
-                {/* Inner edge glow */}
-                <div className="absolute inset-[4px] border border-[#0077ff]/25 z-20"></div>
-                {/* Screen content - YouTube Video */}
-                <div className="absolute inset-[5px] bg-[#050510] overflow-hidden">
-                  <iframe
-                    src="https://www.youtube.com/embed/0DvvfhOgYPM?autoplay=1&mute=1&loop=1&playlist=0DvvfhOgYPM&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1"
-                    title="LED Wall Showcase"
-                    className="w-full h-full border-0 scale-[1.5] pointer-events-auto"
-                    allow="autoplay; encrypted-media"
-                    loading="lazy"
-                  ></iframe>
+            {/* Right LED Panel */}
+            {isDesktop && (
+              <motion.div
+                initial={{ opacity: 0, x: 50, scale: 0.9 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ duration: 1, delay: 1.1 }}
+                className="hidden lg:flex absolute -right-2 xl:-right-4 top-[74%] -translate-y-1/2 flex-col items-center pointer-events-none"
+              >
+                <div className="relative w-[220px] h-[165px] rounded-[2px] overflow-hidden shadow-[0_0_40px_rgba(0,100,255,0.2),0_0_80px_rgba(0,100,255,0.08),inset_0_0_20px_rgba(0,0,0,0.5)]">
+                  <div className="absolute inset-0 border-[4px] border-[#1a1a1a] rounded-[2px] z-30" />
+                  <div className="absolute inset-0 border-t-[1px] border-l-[1px] border-[#444] rounded-[2px] z-30 opacity-40" />
+                  <div className="absolute top-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
+                  <div className="absolute top-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
+                  <div className="absolute bottom-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
+                  <div className="absolute bottom-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
+                  <div className="absolute inset-[4px] border border-[#0077ff]/25 z-20" />
+                  <div className="absolute inset-[5px] bg-[#050510] overflow-hidden">
+                    <iframe src="https://www.youtube.com/embed/0DvvfhOgYPM?autoplay=1&mute=1&loop=1&playlist=0DvvfhOgYPM&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1" title="LED Wall Showcase" className="w-full h-full border-0 scale-[1.5] pointer-events-auto" allow="autoplay; encrypted-media" loading="lazy" />
+                  </div>
+                  <div className="absolute inset-[5px] z-10 pointer-events-none">
+                    <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#111]/60" />
+                    <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-[#111]/60" />
+                  </div>
+                  <div className="absolute inset-[5px] z-10 opacity-[0.04] pointer-events-none" style={{ backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px), repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px)` }} />
+                  <motion.div animate={{ y: ["-100%", "250%"] }} transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1.5 }} className="absolute left-[5px] right-[5px] h-[1.5px] bg-gradient-to-r from-transparent via-white/8 to-transparent z-10 pointer-events-none" />
+                  <motion.div animate={{ opacity: [0.97, 1, 0.98, 1] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="absolute inset-[5px] bg-transparent z-[5]" />
                 </div>
-                {/* LED Module Grid Lines (simulating 2x2 panel segments) */}
-                <div className="absolute inset-[5px] z-10 pointer-events-none">
-                  <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#111]/60"></div>
-                  <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-[#111]/60"></div>
+                <div className="flex flex-col items-center">
+                  <div className="w-[70px] h-[4px] bg-gradient-to-b from-[#555] to-[#333] rounded-sm shadow-[0_1px_3px_rgba(0,0,0,0.5)]" />
+                  <div className="w-[4px] h-[22px] bg-gradient-to-b from-[#555] via-[#444] to-[#3a3a3a] relative"><div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#4a4a4a] rounded-[1px] border-t border-[#666]/40" /></div>
+                  <div className="w-[10px] h-[5px] bg-gradient-to-b from-[#555] to-[#3a3a3a] rounded-[1px] border border-[#666]/30" />
+                  <div className="w-[4px] h-[28px] bg-gradient-to-b from-[#444] to-[#2a2a2a] relative"><div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#3a3a3a] rounded-[1px] border-t border-[#555]/30" /></div>
+                  <div className="w-[12px] h-[5px] bg-gradient-to-b from-[#444] to-[#333] rounded-sm" />
+                  <div className="relative w-[70px] h-[6px]">
+                    <div className="absolute left-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-l from-[#444] to-[#333] rounded-full -rotate-[15deg] origin-right" />
+                    <div className="absolute right-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-r from-[#444] to-[#333] rounded-full rotate-[15deg] origin-left" />
+                    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[2px] h-[4px] bg-[#3a3a3a]" />
+                  </div>
                 </div>
-                {/* RGB Sub-pixel Pattern Overlay */}
-                <div
-                  className="absolute inset-[5px] z-10 opacity-[0.04] pointer-events-none"
-                  style={{
-                    backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px), repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px)`
-                  }}
-                ></div>
-                {/* LED Scan Line */}
-                <motion.div
-                  animate={{ y: ["-100%", "250%"] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1.5 }}
-                  className="absolute left-[5px] right-[5px] h-[1.5px] bg-gradient-to-r from-transparent via-white/8 to-transparent z-10 pointer-events-none"
-                ></motion.div>
-                {/* Subtle screen flicker */}
-                <motion.div
-                  animate={{ opacity: [0.97, 1, 0.98, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-[5px] bg-transparent z-[5]"
-                ></motion.div>
-              </div>
-              {/* ── Premium Truss Stand ── */}
-              <div className="flex flex-col items-center">
-                {/* Top mounting plate */}
-                <div className="w-[70px] h-[4px] bg-gradient-to-b from-[#555] to-[#333] rounded-sm shadow-[0_1px_3px_rgba(0,0,0,0.5)]"></div>
-                {/* Upper pole section */}
-                <div className="w-[4px] h-[22px] bg-gradient-to-b from-[#555] via-[#444] to-[#3a3a3a] relative">
-                  <div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#4a4a4a] rounded-[1px] border-t border-[#666]/40"></div>
+                <div className="mt-1.5 flex flex-col items-center gap-0.5">
+                  <span className="text-white/80 text-[10px] font-bold tracking-[0.25em] uppercase">Live Preview</span>
+                  <span className="text-white/40 text-[8px] tracking-wider">Event Showcase</span>
                 </div>
-                {/* Adjustment clamp ring */}
-                <div className="w-[10px] h-[5px] bg-gradient-to-b from-[#555] to-[#3a3a3a] rounded-[1px] border border-[#666]/30"></div>
-                {/* Lower pole section */}
-                <div className="w-[4px] h-[28px] bg-gradient-to-b from-[#444] to-[#2a2a2a] relative">
-                  <div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#3a3a3a] rounded-[1px] border-t border-[#555]/30"></div>
-                </div>
-                {/* Tripod base hub */}
-                <div className="w-[12px] h-[5px] bg-gradient-to-b from-[#444] to-[#333] rounded-sm"></div>
-                {/* Tripod legs */}
-                <div className="relative w-[70px] h-[6px]">
-                  <div className="absolute left-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-l from-[#444] to-[#333] rounded-full -rotate-[15deg] origin-right"></div>
-                  <div className="absolute right-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-r from-[#444] to-[#333] rounded-full rotate-[15deg] origin-left"></div>
-                  <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[2px] h-[4px] bg-[#3a3a3a]"></div>
-                </div>
-              </div>
-              {/* Label */}
-              <div className="mt-1.5 flex flex-col items-center gap-0.5">
-                <span className="text-white/80 text-[10px] font-bold tracking-[0.25em] uppercase">Live Preview</span>
-                <span className="text-white/40 text-[8px] tracking-wider">Event Showcase</span>
-              </div>
-            </motion.div>
-          )}
+              </motion.div>
+            )}
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gold/20 backdrop-blur-md mb-2 md:mb-0"
-          >
-            <span className="w-2 h-2 bg-gold rounded-full animate-pulse"></span>
-            <span className="text-sm font-semibold text-gold tracking-wide uppercase">
-              Premium Event Solutions
-            </span>
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-3xl sm:text-4xl md:text-6xl font-display font-extrabold leading-tight text-ink drop-shadow-[0_4px_12px_rgba(0,0,0,0.7)] md:drop-shadow-none px-2"
-          >
-            <span className="text-gray-50">Professional</span>{" "}
-            <span className="text-gold-light">LED & Audio Visual</span>{" "}
-            <br className="hidden md:inline" />
-            <span className="text-gray-50">Solution for Every Event</span>
-          </motion.h1>
+            {/* GSAP-animated hero text â€” classes targeted by GSAP timeline */}
+            <div className="home-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gold/20 backdrop-blur-md mb-2 md:mb-0" style={{ opacity: 0 }}>
+              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+              <span className="text-sm font-semibold text-gold tracking-wide uppercase">Premium Event Solutions</span>
+            </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-white text-sm md:text-xl max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] md:drop-shadow-none px-4"
-          >
-            Transform your events with cutting-edge LED screens, crystal-clear audio systems and professional lighting solutions. Crafting unforgettable experiences.
-          </motion.p>
+            <h1 className="home-h1 text-3xl sm:text-4xl md:text-6xl font-display font-extrabold leading-tight text-ink drop-shadow-[0_4px_12px_rgba(0,0,0,0.7)] md:drop-shadow-none px-2" style={{ opacity: 0 }}>
+              <span className="text-gray-50">Professional</span>{" "}
+              <span className="text-gold-light">LED &amp; Audio Visual</span>{" "}
+              <br className="hidden md:inline" />
+              <span className="text-gray-50">Solution for Every Event</span>
+            </h1>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mt-2 md:mt-8 w-full px-4"
-          >
-            <a
-              href="#services"
-              className="w-full max-w-[280px] sm:max-w-none sm:w-auto bg-gold text-black px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-gold-light transition-all group shadow-md"
-            >
-              Explore Services <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a
-              href="#packages"
-              className="w-full max-w-[280px] sm:max-w-none sm:w-auto text-[#f7f7f7] px-8 py-4 rounded-full font-bold border border-[#FFD700] flex items-center justify-center gap-2 hover:bg-white/10 transition-all shadow-md"
-            >
-              Packages
-            </a>
-          </motion.div>
-        </div>
+            <p className="home-p text-white text-sm md:text-xl max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] md:drop-shadow-none px-4" style={{ opacity: 0 }}>
+              Transform your events with cutting-edge LED screens, crystal-clear audio systems
+              and professional lighting solutions. Crafting unforgettable experiences.
+            </p>
 
-        {/* <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-gray-500"
-        >
-          <div className="w-6 h-10 border-2 border-gray-500 rounded-full flex justify-center p-1">
-            <div className="w-1 h-2 bg-gray-500 rounded-full" />
+            <div className="home-btns flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mt-2 md:mt-8 w-full px-4" style={{ opacity: 0 }}>
+              <motion.a
+                href="#services"
+                whileHover={{ scale: 1.05, boxShadow: '0 0 24px rgba(218,165,32,0.4)' }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full max-w-[280px] sm:max-w-none sm:w-auto bg-gold text-black px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-gold-light transition-all group shadow-md"
+              >
+                Explore Services <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+              </motion.a>
+              <motion.a
+                href="#packages"
+                whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.12)' }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full max-w-[280px] sm:max-w-none sm:w-auto text-[#f7f7f7] px-8 py-4 rounded-full font-bold border border-[#FFD700] flex items-center justify-center gap-2 transition-all shadow-md"
+              >
+                Packages
+              </motion.a>
+            </div>
           </div>
-        </motion.div> */}
       </section>
 
       {/* High-Contrast Professional Dual-Track Marquee Section */}
@@ -402,7 +370,7 @@ export default function Home() {
 
 
       {/* Mission Section */}
-      <section id="about" className="py-24 px-6">
+      <section id="about" ref={missionRef} className="py-24 px-6">
         <div className="max-w-7xl mx-auto text-center mb-16">
           <motion.h2 {...fadeInUp} className="text-4xl font-bold mb-4 text-ink">Our <span className="text-gold">Mission</span></motion.h2>
           <motion.div
@@ -420,13 +388,11 @@ export default function Home() {
             { title: 'Reliability', desc: 'Ensuring flawless execution through rigorous testing and redundant systems.', icon: ShieldCheck },
             { title: 'Passion', desc: 'A deep-rooted love for the art of production and live experiences.', icon: Heart },
           ].map((item, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.2 }}
-              viewport={{ once: true }}
-              className="relative glass p-10 rounded-3xl text-center group overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
+              className="mission-card relative glass p-10 rounded-3xl text-center group overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)]"
+              // GSAP sets opacity-0 → 1 on desktop; on mobile cards are visible by default
+              style={{ opacity: typeof window !== 'undefined' && window.innerWidth >= 768 ? 0 : 1 }}
             >
               <div className="w-16 h-16 bg-gold/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:bg-gold/20 transition-all duration-300 shadow-[0_0_20px_rgba(255,215,0,0.15)]">
                 <item.icon className="text-gold w-8 h-8" />
@@ -434,8 +400,7 @@ export default function Home() {
               <h3 className="text-xl font-bold mb-4 text-ink">{item.title}</h3>
               <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
               <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-gold/0 via-gold to-gold/0 opacity-0 group-hover:opacity-100 transition-all duration-500" />
-              {/* <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" /> */}
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
@@ -526,7 +491,7 @@ export default function Home() {
       </section>
 
       {/* Services Grid */}
-      <section id="services" className="py-24 px-6">
+      <section id="services" ref={servicesRef} className="py-24 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 max-w-3xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold text-ink">
@@ -546,14 +511,11 @@ export default function Home() {
             {SERVICES.map((service, i) => {
               const Icon = ServiceIconMap[service.icon] || Settings;
               return (
-                <motion.div
+                <div
                   key={service.id}
                   id={service.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.1 }}
-                  viewport={{ once: true }}
-                  className="group relative h-[400px] rounded-3xl overflow-hidden cursor-pointer"
+                  className="service-card group relative h-[400px] rounded-3xl overflow-hidden cursor-pointer"
+                  style={{ opacity: typeof window !== 'undefined' && window.innerWidth >= 768 ? 0 : 1 }}
                 >
                   {/* IMAGE */}
                   <img
@@ -587,7 +549,7 @@ export default function Home() {
 
                   {/* BORDER GLOW */}
                   <div className="absolute inset-0 border border-transparent group-hover:border-[#F2EDE2]/30 rounded-3xl transition-all duration-500" />
-                </motion.div>
+                </div>
               );
             })}
           </div>

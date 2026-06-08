@@ -5,7 +5,6 @@
   --font-display: "Poppins", sans-serif;
 
   --color-gold: #B8860B;
-  /* Deeper gold for better contrast on light bg */
   --color-gold-light: #DAA520;
   --color-beige: #F5F2ED;
   --color-ink: #1A1A1A;
@@ -14,15 +13,8 @@
 }
 
 @keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-20px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-20px); }
 }
 
 :root {
@@ -34,18 +26,18 @@
 body {
   font-family: var(--font-sans);
   overflow-x: hidden;
+  /* Prevent paint flicker on scroll */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   color: #1A1A1A;
 }
 
+/* ── Glassmorphism ─────────────────────────────────────────── */
 .glass {
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(12px);
@@ -65,55 +57,92 @@ h6 {
   -webkit-text-fill-color: transparent;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
+/* ── Custom Scrollbar ──────────────────────────────────────── */
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: #F5F2ED; }
+::-webkit-scrollbar-thumb  { background: #D1C7B7; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #B8860B; }
 
-::-webkit-scrollbar-track {
-  background: #F5F2ED;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #D1C7B7;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #B8860B;
-}
-
+/* ── Marquee — GPU-accelerated via translateX ──────────────── */
 @keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
-
-  100% {
-    transform: translateX(-50%);
-  }
+  0%   { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
 }
 
 @keyframes marquee-reverse {
-  0% {
-    transform: translateX(-50%);
-  }
-
-  100% {
-    transform: translateX(0%);
-  }
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
 }
 
 .animate-marquee {
   width: max-content;
   animation: marquee 60s linear infinite;
+  /* Promote to own compositor layer for smooth scrolling */
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .animate-marquee-reverse {
   width: max-content;
   animation: marquee-reverse 60s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .animate-marquee:hover,
 .animate-marquee-reverse:hover {
   animation-play-state: paused;
+}
+
+/* ── GPU-acceleration for scroll-animated sections ─────────── */
+/* Hero image zoom — compositor layer = zero layout cost */
+section[style*="perspective"] > div {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Framer Motion animated elements — hint GPU promotion */
+[style*="scale"], [style*="translateY"] {
+  backface-visibility: hidden;
+}
+
+/* ── Reduce motion for accessibility + battery saving ──────── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-reverse {
+    animation: none;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── Mobile performance — disable backdrop-blur on low-end ─── */
+@media (max-width: 640px) {
+  /* Reduce blur cost on mobile: lighter glass */
+  .glass {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .glass-gold {
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  /* Slow marquee slightly on mobile to reduce CPU */
+  .animate-marquee         { animation-duration: 80s; }
+  .animate-marquee-reverse { animation-duration: 80s; }
+}
+
+/* ── Smooth image rendering ─────────────────────────────────── */
+img {
+  image-rendering: auto;
+  content-visibility: auto;
+}
+
+/* ── Prevent content shift on scroll for fixed elements ─────── */
+.sticky, .fixed {
+  transform: translateZ(0);
+  will-change: transform;
 }
