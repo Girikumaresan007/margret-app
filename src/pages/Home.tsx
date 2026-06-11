@@ -176,7 +176,7 @@ export default function Home() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0 bg-black">
           <picture>
-            <source media="(min-width: 768px)" srcSet="/home%205.png" />
+            <source media="(min-width: 768px)" srcSet="/home%205.webp" />
             <img
               src="/mobile 3.webp"
               alt="Hero Background"

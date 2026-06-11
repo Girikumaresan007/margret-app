@@ -10,43 +10,63 @@ const LINE2_SEGS = [
   { text: 'Solution for Every', gold: false },
 ];
 
-const STAGGER = 0.024; // seconds between letters — fast, snappy
-const LINE_GAP = 0.12;  // brief pause between the two lines
+const STAGGER = 0.024; // seconds between letters
+const LINE_GAP = 0.12;  // brief pause between lines
 
 type CharItem = { char: string; gold: boolean; delay: number; isFirst: boolean };
+type WordItem = { chars: CharItem[] };
 
-function buildLines(): [CharItem[], CharItem[]] {
+function buildLinesToWords(): [WordItem[], WordItem[]] {
   let d = 0;
-  const l1: CharItem[] = [];
-  for (const seg of LINE1_SEGS) {
-    for (const char of seg.text) {
-      l1.push({ char, gold: seg.gold, delay: d, isFirst: d === 0 });
-      d += STAGGER;
+
+  const parseSegs = (segs: typeof LINE1_SEGS, isLine2 = false) => {
+    const words: WordItem[] = [];
+    let currentWord: CharItem[] = [];
+
+    for (const seg of segs) {
+      for (let i = 0; i < seg.text.length; i++) {
+        const char = seg.text[i];
+
+        if (char === ' ') {
+          if (currentWord.length > 0) {
+            words.push({ chars: currentWord });
+            currentWord = [];
+          }
+        } else {
+          currentWord.push({
+            char,
+            gold: seg.gold,
+            delay: d,
+            isFirst: !isLine2 && d === 0
+          });
+          d += STAGGER;
+        }
+      }
     }
-  }
+
+    if (currentWord.length > 0) {
+      words.push({ chars: currentWord });
+    }
+
+    return words;
+  };
+
+  const l1 = parseSegs(LINE1_SEGS, false);
   d += LINE_GAP;
-  const l2: CharItem[] = [];
-  for (const seg of LINE2_SEGS) {
-    for (const char of seg.text) {
-      l2.push({ char, gold: seg.gold, delay: d, isFirst: false });
-      d += STAGGER;
-    }
-  }
+  const l2 = parseSegs(LINE2_SEGS, true);
+
   return [l1, l2];
 }
 
-const [LINE1, LINE2] = buildLines();
+const [LINE1_WORDS, LINE2_WORDS] = buildLinesToWords();
 
-// Calculate when the text morph should fade in
-// LINE2 finishes stagger around: last delay (which is around 1.1s to 1.2s)
-const MORPH_DELAY = LINE2.length > 0 ? LINE2[LINE2.length - 1].delay + 0.15 : 1.1;
+// Calculate morph delay
+const lastWord = LINE2_WORDS[LINE2_WORDS.length - 1];
+const lastChar = lastWord ? lastWord.chars[lastWord.chars.length - 1] : null;
+const MORPH_DELAY = lastChar ? lastChar.delay + 0.15 : 1.1;
 
 function Char({ item, running }: { item: CharItem; running: boolean }) {
   const shadow = '0 2px 10px rgba(0,0,0,0.7)';
-
-  if (item.char === ' ') {
-    return <span className="inline-block" style={{ width: '0.28em' }} aria-hidden="true" />;
-  }
 
   if (item.isFirst) {
     return (
@@ -104,33 +124,45 @@ export default function KineticTitle() {
 
   return (
     <h1
-      className="text-3xl sm:text-4xl md:text-6xl font-display font-extrabold leading-[1.2] px-2 select-none mx-auto w-fit text-left mr-8 sm:mr-14 md:mr-24"
+      className="text-3xl sm:text-4xl md:text-6xl font-display font-extrabold leading-[1.3] px-2 select-none text-center max-w-full mx-auto"
       style={{ perspective: '700px' }}
     >
       {/* Line 1 — Professional LED & Audio Visual */}
-      <span className="block text-left">
-        {LINE1.map((item, i) => <Char key={i} item={item} running={running} />)}
+      <span className="block text-center flex flex-wrap justify-center items-center">
+        {LINE1_WORDS.map((word, wordIdx) => (
+          <span key={wordIdx} className="inline-block whitespace-nowrap">
+            {word.chars.map((charItem, charIdx) => (
+              <Char key={charIdx} item={charItem} running={running} />
+            ))}
+            {wordIdx < LINE1_WORDS.length - 1 && (
+              <span className="inline-block" style={{ width: '0.28em' }}>&nbsp;</span>
+            )}
+          </span>
+        ))}
       </span>
 
       {/* Line 2 — Solution for Every [Morphing Word] */}
-      <span className="block text-left mt-1 sm:mt-2 pl-6 sm:pl-8 md:pl-16">
-        <span className="inline-flex items-center justify-start flex-wrap">
-          <span className="inline-block">
-            {LINE2.map((item, i) => <Char key={i} item={item} running={running} />)}
+      <span className="block text-center mt-1 sm:mt-2 flex flex-wrap justify-center items-center translate-x-4 sm:translate-x-8 md:translate-x-14">
+        {LINE2_WORDS.map((word, wordIdx) => (
+          <span key={wordIdx} className="inline-block whitespace-nowrap">
+            {word.chars.map((charItem, charIdx) => (
+              <Char key={charIdx} item={charItem} running={running} />
+            ))}
+            <span className="inline-block" style={{ width: '0.28em' }}>&nbsp;</span>
           </span>
-          <motion.span
-            initial={{ opacity: 0, y: 15 }}
-            animate={running ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: MORPH_DELAY, ease: "easeOut" }}
-            className="inline-block"
-          >
-            <MorphingText
-              words={["Events", "Functions", "Festivals"]}
-              duration={500}
-              className="inline-flex text-3xl sm:text-4xl md:text-6xl font-display font-extrabold select-none py-0 px-1 ml-1.5 sm:ml-2 md:ml-2.5 min-w-[200px] sm:min-w-[250px] md:min-w-[440px] text-left"
-            />
-          </motion.span>
-        </span>
+        ))}
+        <motion.span
+          initial={{ opacity: 0, y: 15 }}
+          animate={running ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: MORPH_DELAY, ease: "easeOut" }}
+          className="inline-block"
+        >
+          <MorphingText
+            words={["Events", "Functions", "Festivals"]}
+            duration={500}
+            className="inline-flex text-3xl sm:text-4xl md:text-6xl font-display font-extrabold select-none py-0 px-1 min-w-[120px] sm:min-w-[250px] md:min-w-[440px] text-left"
+          />
+        </motion.span>
       </span>
     </h1>
   );
