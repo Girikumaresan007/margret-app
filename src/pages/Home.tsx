@@ -86,7 +86,7 @@ export default function Home() {
           .fromTo('.home-p',
             { opacity: 0, y: 30 },
             { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' },
-            '+=1.6'   // wait for kinetic title (total ~1.8s at 24ms stagger)
+            '+=0.6'   // wait less for kinetic title to display paragraph sooner
           )
           .fromTo('.home-btns',
             { opacity: 0, y: 22 },
