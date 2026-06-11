@@ -13,8 +13,15 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-20px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 :root {
@@ -32,7 +39,12 @@ body {
   text-rendering: optimizeSpeed;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   color: #1A1A1A;
 }
@@ -58,20 +70,42 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ── Custom Scrollbar ──────────────────────────────────────── */
-::-webkit-scrollbar        { width: 6px; }
-::-webkit-scrollbar-track  { background: #F5F2ED; }
-::-webkit-scrollbar-thumb  { background: #D1C7B7; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #B8860B; }
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F5F2ED;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D1C7B7;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B8860B;
+}
 
 /* ── Marquee — GPU-accelerated via translateX ──────────────── */
 @keyframes marquee {
-  0%   { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes marquee-reverse {
-  0%   { transform: translateX(-50%); }
-  100% { transform: translateX(0%); }
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
 }
 
 .animate-marquee {
@@ -96,23 +130,26 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── GPU-acceleration for scroll-animated sections ─────────── */
 /* Hero image zoom — compositor layer = zero layout cost */
-section[style*="perspective"] > div {
+section[style*="perspective"]>div {
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
 }
 
 /* Framer Motion animated elements — hint GPU promotion */
-[style*="scale"], [style*="translateY"] {
+[style*="scale"],
+[style*="translateY"] {
   backface-visibility: hidden;
 }
 
 /* ── Reduce motion for accessibility + battery saving ──────── */
 @media (prefers-reduced-motion: reduce) {
+
   .animate-marquee,
   .animate-marquee-reverse {
     animation: none;
   }
+
   * {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
@@ -121,18 +158,26 @@ section[style*="perspective"] > div {
 
 /* ── Mobile performance — disable backdrop-blur on low-end ─── */
 @media (max-width: 640px) {
+
   /* Reduce blur cost on mobile: lighter glass */
   .glass {
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
   }
+
   .glass-gold {
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
   }
+
   /* Slow marquee slightly on mobile to reduce CPU */
-  .animate-marquee         { animation-duration: 80s; }
-  .animate-marquee-reverse { animation-duration: 80s; }
+  .animate-marquee {
+    animation-duration: 80s;
+  }
+
+  .animate-marquee-reverse {
+    animation-duration: 80s;
+  }
 }
 
 /* ── Smooth image rendering ─────────────────────────────────── */
@@ -142,7 +187,39 @@ img {
 }
 
 /* ── Prevent content shift on scroll for fixed elements ─────── */
-.sticky, .fixed {
+.sticky,
+.fixed {
   transform: translateZ(0);
   will-change: transform;
+}
+
+/* ── Premium Shimmer Effects ── */
+@keyframes goldShimmer {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+.gold-shimmer {
+  background: linear-gradient(90deg, #DAA520 0%, #FFF5D0 25%, #DAA520 50%, #FFF5D0 75%, #DAA520 100%);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldShimmer 4s linear infinite;
+  display: inline-block;
+}
+
+@keyframes silverShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.silver-shimmer {
+  background: linear-gradient(110deg, #e5e7eb 30%, #ffffff 50%, #e5e7eb 70%);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: silverShimmer 3.5s linear infinite;
+  display: inline-block;
 }

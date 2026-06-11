@@ -7,6 +7,7 @@ import { cn } from '../lib/utils';
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import KineticTitle from '../components/KineticTitle';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -56,17 +57,9 @@ export default function Home() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [playVideo1, setPlayVideo1] = useState(false);
   const [playVideo2, setPlayVideo2] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
   const heroContentRef = useRef<HTMLDivElement>(null);
   const missionRef = useRef<HTMLElement>(null);
   const servicesRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -75,33 +68,65 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
-  // GSAP: Cinematic hero entrance
+  // GSAP: Cinematic hero entrance — fires only after splash fully exits
   useEffect(() => {
     if (!heroContentRef.current) return;
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.3 });
-      tl.fromTo('.home-badge',
-        { opacity: 0, y: 20, scale: 0.88 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.65, ease: 'back.out(1.5)' }
-      )
-      .fromTo('.home-h1',
-        { opacity: 0, y: 55, skewY: 2 },
-        { opacity: 1, y: 0, skewY: 0, duration: 1, ease: 'power3.out' },
-        '-=0.3'
-      )
-      .fromTo('.home-p',
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' },
-        '-=0.45'
-      )
-      .fromTo('.home-btns',
-        { opacity: 0, y: 22 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
-        '-=0.35'
-      );
-    }, heroContentRef);
-    return () => ctx.revert();
+
+    let ctx: ReturnType<typeof gsap.context>;
+
+    const runTimeline = () => {
+      if (!heroContentRef.current) return;
+      ctx = gsap.context(() => {
+        const tl = gsap.timeline({ delay: 0.15 });
+        // badge comes first, then .home-p and .home-btns after KineticTitle finishes (~2.8s)
+        tl.fromTo('.home-badge',
+          { opacity: 0, y: 20, scale: 0.88 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.65, ease: 'back.out(1.5)' }
+        )
+          .fromTo('.home-p',
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' },
+            '+=1.6'   // wait for kinetic title (total ~1.8s at 24ms stagger)
+          )
+          .fromTo('.home-btns',
+            { opacity: 0, y: 22 },
+            { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+            '-=0.35'
+          );
+      }, heroContentRef);
+    };
+
+    let fallbackTimer: ReturnType<typeof setTimeout>;
+
+    const onSplashDone = () => {
+      clearTimeout(fallbackTimer);
+      // Mark splash as played in-memory — resets on page refresh automatically
+      (window as any).__splashPlayed = true;
+      // Small buffer so the splash fade-out fully settles before hero animates in
+      setTimeout(runTimeline, 120);
+    };
+
+    // window.__splashPlayed is set only during this JS session (SPA navigation).
+    // On a full page refresh it is always undefined, so the event path is used.
+    if ((window as any).__splashPlayed) {
+      // Revisit via SPA nav — run immediately
+      fallbackTimer = setTimeout(runTimeline, 200);
+    } else {
+      window.addEventListener('splashComplete', onSplashDone, { once: true });
+      // Safety net: if splash event never fires within 5s, run anyway
+      fallbackTimer = setTimeout(() => {
+        window.removeEventListener('splashComplete', onSplashDone);
+        runTimeline();
+      }, 5000);
+    }
+
+    return () => {
+      window.removeEventListener('splashComplete', onSplashDone);
+      clearTimeout(fallbackTimer);
+      ctx?.revert();
+    };
   }, []);
+
 
   // GSAP ScrollTrigger: Mission cards scrub reveal
   useEffect(() => {
@@ -149,162 +174,59 @@ export default function Home() {
       <section className="relative min-h-screen flex items-center justify-center px-6 pt-16 md:pt-20 overflow-hidden">
         {/* <ThreeBackground /> */}
         {/* Background Image */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 bg-black">
           <picture>
-            <source media="(min-width: 768px)" srcSet="/hero4.webp" />
+            <source media="(min-width: 768px)" srcSet="/home%205.png" />
             <img
               src="/mobile 3.webp"
               alt="Hero Background"
-              className="w-full h-full object-cover object-[center_20%]"
+              className="w-full h-full object-cover object-[center_20%] opacity-60"
               fetchPriority="high"
             />
           </picture>
         </div>
 
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/40 to-black/80 md:bg-none md:bg-black/10 z-0"></div>
-
-        {/* Large Colorful Logo Watermark (Using user-provided logo-icon.png directly, perfectly centered) */}
-        <div className="absolute inset-0 z-[1] pointer-events-none flex items-center justify-center -translate-y-2 md:-translate-y-6">
-          <img
-            src="/logo-icon.png"
-            alt=""
-            className="w-[160px] h-[160px] sm:w-[220px] sm:h-[220px] md:w-[280px] md:h-[280px] lg:w-[380px] lg:h-[380px] object-contain opacity-35 mix-blend-overlay"
-          />
-        </div>
+        {/* Black Overlay fading to transparent at the bottom */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent z-0"></div>
 
 
-          {/* Hero content â€” GSAP animates .home-badge .home-h1 .home-p .home-btns */}
-          <div ref={heroContentRef} className="relative w-full max-w-7xl mx-auto text-center z-10 flex flex-col items-center justify-center gap-4 md:gap-8 -translate-y-2 md:-translate-y-6">
-            {/* Left LED Panel */}
-            {isDesktop && (
-              <motion.div
-                initial={{ opacity: 0, x: -50, scale: 0.9 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                transition={{ duration: 1, delay: 1.1 }}
-                className="hidden lg:flex absolute -left-2 xl:-left-4 top-[74%] -translate-y-1/2 flex-col items-center pointer-events-none"
-              >
-                <div className="relative w-[220px] h-[165px] rounded-[2px] overflow-hidden shadow-[0_0_40px_rgba(0,100,255,0.2),0_0_80px_rgba(0,100,255,0.08),inset_0_0_20px_rgba(0,0,0,0.5)]">
-                  <div className="absolute inset-0 border-[4px] border-[#1a1a1a] rounded-[2px] z-30" />
-                  <div className="absolute inset-0 border-t-[1px] border-l-[1px] border-[#444] rounded-[2px] z-30 opacity-40" />
-                  <div className="absolute top-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
-                  <div className="absolute top-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
-                  <div className="absolute bottom-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
-                  <div className="absolute bottom-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
-                  <div className="absolute inset-[4px] border border-[#0077ff]/25 z-20" />
-                  <div className="absolute inset-[5px] bg-gradient-to-br from-[#050510] via-[#0a0a18] to-[#060612] flex items-center justify-center">
-                    <img src="/logo-icon.png?v=2" alt="Margret AV" className="w-[110px] h-[110px] object-contain brightness-125 drop-shadow-[0_0_20px_rgba(255,215,0,0.35)]" />
-                  </div>
-                  <div className="absolute inset-[5px] z-10 pointer-events-none">
-                    <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#111]/60" />
-                    <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-[#111]/60" />
-                  </div>
-                  <div className="absolute inset-[5px] z-10 opacity-[0.04] pointer-events-none" style={{ backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px), repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px)` }} />
-                  <motion.div animate={{ y: ["-100%", "250%"] }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="absolute left-[5px] right-[5px] h-[1.5px] bg-gradient-to-r from-transparent via-white/8 to-transparent z-10 pointer-events-none" />
-                  <motion.div animate={{ opacity: [0.97, 1, 0.98, 1] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="absolute inset-[5px] bg-transparent z-[5]" />
-                </div>
-                <div className="flex flex-col items-center">
-                  <div className="w-[70px] h-[4px] bg-gradient-to-b from-[#555] to-[#333] rounded-sm shadow-[0_1px_3px_rgba(0,0,0,0.5)]" />
-                  <div className="w-[4px] h-[22px] bg-gradient-to-b from-[#555] via-[#444] to-[#3a3a3a] relative"><div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#4a4a4a] rounded-[1px] border-t border-[#666]/40" /></div>
-                  <div className="w-[10px] h-[5px] bg-gradient-to-b from-[#555] to-[#3a3a3a] rounded-[1px] border border-[#666]/30" />
-                  <div className="w-[4px] h-[28px] bg-gradient-to-b from-[#444] to-[#2a2a2a] relative"><div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#3a3a3a] rounded-[1px] border-t border-[#555]/30" /></div>
-                  <div className="w-[12px] h-[5px] bg-gradient-to-b from-[#444] to-[#333] rounded-sm" />
-                  <div className="relative w-[70px] h-[6px]">
-                    <div className="absolute left-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-l from-[#444] to-[#333] rounded-full -rotate-[15deg] origin-right" />
-                    <div className="absolute right-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-r from-[#444] to-[#333] rounded-full rotate-[15deg] origin-left" />
-                    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[2px] h-[4px] bg-[#3a3a3a]" />
-                  </div>
-                </div>
-                <div className="mt-1.5 flex flex-col items-center gap-0.5">
-                  <span className="text-white/80 text-[10px] font-bold tracking-[0.25em] uppercase">LED Display</span>
-                  <span className="text-white/40 text-[8px] tracking-wider">P3.9 Indoor</span>
-                </div>
-              </motion.div>
-            )}
+        {/* Hero content — GSAP animates .home-badge .home-h1 .home-p .home-btns */}
+        <div ref={heroContentRef} className="relative w-full max-w-7xl mx-auto text-center z-10 flex flex-col items-center justify-center gap-4 md:gap-8 -translate-y-2 md:-translate-y-6">
 
-            {/* Right LED Panel */}
-            {isDesktop && (
-              <motion.div
-                initial={{ opacity: 0, x: 50, scale: 0.9 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                transition={{ duration: 1, delay: 1.1 }}
-                className="hidden lg:flex absolute -right-2 xl:-right-4 top-[74%] -translate-y-1/2 flex-col items-center pointer-events-none"
-              >
-                <div className="relative w-[220px] h-[165px] rounded-[2px] overflow-hidden shadow-[0_0_40px_rgba(0,100,255,0.2),0_0_80px_rgba(0,100,255,0.08),inset_0_0_20px_rgba(0,0,0,0.5)]">
-                  <div className="absolute inset-0 border-[4px] border-[#1a1a1a] rounded-[2px] z-30" />
-                  <div className="absolute inset-0 border-t-[1px] border-l-[1px] border-[#444] rounded-[2px] z-30 opacity-40" />
-                  <div className="absolute top-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
-                  <div className="absolute top-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
-                  <div className="absolute bottom-[2px] left-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
-                  <div className="absolute bottom-[2px] right-[2px] w-[5px] h-[5px] rounded-full bg-[#333] border border-[#555] z-30" />
-                  <div className="absolute inset-[4px] border border-[#0077ff]/25 z-20" />
-                  <div className="absolute inset-[5px] bg-[#050510] overflow-hidden">
-                    <iframe src="https://www.youtube.com/embed/0DvvfhOgYPM?autoplay=1&mute=1&loop=1&playlist=0DvvfhOgYPM&controls=0&showinfo=0&modestbranding=1&rel=0&playsinline=1" title="LED Wall Showcase" className="w-full h-full border-0 scale-[1.5] pointer-events-auto" allow="autoplay; encrypted-media" loading="lazy" />
-                  </div>
-                  <div className="absolute inset-[5px] z-10 pointer-events-none">
-                    <div className="absolute left-1/2 top-0 bottom-0 w-[1px] bg-[#111]/60" />
-                    <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-[#111]/60" />
-                  </div>
-                  <div className="absolute inset-[5px] z-10 opacity-[0.04] pointer-events-none" style={{ backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px), repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(0,0,0,0.6) 1px, rgba(0,0,0,0.6) 2px)` }} />
-                  <motion.div animate={{ y: ["-100%", "250%"] }} transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1.5 }} className="absolute left-[5px] right-[5px] h-[1.5px] bg-gradient-to-r from-transparent via-white/8 to-transparent z-10 pointer-events-none" />
-                  <motion.div animate={{ opacity: [0.97, 1, 0.98, 1] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="absolute inset-[5px] bg-transparent z-[5]" />
-                </div>
-                <div className="flex flex-col items-center">
-                  <div className="w-[70px] h-[4px] bg-gradient-to-b from-[#555] to-[#333] rounded-sm shadow-[0_1px_3px_rgba(0,0,0,0.5)]" />
-                  <div className="w-[4px] h-[22px] bg-gradient-to-b from-[#555] via-[#444] to-[#3a3a3a] relative"><div className="absolute top-[8px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#4a4a4a] rounded-[1px] border-t border-[#666]/40" /></div>
-                  <div className="w-[10px] h-[5px] bg-gradient-to-b from-[#555] to-[#3a3a3a] rounded-[1px] border border-[#666]/30" />
-                  <div className="w-[4px] h-[28px] bg-gradient-to-b from-[#444] to-[#2a2a2a] relative"><div className="absolute top-[12px] left-1/2 -translate-x-1/2 w-[14px] h-[4px] bg-[#3a3a3a] rounded-[1px] border-t border-[#555]/30" /></div>
-                  <div className="w-[12px] h-[5px] bg-gradient-to-b from-[#444] to-[#333] rounded-sm" />
-                  <div className="relative w-[70px] h-[6px]">
-                    <div className="absolute left-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-l from-[#444] to-[#333] rounded-full -rotate-[15deg] origin-right" />
-                    <div className="absolute right-[4px] bottom-0 w-[24px] h-[2px] bg-gradient-to-r from-[#444] to-[#333] rounded-full rotate-[15deg] origin-left" />
-                    <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[2px] h-[4px] bg-[#3a3a3a]" />
-                  </div>
-                </div>
-                <div className="mt-1.5 flex flex-col items-center gap-0.5">
-                  <span className="text-white/80 text-[10px] font-bold tracking-[0.25em] uppercase">Live Preview</span>
-                  <span className="text-white/40 text-[8px] tracking-wider">Event Showcase</span>
-                </div>
-              </motion.div>
-            )}
 
-            {/* GSAP-animated hero text â€” classes targeted by GSAP timeline */}
-            <div className="home-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gold/20 backdrop-blur-md mb-2 md:mb-0" style={{ opacity: 0 }}>
-              <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-              <span className="text-sm font-semibold text-gold tracking-wide uppercase">Premium Event Solutions</span>
-            </div>
-
-            <h1 className="home-h1 text-3xl sm:text-4xl md:text-6xl font-display font-extrabold leading-tight text-ink drop-shadow-[0_4px_12px_rgba(0,0,0,0.7)] md:drop-shadow-none px-2" style={{ opacity: 0 }}>
-              <span className="text-gray-50">Professional</span>{" "}
-              <span className="text-gold-light">LED &amp; Audio Visual</span>{" "}
-              <br className="hidden md:inline" />
-              <span className="text-gray-50">Solution for Every Event</span>
-            </h1>
-
-            <p className="home-p text-white text-sm md:text-xl max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] md:drop-shadow-none px-4" style={{ opacity: 0 }}>
-              Transform your events with cutting-edge LED screens, crystal-clear audio systems
-              and professional lighting solutions. Crafting unforgettable experiences.
-            </p>
-
-            <div className="home-btns flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mt-2 md:mt-8 w-full px-4" style={{ opacity: 0 }}>
-              <motion.a
-                href="#services"
-                whileHover={{ scale: 1.05, boxShadow: '0 0 24px rgba(218,165,32,0.4)' }}
-                whileTap={{ scale: 0.97 }}
-                className="w-full max-w-[280px] sm:max-w-none sm:w-auto bg-gold text-black px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-gold-light transition-all group shadow-md"
-              >
-                Explore Services <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-              </motion.a>
-              <motion.a
-                href="#packages"
-                whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.12)' }}
-                whileTap={{ scale: 0.97 }}
-                className="w-full max-w-[280px] sm:max-w-none sm:w-auto text-[#f7f7f7] px-8 py-4 rounded-full font-bold border border-[#FFD700] flex items-center justify-center gap-2 transition-all shadow-md"
-              >
-                Packages
-              </motion.a>
-            </div>
+          {/* GSAP-animated hero text — classes targeted by GSAP timeline */}
+          <div className="home-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gold/20 backdrop-blur-md mb-2 md:mb-2" style={{ opacity: 0 }}>
+            <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
+            <span className="text-sm font-semibold text-gold tracking-wide uppercase">Premium Event Solutions</span>
           </div>
+
+          {/* KineticTitle — self-contained, waits for splashComplete */}
+          <KineticTitle />
+
+          <p className="home-p text-white text-xs sm:text-sm md:text-lg max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] md:drop-shadow-none px-4 mt-1 md:mt-2" style={{ opacity: 0 }}>
+            Transform your events with cutting-edge LED screens, crystal-clear audio systems
+            and professional lighting solutions. Crafting unforgettable experiences.
+          </p>
+
+          <div className="home-btns flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mt-2 md:mt-8 w-full px-4" style={{ opacity: 0 }}>
+            <motion.a
+              href="#services"
+              whileHover={{ scale: 1.05, boxShadow: '0 0 24px rgba(218,165,32,0.4)' }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full max-w-[280px] sm:max-w-none sm:w-auto bg-gold text-black px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-gold-light transition-all group shadow-md"
+            >
+              Explore Services <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+            </motion.a>
+            <motion.a
+              href="#packages"
+              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.12)' }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full max-w-[280px] sm:max-w-none sm:w-auto text-[#f7f7f7] px-8 py-4 rounded-full font-bold border border-[#FFD700] flex items-center justify-center gap-2 transition-all shadow-md"
+            >
+              Packages
+            </motion.a>
+          </div>
+        </div>
       </section>
 
       {/* High-Contrast Professional Dual-Track Marquee Section */}

@@ -54,6 +54,8 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     if (phase === 'exit') {
       // Phase 3: Unmount splash screen once flight is fully complete (~1.0s total flight time + buffer)
       const completeTimer = setTimeout(() => {
+        // Dispatch event BEFORE calling onComplete so Home can start its animation
+        window.dispatchEvent(new CustomEvent('splashComplete'));
         onComplete();
       }, 500);
 
