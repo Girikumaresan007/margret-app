@@ -176,11 +176,11 @@ export default function Home() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0 bg-black">
           <picture>
-            <source media="(min-width: 768px)" srcSet="/home%205.webp" />
+            <source media="(min-width: 1024px)" srcSet="/home%205.webp" />
             <img
-              src="/mobile 3.webp"
+              src="/mobile view.webp"
               alt="Hero Background"
-              className="w-full h-full object-cover object-[center_20%] opacity-60"
+              className="w-full h-full object-cover object-center lg:object-[center_20%] opacity-60"
               fetchPriority="high"
             />
           </picture>
@@ -188,6 +188,8 @@ export default function Home() {
 
         {/* Black Overlay fading to transparent at the bottom */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent z-0"></div>
+
+
 
 
         {/* Hero content — GSAP animates .home-badge .home-h1 .home-p .home-btns */}

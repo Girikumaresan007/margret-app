@@ -124,33 +124,47 @@ export default function KineticTitle() {
 
   return (
     <h1
-      className="text-3xl sm:text-4xl md:text-6xl font-display font-extrabold leading-[1.3] px-2 select-none text-center max-w-full mx-auto"
+      className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-extrabold leading-[1.3] px-2 select-none text-center max-w-full mx-auto"
       style={{ perspective: '700px' }}
     >
       {/* Line 1 — Professional LED & Audio Visual */}
-      <span className="block text-center flex flex-wrap justify-center items-center">
-        {LINE1_WORDS.map((word, wordIdx) => (
-          <span key={wordIdx} className="inline-block whitespace-nowrap">
-            {word.chars.map((charItem, charIdx) => (
-              <Char key={charIdx} item={charItem} running={running} />
-            ))}
-            {wordIdx < LINE1_WORDS.length - 1 && (
+      <span className="block text-center flex flex-wrap justify-center items-center gap-y-1">
+        <span className="whitespace-nowrap inline-block">
+          {LINE1_WORDS.slice(0, 1).map((word, wordIdx) => (
+            <span key={wordIdx} className="inline-block whitespace-nowrap">
+              {word.chars.map((charItem, charIdx) => (
+                <Char key={charIdx} item={charItem} running={running} />
+              ))}
               <span className="inline-block" style={{ width: '0.28em' }}>&nbsp;</span>
-            )}
-          </span>
-        ))}
+            </span>
+          ))}
+        </span>
+        <span className="whitespace-nowrap inline-block">
+          {LINE1_WORDS.slice(1).map((word, wordIdx) => (
+            <span key={wordIdx} className="inline-block whitespace-nowrap">
+              {word.chars.map((charItem, charIdx) => (
+                <Char key={charIdx} item={charItem} running={running} />
+              ))}
+              {wordIdx < LINE1_WORDS.slice(1).length - 1 && (
+                <span className="inline-block" style={{ width: '0.28em' }}>&nbsp;</span>
+              )}
+            </span>
+          ))}
+        </span>
       </span>
 
       {/* Line 2 — Solution for Every [Morphing Word] */}
-      <span className="block text-center mt-1 sm:mt-2 flex flex-wrap justify-center items-center translate-x-4 sm:translate-x-8 md:translate-x-14">
-        {LINE2_WORDS.map((word, wordIdx) => (
-          <span key={wordIdx} className="inline-block whitespace-nowrap">
-            {word.chars.map((charItem, charIdx) => (
-              <Char key={charIdx} item={charItem} running={running} />
-            ))}
-            <span className="inline-block" style={{ width: '0.28em' }}>&nbsp;</span>
-          </span>
-        ))}
+      <span className="block text-center mt-1 sm:mt-2 flex flex-wrap justify-center items-center sm:translate-x-4 md:translate-x-5 lg:translate-x-6">
+        <span className="whitespace-nowrap inline-block">
+          {LINE2_WORDS.map((word, wordIdx) => (
+            <span key={wordIdx} className="inline-block whitespace-nowrap">
+              {word.chars.map((charItem, charIdx) => (
+                <Char key={charIdx} item={charItem} running={running} />
+              ))}
+              <span className="inline-block" style={{ width: '0.28em' }}>&nbsp;</span>
+            </span>
+          ))}
+        </span>
         <motion.span
           initial={{ opacity: 0, y: 15 }}
           animate={running ? { opacity: 1, y: 0 } : {}}
@@ -160,7 +174,7 @@ export default function KineticTitle() {
           <MorphingText
             words={["Events", "Functions", "Festivals"]}
             duration={500}
-            className="inline-flex text-3xl sm:text-4xl md:text-6xl font-display font-extrabold select-none py-0 px-1 min-w-[120px] sm:min-w-[250px] md:min-w-[440px] text-left"
+            className="inline-flex text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-extrabold select-none py-0 px-1 w-[10ch] justify-center sm:justify-start text-center sm:text-left"
           />
         </motion.span>
       </span>

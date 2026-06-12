@@ -88,7 +88,7 @@ export const MorphingText = ({
   }, []);
 
   return (
-    <div className={cn("relative inline-block text-left", className)}>
+    <div className={cn("relative inline-block", className)}>
       <span className="font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#DAA520] via-[#FFF5D0] to-[#DAA520]">
         {displayText}
         <span className="inline-block w-0.5 h-[0.85em] bg-gradient-to-b from-[#DAA520] to-[#FFF5D0] animate-pulse ml-1 align-middle" />
