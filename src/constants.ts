@@ -93,20 +93,20 @@ export const PACKAGES: Package[] = [
   {
     id: 'basic',
     name: 'Basic',
-    price: '$999',
+    price: '₹10,000',
     features: ['Standard Audio System', '2 LED Screens (55")', 'Basic Stage Lighting', '4 Hours Support', 'Setup & Teardown'],
   },
   {
     id: 'standard',
     name: 'Standard',
-    price: '$2,499',
+    price: '₹35,000',
     features: ['Premium Audio System', '10x8ft LED Wall', 'Moving Head Lights', 'Live Mixing', '8 Hours Support', 'Event Photography'],
     isPopular: true,
   },
   {
     id: 'premium',
     name: 'Premium',
-    price: '$4,999',
+    price: '₹40,000',
     features: ['Concert Grade Audio', '20x10ft LED Wall', 'Full Lighting Rig', 'Multi-cam Live Stream', 'Full Day Support', 'Cinematic Video Highlights'],
   },
   {

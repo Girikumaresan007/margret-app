@@ -69,10 +69,10 @@ export default function PackageDetails() {
               <h2 className="text-2xl font-bold text-ink">Add-ons Available</h2>
               <div className="space-y-4">
                 {[
-                  { name: 'Extra LED Screen (55")', price: '+$150/ea' },
-                  { name: 'Wireless Microphone Kit', price: '+$75/ea' },
-                  { name: 'Fog Machine / Special Effects', price: '+$200' },
-                  { name: 'Additional Technical Support', price: '+$50/hr' },
+                  { name: 'Extra LED Screen (55")', price: '+₹12,000/ea' },
+                  { name: 'Wireless Microphone Kit', price: '+₹6,000/ea' },
+                  { name: 'Fog Machine / Special Effects', price: '+₹16,000' },
+                  { name: 'Additional Technical Support', price: '+₹4,000/hr' },
                 ].map((addon, i) => (
                   <div key={i} className="flex justify-between items-center p-4 glass rounded-xl">
                     <span className="text-gray-700">{addon.name}</span>
