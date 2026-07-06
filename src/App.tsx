@@ -10,6 +10,10 @@ import About from './pages/About';
 import LoadingScreen from './components/LoadingScreen';
 import SplashScreen from './components/SplashScreen';
 import ScrollToTop from './components/ScrollToTop';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -36,6 +40,21 @@ export default function App() {
     const timer = setTimeout(() => setPhase('splash'), 2000);
     return () => clearTimeout(timer);
   }, []);
+
+  // Lock scrolling and hide scrollbar during loading/splash screens
+  useEffect(() => {
+    if (phase !== 'ready') {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [phase]);
 
   const handleSplashComplete = () => {
     setPhase('ready');

@@ -112,15 +112,24 @@ export default function Footer() {
           <ul className="space-y-4 text-sm text-gray-600">
             <li className="flex items-start gap-3">
               <MapPin size={18} className="text-gold shrink-0 mt-0.5" />
-              <span>123 Event Plaza, Production City, PC 56789</span>
+              <span>
+                No.5, 'B' Block, St.Paul's Complex,<br />
+                Near To Nalli Silks,<br />
+                Bharathiyar Salai, Trichy-01
+              </span>
             </li>
-            <li className="flex items-center gap-3">
-              <Phone size={18} className="text-gold shrink-0" />
-              <span>+1 (234) 567-890</span>
+            <li className="flex items-start gap-3">
+              <Phone size={18} className="text-gold shrink-0 mt-0.5" />
+              <div className="flex flex-col">
+                <a href="tel:+917358053005" className="hover:text-gold transition-colors">+91 73580 53005</a>
+                <a href="tel:+919842414007" className="hover:text-gold transition-colors">+91 98424 14007</a>
+              </div>
             </li>
             <li className="flex items-center gap-3">
               <Mail size={18} className="text-gold shrink-0" />
-              <span>hello@margretav.com</span>
+              <a href="mailto:margretaudiovisual@gmail.com" className="hover:text-gold transition-colors">
+                margretaudiovisual@gmail.com
+              </a>
             </li>
           </ul>
         </motion.div>

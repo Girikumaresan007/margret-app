@@ -35,9 +35,9 @@ export default function Contact() {
     const body = `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\n\nMessage:\n${message}`;
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isMobile) {
-      window.location.href = `mailto:hello@margretav.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = `mailto:margretaudiovisual@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     } else {
-      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=hello@margretav.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
+      window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=margretaudiovisual@gmail.com&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`, '_blank');
     }
     setTimeout(() => setFormState({ name: '', email: '', phone: '', message: '' }), 3000);
   };
@@ -80,19 +80,22 @@ export default function Contact() {
                 {
                   Icon: Mail,
                   title: 'Email Us',
-                  lines: ['hello@margretav.com', 'support@margretav.com'],
+                  lines: ['margretaudiovisual@gmail.com'],
+                  hrefs: ['mailto:margretaudiovisual@gmail.com'],
                 },
                 {
                   Icon: Phone,
                   title: 'Call Us',
-                  lines: ['+1 (234) 567-890', 'Mon - Fri, 9am - 6pm'],
+                  lines: ['+91 73580 53005', '+91 98424 14007'],
+                  hrefs: ['tel:+917358053005', 'tel:+919842414007'],
                 },
                 {
                   Icon: MapPin,
                   title: 'Visit Us',
-                  lines: ['123 Event Plaza, Production City', 'PC 56789, United States'],
+                  lines: ["No.5, 'B' Block, St.Paul's Complex", "Near To Nalli Silks, Bharathiyar Salai, Trichy-01"],
+                  hrefs: [],
                 },
-              ].map(({ Icon, title, lines }, i) => (
+              ].map(({ Icon, title, lines, hrefs }, i) => (
                 <motion.div
                   key={title}
                   initial={{ opacity: 0, y: 20 }}
@@ -108,8 +111,18 @@ export default function Contact() {
                   </motion.div>
                   <div>
                     <h3 className="text-xl font-bold mb-1 text-ink">{title}</h3>
-                    {lines.map((l) => (
-                      <p key={l} className="text-gray-600">{l}</p>
+                    {lines.map((line, idx) => (
+                      hrefs[idx] ? (
+                        <a
+                          key={line}
+                          href={hrefs[idx]}
+                          className="block text-gray-600 hover:text-gold transition-colors"
+                        >
+                          {line}
+                        </a>
+                      ) : (
+                        <p key={line} className="text-gray-600">{line}</p>
+                      )
                     ))}
                   </div>
                 </motion.div>
@@ -144,11 +157,18 @@ export default function Contact() {
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1.0, duration: 0.7 }}
-              className="h-64 rounded-3xl overflow-hidden glass p-2"
+              className="h-64 rounded-3xl overflow-hidden glass p-2 relative group"
             >
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=St.+Paul's+Complex,+Bharathiyar+Salai,+Trichy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute inset-2 z-10 rounded-2xl cursor-pointer block bg-black/0 group-hover:bg-black/5 transition-colors"
+                title="Open in Google Maps"
+              />
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.8354345093747!2d-122.4194155!3d37.7749295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858070cc2f9755%3A0xd601c3003190848!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2s!4v1647854682345!5m2!1sen!2s"
-                className="w-full h-full rounded-2xl grayscale opacity-60"
+                src="https://maps.google.com/maps?q=St.%20Paul's%20Complex,%20Bharathiyar%20Salai,%20Trichy&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                className="w-full h-full rounded-2xl grayscale opacity-60 group-hover:opacity-85 transition-all duration-300"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
@@ -208,7 +228,7 @@ export default function Contact() {
                   value={formState.phone}
                   onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
                   className="w-full bg-ink/5 border border-ink/10 rounded-xl px-5 py-4 focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all text-ink"
-                  placeholder="+1 (234) 567-890"
+                  placeholder="+91 XXXXX XXXXX"
                 />
               </motion.div>
 

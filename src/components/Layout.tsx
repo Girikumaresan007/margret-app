@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Floating WhatsApp Icon */}
       <a
-        href="https://wa.me/1234567890"
+        href="https://wa.me/917358053005"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 w-12 h-12 md:w-14 md:h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform animate-float"

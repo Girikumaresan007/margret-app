@@ -146,7 +146,7 @@ export default function About() {
           className="absolute inset-0 origin-center overflow-hidden"
         >
           <img
-            src="https://www.pro-audio-visual.co.uk/wp-content/uploads/2020/05/con-2.jpg"
+            src="/con-2.webp"
             alt="Premium LED Wall and Stage Production"
             className="w-full h-full object-cover"
           />
@@ -194,7 +194,7 @@ export default function About() {
           {/* Image — slide in from left */}
           <motion.div {...slideInLeft} className="relative group rounded-3xl overflow-hidden shadow-2xl">
             <img
-              src="https://www.avrental.com.sg/wp-content/uploads/2024/05/led-wall-rental-ascott-3.jpeg"
+              src="/about page 2.webp"
               alt="Corporate Event Production"
               className="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105"
             />
@@ -390,7 +390,7 @@ export default function About() {
       {/* ── 5. Gallery / Portfolio ── */}
       <ScrollGallery />
 
-      {/* ── 6. Client Logos ── */}
+      {/* ── 6. Client Specialization Marquee ── */}
       <section className="py-16 bg-white border-y border-black/5 overflow-hidden">
         <motion.h3
           initial={{ opacity: 0, y: 16 }}
@@ -398,7 +398,7 @@ export default function About() {
           viewport={{ once: true }}
           className="text-center text-sm font-bold tracking-widest text-gray-400 uppercase mb-8"
         >
-          Trusted by Industry Leaders
+          Events We Specialize In
         </motion.h3>
         <div className="relative">
           <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-white to-transparent z-10" />
@@ -406,17 +406,25 @@ export default function About() {
           <div className="flex gap-16 whitespace-nowrap animate-marquee">
             {[...Array(2)].map((_, arrayIndex) => (
               <div key={arrayIndex} className="flex gap-16 items-center">
-                {["L'Oréal", 'Red Bull', 'TEDx', 'Samsung', 'BMW', 'Spotify', 'Forbes', 'Vogue'].map(
-                  (client, i) => (
-                    <motion.span
-                      key={i}
-                      whileHover={{ color: '#DAA520', scale: 1.05 }}
-                      className="text-3xl font-display font-black text-gray-200 cursor-default transition-colors duration-300"
-                    >
-                      {client}
-                    </motion.span>
-                  )
-                )}
+                {[
+                  "Wedding Functions",
+                  "Corporate Shows",
+                  "Product Launches",
+                  "Award Ceremonies",
+                  "College Events",
+                  "Political Events",
+                  "Live Concerts",
+                  "Exhibitions",
+                  "DJ Nights"
+                ].map((eventTypeName, i) => (
+                  <motion.span
+                    key={i}
+                    whileHover={{ color: '#DAA520', scale: 1.05 }}
+                    className="text-3xl font-display font-black text-gray-200 cursor-default transition-colors duration-300 uppercase"
+                  >
+                    {eventTypeName}
+                  </motion.span>
+                ))}
               </div>
             ))}
           </div>
