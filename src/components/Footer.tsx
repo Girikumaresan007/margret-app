@@ -33,10 +33,16 @@ export default function Footer() {
             technology and professional production management.
           </p>
           <div className="flex gap-4">
-            {[Instagram, Facebook, Youtube, Twitter].map((Icon, i) => (
+            {[
+              { Icon: Instagram, href: '#' },
+              { Icon: Facebook, href: '#' },
+              { Icon: Youtube, href: 'https://www.youtube.com/@margretaudiovisual1095' },
+              { Icon: Twitter, href: '#' }
+            ].map(({ Icon, href }, i) => (
               <a
                 key={i}
-                href="#"
+                href={href}
+                {...(href !== '#' ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 className="w-10 h-10 rounded-full glass flex items-center justify-center text-ink hover:text-gold hover:scale-110 transition-all duration-200"
               >
                 <Icon size={18} />

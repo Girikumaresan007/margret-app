@@ -157,9 +157,20 @@ export default function Navbar() {
               transition={{ delay: 0.35 }}
               className="flex justify-center gap-6 mt-4"
             >
-              <Instagram className="w-5 h-5 text-gray-600" />
-              <Facebook className="w-5 h-5 text-gray-600" />
-              <Youtube className="w-5 h-5 text-gray-600" />
+              <a href="#" className="hover:text-gold transition-colors">
+                <Instagram className="w-5 h-5 text-gray-600 hover:text-gold transition-colors" />
+              </a>
+              <a href="#" className="hover:text-gold transition-colors">
+                <Facebook className="w-5 h-5 text-gray-600 hover:text-gold transition-colors" />
+              </a>
+              <a
+                href="https://www.youtube.com/@margretaudiovisual1095"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-gold transition-colors"
+              >
+                <Youtube className="w-5 h-5 text-gray-600 hover:text-gold transition-colors" />
+              </a>
             </motion.div>
           </motion.div>
         )}

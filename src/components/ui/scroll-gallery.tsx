@@ -1,11 +1,17 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
+import { Shuffle } from 'lucide-react';
+
+// Fisher-Yates shuffle helper
+const shuffleArray = <T,>(arr: T[]): T[] => {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
 
 const SLIDES = [
-  {
-    src: '/gallery/WhatsApp Image 2026-07-06 at 4.00.12 PM.jpeg',
-    label: 'TNOA Conference',
-    sub: 'ISO 9001:2015 Certified — LED arch entry gate with live-flame motion graphics',
-  },
   {
     src: '/gallery/WhatsApp Image 2026-07-06 at 4.00.12 PM (1).jpeg',
     label: 'KFest Annual Day',
@@ -22,11 +28,6 @@ const SLIDES = [
     sub: 'Jegan Matha Matric — Multi-panel LED stage setup with floral decoration',
   },
   {
-    src: '/gallery/WhatsApp Image 2026-07-06 at 4.00.13 PM (1).jpeg',
-    label: 'SBI NRI Meet',
-    sub: 'State Bank of India — Corporate LED wall with premium ballroom lighting',
-  },
-  {
     src: '/gallery/WhatsApp Image 2026-07-06 at 4.00.13 PM (2).jpeg',
     label: 'SBI Seminar',
     sub: 'Digital NRI Account Launch — Wide LED screen with projection-ready stage',
@@ -35,16 +36,6 @@ const SLIDES = [
     src: '/gallery/WhatsApp Image 2026-07-06 at 4.00.13 PM (3).jpeg',
     label: 'Concert Stage Setup',
     sub: 'Reality Lyrics Live — Immersive LED wall with orange flame beam lighting',
-  },
-  {
-    src: '/gallery/WhatsApp Image 2026-07-06 at 4.00.14 PM.jpeg',
-    label: 'GBC Chapter Launch',
-    sub: 'GBC Chapter 2 — Vibrant red LED stage with truss & side auxiliary screens',
-  },
-  {
-    src: '/gallery/WhatsApp Image 2026-07-06 at 4.00.14 PM (1).jpeg',
-    label: 'SBI Presentation',
-    sub: 'Digital Banking Seminar — LED display with speaker podium, Trichy venue',
   },
   {
     src: '/gallery/WhatsApp Image 2026-07-06 at 4.05.01 PM.jpeg',
@@ -60,11 +51,6 @@ const SLIDES = [
     src: '/gallery/WhatsApp Image 2026-07-06 at 4.05.02 PM.jpeg',
     label: 'HP Product Launch',
     sub: 'AI-Powered Laptop Reveal — Corporate AV setup with dual display screens',
-  },
-  {
-    src: '/gallery/WhatsApp Image 2026-07-06 at 4.05.02 PM (1).jpeg',
-    label: 'DJ Night Setup',
-    sub: 'Empty Brain VeeJay — Premium LED wall with neon edge lit stage & blue floor',
   },
   {
     src: '/gallery/WhatsApp Image 2026-07-06 at 4.05.02 PM (2).jpeg',
@@ -96,6 +82,36 @@ const SLIDES = [
     label: 'SZ Vengai Dealers Meet',
     sub: 'HP Dealers Meet, Trichy 2024 — LED main screen with portrait side panels',
   },
+  {
+    src: '/gallery/WhatsApp Image 2026-07-07 at 11.09.01 AM.jpeg',
+    label: 'Live Concert Stage',
+    sub: 'Immersive sound reinforcement and dynamic wash lighting for live band performance',
+  },
+  {
+    src: '/gallery/WhatsApp Image 2026-07-07 at 11.10.23 AM.jpeg',
+    label: 'Corporate Summit',
+    sub: 'State-of-the-art presentation setup with dual-screen configurations and custom stage',
+  },
+  {
+    src: '/gallery/WhatsApp Image 2026-07-07 at 11.11.08 AM.jpeg',
+    label: 'Outdoor Festival',
+    sub: 'Large scale open-air LED screen and line-array sound system installation',
+  },
+  {
+    src: '/gallery/WhatsApp Image 2026-07-07 at 11.12.23 AM.jpeg',
+    label: 'Award Ceremony Stage',
+    sub: 'High-brightness backdrop LED walls with golden uplighting and custom trusses',
+  },
+  {
+    src: '/gallery/WhatsApp Image 2026-07-07 at 11.13.32 AM.jpeg',
+    label: 'Cultural Fest',
+    sub: 'Dynamic stage backdrop and professional audio management for high-energy events',
+  },
+  {
+    src: '/gallery/WhatsApp Image 2026-07-07 at 11.14.19 AM.jpeg',
+    label: 'Grand Wedding Reception',
+    sub: 'Elegant scenic design combining high-resolution LED screens with romantic lighting',
+  },
 ];
 
 const N = SLIDES.length;
@@ -111,6 +127,8 @@ const mod   = (i: number, m: number) => ((i % m) + m) % m;
 const ease3 = (x: number) => 1 - Math.pow(1 - x, 3);
 
 export function ScrollGallery() {
+  const [slides, setSlides] = useState(() => shuffleArray(SLIDES));
+  const [isShuffling, setIsShuffling] = useState(false);
   const rootRef  = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const dotsRef  = useRef<HTMLDivElement>(null);
@@ -120,10 +138,12 @@ export function ScrollGallery() {
     index: 0, pos: 0,
     slideW: 0, gap: GAP,
     dragging: false, pointerId: null as number | null,
-    x0: 0, v: 0, t0: 0,
+    x0: 0, y0: 0, v: 0, t0: 0,
     animating: false, hovering: false,
     startTime: 0, pausedAt: 0,
     cycleRaf: 0,
+    isScrolling: false,
+    hasCapture: false,
   });
 
   // 3-D card tilt state — matches the rotateToMouse snippet
@@ -227,6 +247,27 @@ export function ScrollGallery() {
   const prev = useCallback(() => goTo(mod(st.current.index - 1, N)), [goTo]);
   const next = useCallback(() => goTo(mod(st.current.index + 1, N)), [goTo]);
 
+  const shuffle = useCallback(() => {
+    if (isShuffling) return;
+    setIsShuffling(true);
+    const shuffled = shuffleArray(slides);
+    
+    // Reset index & pos to 0
+    st.current.index = 0;
+    st.current.pos = 0;
+    st.current.startTime = performance.now();
+    
+    setSlides(shuffled);
+    
+    setTimeout(() => {
+      setIsShuffling(false);
+    }, 650);
+  }, [slides, isShuffling]);
+
+  useEffect(() => {
+    render(true);
+  }, [slides, render]);
+
   /* ── measure ─────────────────────────────────────────────── */
   const measure = useCallback(() => {
     // Use window.innerWidth so slideW matches CSS `min(960px, 78vw)` exactly
@@ -274,17 +315,53 @@ export function ScrollGallery() {
   /* ── pointer handlers ────────────────────────────────────── */
   const onPD = (e: React.PointerEvent) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
-    e.preventDefault();
     const s = st.current;
-    s.dragging = true; s.pointerId = e.pointerId;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-    s.x0 = e.clientX; s.t0 = performance.now(); s.v = 0;
+    s.dragging = true;
+    s.isScrolling = false;
+    s.hasCapture = false;
+    s.pointerId = e.pointerId;
+    s.x0 = e.clientX;
+    s.y0 = e.clientY;
+    s.t0 = performance.now();
+    s.v = 0;
     s.pausedAt = performance.now(); // pause timer while dragging
+    if (e.pointerType === 'mouse') {
+      try {
+        (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        s.hasCapture = true;
+      } catch {}
+    }
   };
   const onPM = (e: React.PointerEvent) => {
     const s = st.current;
     if (!s.dragging || e.pointerId !== s.pointerId) return;
+    if (s.isScrolling) return;
+
     const dx = e.clientX - s.x0;
+    const dy = e.clientY - s.y0;
+
+    // For touch devices, check if we're scrolling vertically or dragging horizontally
+    if (e.pointerType === 'touch' && !s.isScrolling && !s.hasCapture) {
+      const absX = Math.abs(dx);
+      const absY = Math.abs(dy);
+      if (absY > absX && absY > 8) {
+        // It's a vertical scroll! Cancel drag and let browser scroll.
+        s.isScrolling = true;
+        s.dragging = false;
+        if (s.pausedAt) { s.startTime += performance.now() - s.pausedAt; s.pausedAt = 0; }
+        return;
+      } else if (absX > absY && absX > 8) {
+        // It's a horizontal swipe! Capture the pointer and handle it.
+        try {
+          (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+          s.hasCapture = true;
+        } catch {}
+      } else {
+        // Still below threshold, do nothing yet
+        return;
+      }
+    }
+
     s.v   = dx / Math.max(16, performance.now() - s.t0);
     // drag offset uses full span so dragging feels proportional
     s.pos = mod(s.index - dx / (s.slideW + s.gap), N);
@@ -301,16 +378,24 @@ export function ScrollGallery() {
   const onPU = (e: React.PointerEvent) => {
     const s = st.current;
     if (!s.dragging || e.pointerId !== s.pointerId) return;
-    const wasDrag = Math.abs(e.clientX - s.x0) > 6;
+    if (s.isScrolling) return;
+
+    const threshold = e.pointerType === 'touch' ? 12 : 6;
+    const wasDrag = Math.abs(e.clientX - s.x0) > threshold;
     s.dragging = false;
-    try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch {}
+    if (s.hasCapture) {
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {}
+      s.hasCapture = false;
+    }
     s.pointerId = null;
     // Resume timer — add back the paused duration so progress continues smoothly
     if (s.pausedAt) { s.startTime += performance.now() - s.pausedAt; s.pausedAt = 0; }
     const target  = Math.round(s.pos - Math.sign(s.v) * (Math.abs(s.v) > 0.18 ? 0.5 : 0));
     const snapped = mod(target, N);
     if (!wasDrag && snapped === s.index) {
-      setLightbox(SLIDES[s.index]);
+      setLightbox(slides[s.index]);
       return;
     }
     goTo(snapped);
@@ -359,7 +444,7 @@ export function ScrollGallery() {
 
   /* ── JSX ─────────────────────────────────────────────────── */
   return (
-    <div id="portfolio" className="relative bg-ink overflow-hidden select-none" style={{ touchAction: 'none' }}>
+    <div id="portfolio" className="relative bg-ink overflow-hidden select-none" style={{ touchAction: 'pan-y' }}>
 
       {/* Lightbox */}
       {lightbox && (
@@ -393,15 +478,23 @@ export function ScrollGallery() {
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/10 blur-[120px] rounded-full pointer-events-none" />
 
       {/* Heading */}
-      <div className="relative z-10 text-center pt-16 pb-6 px-6">
+      <div className="relative z-10 text-center pt-16 pb-6 px-6 flex flex-col items-center justify-center">
         <h2 className="text-4xl md:text-5xl font-display font-bold">
           <span className="text-white">Event </span>
           <span className="text-gold">Gallery</span>
         </h2>
         <div className="h-[2px] w-[60px] mx-auto mt-3 mb-3 bg-gradient-to-r from-transparent via-gold to-transparent" />
-        <p className="text-white/50 text-sm tracking-widest uppercase">
+        <p className="text-white/50 text-sm tracking-widest uppercase mb-1">
           Drag · Swipe · Tap to expand
         </p>
+        <button
+          onClick={shuffle}
+          disabled={isShuffling}
+          className="mt-2.5 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/5 hover:bg-gold/15 border border-white/10 hover:border-gold/30 text-white/80 hover:text-gold transition-all duration-300 text-xs font-bold uppercase tracking-wider group shadow-md"
+        >
+          <Shuffle size={14} className={`group-hover:rotate-180 transition-transform duration-500 ${isShuffling ? 'animate-spin' : ''}`} />
+          Shuffle Gallery
+        </button>
       </div>
 
       {/* Carousel area */}
@@ -422,10 +515,10 @@ export function ScrollGallery() {
           onPointerUp={onPU}
           onPointerCancel={onPU}
         >
-          {SLIDES.map((sl, i) => (
+          {slides.map((sl, i) => (
             <div
-              key={i}
-              className="eg-slide absolute left-1/2"
+              key={sl.src}
+              className={`eg-slide absolute left-1/2 ${isShuffling ? 'shuffling-active' : ''}`}
               data-active="0"
               style={{
                 top: '50%',
@@ -493,7 +586,7 @@ export function ScrollGallery() {
 
       {/* Dots */}
       <div ref={dotsRef} className="relative z-10 flex justify-center gap-2 pt-5 pb-2">
-        {SLIDES.map((_, i) => (
+        {slides.map((_, i) => (
           <button
             key={i}
             className="eg-dot w-2 h-2 rounded-full border-0 cursor-pointer transition-all duration-200"
@@ -532,6 +625,9 @@ export function ScrollGallery() {
         }
         .eg-slide[data-active="0"] {
           box-shadow: 0 16px 40px rgba(0,0,0,0.4) !important;
+        }
+        .shuffling-active {
+          transition: transform 650ms cubic-bezier(0.25, 1, 0.25, 1), filter 650ms ease, opacity 650ms ease !important;
         }
       `}</style>
     </div>

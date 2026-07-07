@@ -138,10 +138,16 @@ export default function Contact() {
             >
               <h3 className="text-xl font-bold text-ink">Follow Our Journey</h3>
               <div className="flex gap-4">
-                {[Instagram, Facebook, Youtube, Twitter].map((Icon, i) => (
+                {[
+                  { Icon: Instagram, href: '#' },
+                  { Icon: Facebook, href: '#' },
+                  { Icon: Youtube, href: 'https://www.youtube.com/@margretaudiovisual1095' },
+                  { Icon: Twitter, href: '#' }
+                ].map(({ Icon, href }, i) => (
                   <motion.a
                     key={i}
-                    href="#"
+                    href={href}
+                    {...(href !== '#' ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                     whileHover={{ scale: 1.15, rotate: 8 }}
                     whileTap={{ scale: 0.9 }}
                     className="group w-12 h-12 rounded-xl flex items-center justify-center bg-white/70 backdrop-blur-md border border-gray-200 transition-all duration-300 hover:bg-gold hover:shadow-lg hover:shadow-gold/30"
