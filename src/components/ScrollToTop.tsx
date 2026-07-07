@@ -19,13 +19,13 @@ export default function ScrollToTop() {
       tryScroll();
     } else {
       window.scrollTo(0, 0);
-      
+
       const t1 = setTimeout(() => window.scrollTo(0, 0), 50);
       const t2 = setTimeout(() => window.scrollTo(0, 0), 150);
       const t3 = setTimeout(() => window.scrollTo(0, 0), 300);
       const t4 = setTimeout(() => window.scrollTo(0, 0), 500);
       const t5 = setTimeout(() => window.scrollTo(0, 0), 800);
-      
+
       return () => {
         clearTimeout(t1);
         clearTimeout(t2);

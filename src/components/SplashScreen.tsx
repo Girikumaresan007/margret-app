@@ -289,10 +289,10 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         transition={{ duration: 0.6, delay: phase === 'show' ? 0.6 : 0 }}
         className="absolute top-[calc(50%+115px)] md:top-[calc(50%+150px)] left-1/2 -translate-x-1/2 text-center z-10"
       >
-        <h1 className="font-display font-bold text-2xl md:text-3xl tracking-tight text-[#1A1A1A]">
+        <h1 className="font-display font-bold text-lg sm:text-2xl md:text-3xl tracking-tight text-[#1A1A1A] whitespace-nowrap">
           MARGRET <span style={{ color: '#DAA520' }}>AUDIO VISUAL</span>
         </h1>
-        <p className="text-[#1A1A1A]/50 text-xs md:text-sm tracking-[0.3em] uppercase mt-2 font-medium">
+        <p className="text-[#1A1A1A]/50 text-[10px] sm:text-xs md:text-sm tracking-[0.3em] uppercase mt-2 font-medium">
           Premium Event Solutions
         </p>
       </motion.div>
