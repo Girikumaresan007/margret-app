@@ -144,12 +144,31 @@ export function ScrollGallery() {
     cycleRaf: 0,
     isScrolling: false,
     hasCapture: false,
+    lightboxActive: false,
   });
 
   // 3-D card tilt state — matches the rotateToMouse snippet
   const card3d = useRef({ active: false, rotX: 0, rotY: 0, angle: 0, glowX: 0, glowY: 0 });
 
   const [lightbox, setLightbox] = useState<{ src: string; label: string; sub: string } | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  // Pause/resume auto-scroll when lightbox is toggled
+  useEffect(() => {
+    const s = st.current;
+    if (lightbox) {
+      s.lightboxActive = true;
+      s.pausedAt = performance.now();
+      setImageLoaded(false);
+    } else {
+      s.lightboxActive = false;
+      setImageLoaded(false);
+      if (s.pausedAt) {
+        s.startTime += performance.now() - s.pausedAt;
+        s.pausedAt = 0;
+      }
+    }
+  }, [lightbox]);
 
   /* ── helpers ─────────────────────────────────────────────── */
   const getSlides = () =>
@@ -284,10 +303,10 @@ export function ScrollGallery() {
     s.startTime = performance.now();
     render(true);
 
-    // Auto-advance loop — fires every INTERVAL ms, skips during drag/animation
+    // Auto-advance loop — fires every INTERVAL ms, skips during drag/animation/lightbox
     const loop = (now: number) => {
       const s = st.current;
-      if (!s.dragging && !s.animating) {
+      if (!s.dragging && !s.animating && !s.lightboxActive) {
         const elapsed = now - s.startTime;
         renderProgress(Math.min(1, elapsed / INTERVAL));
         if (elapsed >= INTERVAL) next();
@@ -449,27 +468,56 @@ export function ScrollGallery() {
       {/* Lightbox */}
       {lightbox && (
         <div
-          className="fixed inset-0 z-[999] flex flex-col items-center justify-center"
-          style={{ background: 'rgba(0,0,0,0.92)', backdropFilter: 'blur(12px)' }}
+          className="fixed inset-0 z-[999] flex flex-col items-center justify-center overflow-hidden"
+          style={{ background: 'rgba(0,0,0,0.95)', backdropFilter: 'blur(16px)' }}
           onClick={() => setLightbox(null)}
         >
-          <img
-            src={lightbox.src}
-            alt={lightbox.label}
-            className="max-w-[95vw] max-h-[85vh] object-contain rounded-2xl shadow-2xl"
-            style={{ boxShadow: '0 0 80px rgba(218,165,32,0.25)' }}
+          <div
+            className="relative flex flex-col items-center justify-center max-w-[92vw] max-h-[78vh] min-h-[300px] min-w-[300px]"
             onClick={e => e.stopPropagation()}
-            draggable={false}
-          />
-          <div className="mt-4 text-center px-6">
-            <p className="text-[#DAA520] font-bold tracking-widest uppercase text-sm">{lightbox.label}</p>
-            <p className="text-white/60 text-xs mt-1">{lightbox.sub}</p>
+          >
+            {/* Elegant Loader (shows while image is loading) */}
+            {!imageLoaded && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                <div className="w-10 h-10 border-2 border-gold/20 border-t-gold rounded-full animate-spin" />
+                <span className="text-white/40 text-xs tracking-wider uppercase">Loading Image...</span>
+              </div>
+            )}
+            <img
+              src={lightbox.src}
+              alt={lightbox.label}
+              onLoad={() => setImageLoaded(true)}
+              className="max-w-[92vw] max-h-[78vh] object-contain rounded-2xl shadow-2xl transition-all duration-700 ease-out"
+              style={{
+                boxShadow: '0 0 80px rgba(218,165,32,0.15)',
+                opacity: imageLoaded ? 1 : 0,
+                transform: imageLoaded ? 'scale(1)' : 'scale(0.97)',
+              }}
+              draggable={false}
+            />
           </div>
+          
+          <div 
+            className="mt-6 text-center px-6 max-w-2xl transition-opacity duration-500 ease-out"
+            style={{ opacity: imageLoaded ? 1 : 0 }}
+            onClick={e => e.stopPropagation()}
+          >
+            <p className="text-[#DAA520] font-bold tracking-[0.2em] uppercase text-sm md:text-base">
+              {lightbox.label}
+            </p>
+            <p className="text-white/70 text-xs md:text-sm mt-2 font-light">
+              {lightbox.sub}
+            </p>
+          </div>
+
+          {/* Close button */}
           <button
-            className="absolute top-5 right-5 w-10 h-10 rounded-full flex items-center justify-center text-white text-2xl"
-            style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)' }}
+            className="absolute top-6 right-6 w-12 h-12 rounded-full flex items-center justify-center text-white text-3xl transition-all duration-300 hover:bg-white/10 active:scale-90"
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)' }}
             onClick={() => setLightbox(null)}
-          >×</button>
+          >
+            ×
+          </button>
         </div>
       )}
 
