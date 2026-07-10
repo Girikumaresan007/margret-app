@@ -1,13 +1,12 @@
 import { motion } from 'motion/react';
 import { TestimonialsSection } from '../components/ui/testimonial-v2';
-import { ArrowRight, Star, CheckCircle2, Play, Users, ShieldCheck, Zap, Heart, Settings, Briefcase, Music, Disc, Gift, Rocket, GraduationCap, Sparkles, Trophy, MonitorPlay, Volume2, Lightbulb, Cpu, Layers, Activity, Presentation, Megaphone, Monitor } from 'lucide-react';
+import { ArrowRight, Star, CheckCircle2, Play, Users, ShieldCheck, Zap, Heart, Settings, Briefcase, Music, Disc, Gift, Rocket, GraduationCap, Sparkles, Trophy, MonitorPlay, Volume2, Lightbulb, Cpu, Layers, Activity, Presentation, Megaphone, Monitor, Gem, Headphones, CalendarCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SERVICES, TESTIMONIALS, PACKAGES } from '../constants';
 import { cn } from '../lib/utils';
 import { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import KineticTitle from '../components/KineticTitle';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,6 +21,68 @@ const ServiceIconMap: Record<string, React.ComponentType<any>> = {
   Megaphone,
   Heart
 };
+
+// Custom High-Fidelity SVG Icons for the Experience Stats Card
+const LaurelWreathStar = ({ className, size = 26 }: { className?: string; size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={className}>
+    <path d="M5.5 16C4.2 14.5 3.5 12.5 3.5 10.5C3.5 6.5 6.5 3.5 10.5 3.5" strokeLinecap="round" strokeWidth="1.7" />
+    <path d="M4 8.5C3.5 9 3 9 3 8" />
+    <path d="M3.5 11.5C3 12 2.5 12 2.5 11" />
+    <path d="M4.5 14.5C4 15 3.5 15 3.5 14" />
+    <path d="M6.5 6C6 6.5 5.5 6.5 5.5 5.5" />
+    <path d="M18.5 16C19.8 14.5 20.5 12.5 20.5 10.5C20.5 6.5 17.5 3.5 13.5 3.5" strokeLinecap="round" strokeWidth="1.7" />
+    <path d="M20 8.5C20.5 9 21 9 21 8" />
+    <path d="M20.5 11.5C21 12 21.5 12 21.5 11" />
+    <path d="M19.5 14.5C20 15 20.5 15 20.5 14" />
+    <path d="M17.5 6C18 6.5 18.5 6.5 18.5 5.5" />
+    <path d="M10 18.5C11 19 13 19 14 18.5" strokeLinecap="round" />
+    <path d="M11.5 18.5L9.5 21" strokeLinecap="round" />
+    <path d="M12.5 18.5L14.5 21" strokeLinecap="round" />
+    <polygon points="12 6.5 13.5 9.5 16.8 9.8 14.3 12 15 15.2 12 13.5 9 15.2 9.7 12 7.2 9.8 10.5 9.5" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+const CustomCalendar = ({ className, size = 22 }: { className?: string; size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <rect x="3" y="6" width="18" height="15" rx="3" fill="none" stroke="currentColor" strokeWidth="2" />
+    <path d="M3 11H21" stroke="currentColor" strokeWidth="2" />
+    <path d="M8 3V7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    <path d="M16 3V7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    <rect x="6" y="13" width="2.5" height="2" rx="0.5" />
+    <rect x="10.75" y="13" width="2.5" height="2" rx="0.5" />
+    <rect x="15.5" y="13" width="2.5" height="2" rx="0.5" />
+    <rect x="6" y="17" width="2.5" height="2" rx="0.5" />
+    <rect x="10.75" y="17" width="2.5" height="2" rx="0.5" />
+    <rect x="15.5" y="17" width="2.5" height="2" rx="0.5" />
+  </svg>
+);
+
+const CustomUsers = ({ className, size = 22 }: { className?: string; size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className}>
+    {/* Left User */}
+    <path d="M 1.5,18.5 C 1.5,15.2 3.5,12.5 6,12.5 C 8.5,12.5 10.5,15.2 10.5,18.5 Z" />
+    <circle cx="6" cy="10" r="2.5" />
+
+    {/* Right User */}
+    <path d="M 13.5,18.5 C 13.5,15.2 15.5,12.5 18,12.5 C 20.5,12.5 22.5,15.2 22.5,18.5 Z" />
+    <circle cx="18" cy="10" r="2.5" />
+
+    {/* Center User (in front) */}
+    <path d="M 5.5,21.5 C 5.5,17.2 8.5,13.5 12,13.5 C 15.5,13.5 18.5,17.2 18.5,21.5 Z" stroke="#FAF6F0" strokeWidth="1.2" />
+    <circle cx="12" cy="10.2" r="3.2" stroke="#FAF6F0" strokeWidth="1.2" />
+  </svg>
+);
+
+const CustomSupport = ({ className, size = 22 }: { className?: string; size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M3 14c0-4.97 4.03-9 9-9s9 4.03 9 9" />
+    <rect x="2" y="13" width="3" height="5" rx="1.5" fill="currentColor" />
+    <rect x="19" y="13" width="3" height="5" rx="1.5" fill="currentColor" />
+    <path d="M4 17.5c0 2 1.5 3.5 3.5 3.5h1.5" />
+    <circle cx="9.5" cy="21" r="1" fill="currentColor" />
+  </svg>
+);
+
 
 
 const fadeInUp = {
@@ -57,7 +118,6 @@ export default function Home() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [playVideo1, setPlayVideo1] = useState(false);
   const [playVideo2, setPlayVideo2] = useState(false);
-  const heroContentRef = useRef<HTMLDivElement>(null);
   const missionRef = useRef<HTMLElement>(null);
   const servicesRef = useRef<HTMLElement>(null);
 
@@ -66,65 +126,6 @@ export default function Home() {
       setActiveTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, []);
-
-  // GSAP: Cinematic hero entrance — fires only after splash fully exits
-  useEffect(() => {
-    if (!heroContentRef.current) return;
-
-    let ctx: ReturnType<typeof gsap.context>;
-
-    const runTimeline = () => {
-      if (!heroContentRef.current) return;
-      ctx = gsap.context(() => {
-        const tl = gsap.timeline({ delay: 0.15 });
-        // badge comes first, then .home-p and .home-btns after KineticTitle finishes (~2.8s)
-        tl.fromTo('.home-badge',
-          { opacity: 0, y: 20, scale: 0.88 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.65, ease: 'back.out(1.5)' }
-        )
-          .fromTo('.home-p',
-            { opacity: 0, y: 30 },
-            { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' },
-            '+=0.6'   // wait less for kinetic title to display paragraph sooner
-          )
-          .fromTo('.home-btns',
-            { opacity: 0, y: 22 },
-            { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
-            '-=0.35'
-          );
-      }, heroContentRef);
-    };
-
-    let fallbackTimer: ReturnType<typeof setTimeout>;
-
-    const onSplashDone = () => {
-      clearTimeout(fallbackTimer);
-      // Mark splash as played in-memory — resets on page refresh automatically
-      (window as any).__splashPlayed = true;
-      // Small buffer so the splash fade-out fully settles before hero animates in
-      setTimeout(runTimeline, 120);
-    };
-
-    // window.__splashPlayed is set only during this JS session (SPA navigation).
-    // On a full page refresh it is always undefined, so the event path is used.
-    if ((window as any).__splashPlayed) {
-      // Revisit via SPA nav — run immediately
-      fallbackTimer = setTimeout(runTimeline, 200);
-    } else {
-      window.addEventListener('splashComplete', onSplashDone, { once: true });
-      // Safety net: if splash event never fires within 5s, run anyway
-      fallbackTimer = setTimeout(() => {
-        window.removeEventListener('splashComplete', onSplashDone);
-        runTimeline();
-      }, 5000);
-    }
-
-    return () => {
-      window.removeEventListener('splashComplete', onSplashDone);
-      clearTimeout(fallbackTimer);
-      ctx?.revert();
-    };
   }, []);
 
 
@@ -170,65 +171,133 @@ export default function Home() {
 
   return (
     <div className="relative">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 pt-16 md:pt-20 overflow-hidden">
-        {/* <ThreeBackground /> */}
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0 bg-black">
-          <picture>
-            <source media="(min-width: 1024px)" srcSet="/home%205.webp" />
-            <img
-              src="/mobile view.webp"
-              alt="Hero Background"
-              className="w-full h-full object-cover object-center lg:object-[center_20%] opacity-60"
-              fetchPriority="high"
-            />
-          </picture>
+      {/* ══ Hero Section ══ */}
+      <section className="relative min-h-screen overflow-hidden bg-[#FAF6F0]">
+
+        {/* Full-width background photo */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/hero%20pic.png"
+            alt="Hero Background"
+            className="w-full h-full object-cover"
+            style={{ objectPosition: '65% center' }}
+            fetchPriority="high"
+          />
+          {/* Near hard-cut — cream to photo with almost zero smoke */}
+          <div className="absolute inset-0" style={{
+            background: 'linear-gradient(to right, #FAF6F0 0%, #FAF6F0 42%, transparent 46%)'
+          }} />
         </div>
 
-        {/* Black Overlay fading to transparent at the bottom */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-transparent z-0"></div>
+        {/* Content panel */}
+        <div className="relative z-10 flex flex-col justify-between pl-4 sm:pl-8 md:pl-10 lg:pl-12 pr-4 pt-28 pb-16 min-h-screen w-full">
 
+          {/* Left top elements - limited width to prevent overlapping text */}
+          <div className="w-full md:max-w-[50%] lg:max-w-[48%] flex flex-col my-auto">
 
+            {/* 1 ▸ BADGES */}
+            <motion.div initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}
+              className="flex flex-nowrap items-center gap-x-5 mb-7">
+              {[
+                { Icon: Gem, label: 'Premium Quality' },
+                { Icon: Star, label: 'Advanced Technology' },
+                { Icon: Lightbulb, label: 'Creative Design' },
+                { Icon: Headphones, label: 'Reliable Support' },
+              ].map(({ Icon, label }, i) => (
+                <span key={i} className="flex items-center gap-[6px] text-[12.5px] font-bold text-gray-800 whitespace-nowrap">
+                  <Icon size={14} strokeWidth={2.0} className="text-[#B8860B] shrink-0" />
+                  {label}
+                </span>
+              ))}
+            </motion.div>
 
+            {/* 2 ▸ HEADING */}
+            <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.08 }} className="mb-5">
+              <h1 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, lineHeight: 1.06 }}
+                className="text-[2rem] md:text-[2.5rem] lg:text-[2.9rem] text-[#1A1A1A] tracking-tight whitespace-nowrap">
+                We Create Moments<br />You Remember
+              </h1>
+              <p style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.1 }}
+                className="text-[1.8rem] md:text-[2.2rem] lg:text-[2.6rem] text-[#B8860B] mt-0.5">
+                Forever
+              </p>
+              <div className="w-12 h-[3px] rounded-full bg-[#B8860B] mt-4" />
+            </motion.div>
 
-        {/* Hero content — GSAP animates .home-badge .home-h1 .home-p .home-btns */}
-        <div ref={heroContentRef} className="relative w-full max-w-7xl mx-auto text-center z-10 flex flex-col items-center justify-center gap-4 md:gap-8 -translate-y-2 md:-translate-y-6">
+            {/* 3 ▸ DESCRIPTION */}
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.2 }} className="mb-6">
+              <p className="text-gray-800 font-semibold text-[14px] leading-[1.75] max-w-[460px]">
+                Professional LED, Audio &amp; Visual solutions for weddings,<br />
+                corporate events, conferences, product launches,<br />
+                live shows and every celebration.
+              </p>
+              <p className="text-[#9C6A20] font-bold text-[13.5px] mt-2">
+                Bringing your vision to life with perfection.
+              </p>
+            </motion.div>
 
-
-          {/* GSAP-animated hero text — classes targeted by GSAP timeline */}
-          <div className="home-badge inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-gold/20 backdrop-blur-md mb-2 md:mb-2" style={{ opacity: 0 }}>
-            <span className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-            <span className="text-sm font-semibold text-gold tracking-wide uppercase">Premium Event Solutions</span>
           </div>
 
-          {/* KineticTitle — self-contained, waits for splashComplete */}
-          <KineticTitle />
-
-          <p className="home-p text-white text-xs sm:text-sm md:text-lg max-w-3xl mx-auto leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)] md:drop-shadow-none px-4 mt-1 md:mt-2" style={{ opacity: 0 }}>
-            Transform your events with cutting-edge LED screens, crystal-clear audio systems
-            and professional lighting solutions. Crafting unforgettable experiences.
-          </p>
-
-          <div className="home-btns flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mt-2 md:mt-8 w-full px-4" style={{ opacity: 0 }}>
-            <motion.a
-              href="#services"
-              whileHover={{ scale: 1.05, boxShadow: '0 0 24px rgba(218,165,32,0.4)' }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full max-w-[280px] sm:max-w-none sm:w-auto bg-gold text-black px-8 py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:bg-gold-light transition-all group shadow-md"
-            >
-              Explore Services <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-            </motion.a>
-            <motion.a
-              href="#packages"
-              whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.12)' }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full max-w-[280px] sm:max-w-none sm:w-auto text-[#f7f7f7] px-8 py-4 rounded-full font-bold border border-[#FFD700] flex items-center justify-center gap-2 transition-all shadow-md"
-            >
-              Packages
-            </motion.a>
+          {/* 4 ▸ SERVICE CARDS - individual glass cards */}
+          <div className="w-full max-w-[690px] grid grid-cols-3 gap-2 sm:gap-4 mt-6 mb-6">
+            {[
+              { Icon: Monitor,   title: 'LED Wall & Screens', desc: ['High resolution displays', 'for stunning visuals'] },
+              { Icon: Volume2,   title: 'Audio Excellence',   desc: ['Crystal clear sound', 'that connects'] },
+              { Icon: Lightbulb, title: 'Lighting Design',    desc: ['Dynamic lighting', 'for every atmosphere'] },
+            ].map(({ Icon, title, desc }, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 16 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ duration: 0.5, delay: 0.32 + i * 0.1 }}
+                whileHover={{ y: -4, boxShadow: '0 12px 30px rgba(184,134,11,0.08)' }}
+                className="bg-gradient-to-br from-[#FAF6F0]/90 to-white/20 backdrop-blur-md border border-[#B8860B]/12 rounded-2xl md:rounded-3xl py-3 px-2 sm:py-5 sm:px-3 md:py-6 md:px-3.5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 shadow-[0_8px_25px_rgba(184,134,11,0.04)] cursor-default transition-all duration-300"
+              >
+                <div className="w-9 h-9 sm:w-[50px] sm:h-[50px] rounded-full bg-[#FAF6F0]/40 flex items-center justify-center shadow-sm shrink-0 border border-white/80">
+                  <Icon className="w-5 h-5 sm:w-[26px] sm:h-[26px] text-[#8B5A2B]" strokeWidth={1.8} />
+                </div>
+                <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+                  <p style={{ fontFamily: 'Poppins, sans-serif' }} className="text-[8px] sm:text-[10px] md:text-[11px] font-extrabold text-[#1A1A1A] leading-tight whitespace-nowrap">{title}</p>
+                  <p className="hidden md:block text-[9.5px] md:text-[10px] text-gray-700 font-semibold mt-1 leading-snug">
+                    {desc[0]}<br />{desc[1]}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
           </div>
+
+          {/* 5 ▸ STATS - combined single wide glass card */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.52 }}
+            className="w-full max-w-[760px] bg-gradient-to-r from-[#FAF6F0]/90 via-[#FAF6F0]/65 to-white/20 backdrop-blur-md border border-[#B8860B]/12 rounded-2xl md:rounded-3xl py-5 px-3 md:py-6 md:px-4 flex flex-col sm:flex-row items-stretch justify-between shadow-[0_10px_35px_rgba(184,134,11,0.06)] gap-4 sm:gap-0 mt-auto mb-4"
+          >
+            {[
+              { Icon: LaurelWreathStar, num: '15+', label: 'Years Experience', size: 38 },
+              { Icon: CustomCalendar, num: '1000+', label: 'Events Completed', size: 30 },
+              { Icon: CustomUsers, num: '500+', label: 'Happy Clients', size: 35 },
+              { Icon: CustomSupport, num: '24/7', label: 'Support', size: 30 },
+            ].map(({ Icon, num, label, size }, i, arr) => (
+              <div key={i} className="flex flex-1 items-center justify-between sm:justify-center">
+                <div className="flex items-center gap-2 md:gap-2.5 px-2.5 md:px-3.5">
+                  <div className="w-[50px] h-[50px] rounded-full bg-[#FAF6F0]/40 flex items-center justify-center shadow-sm shrink-0 border border-white/80">
+                    <Icon className="text-[#8B5A2B]" size={size} />
+                  </div>
+                  <div className="flex flex-col">
+                    <p style={{ fontFamily: 'Poppins, sans-serif' }} className="text-[1.2rem] md:text-[1.3rem] font-extrabold text-[#1A1A1A] leading-none">{num}</p>
+                    <p className="text-[9.5px] md:text-[10px] text-gray-700 font-bold mt-1 whitespace-nowrap leading-none">{label}</p>
+                  </div>
+                </div>
+                {i < arr.length - 1 && (
+                  <div className="hidden sm:block h-12 w-[1px] bg-[#B8860B]/18 self-center ml-auto" />
+                )}
+              </div>
+            ))}
+          </motion.div>
+
         </div>
+
       </section>
 
       {/* High-Contrast Professional Dual-Track Marquee Section */}

@@ -120,8 +120,8 @@ export default function Navbar() {
           onClick={() => setIsOpen(!isOpen)}
           className={cn(
             "lg:hidden flex flex-col justify-center items-center w-10 h-10 rounded-full border transition-all duration-300 relative z-50 focus:outline-none active:scale-90",
-            isOpen 
-              ? "border-gold/30 bg-gold/10 text-gold" 
+            isOpen
+              ? "border-gold/30 bg-gold/10 text-gold"
               : "border-black/5 bg-black/[0.03] text-ink"
           )}
           aria-label="Toggle Menu"
