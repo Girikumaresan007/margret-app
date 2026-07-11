@@ -336,7 +336,7 @@ export default function Home() {
         </div>
 
         {/* Mobile Content panel (Visible under lg) */}
-        <div className="relative z-10 flex lg:hidden flex-col justify-between px-4 sm:px-6 pt-20 pb-4 md:pb-6 min-h-[100dvh] md:min-h-screen w-full">
+        <div className="relative z-10 flex lg:hidden flex-col justify-between px-4 sm:px-6 pt-20 pb-5 md:pb-6 min-h-[100dvh] md:min-h-screen w-full">
           {/* Top text block */}
           <div className="w-full flex flex-col items-center text-center mt-2">
             <h1 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 800, lineHeight: 1.1 }}
@@ -368,7 +368,7 @@ export default function Home() {
           </div>
 
           {/* Bottom Group (Cards + Stats + Button) - pushed to bottom using mt-auto */}
-          <div className="w-full flex flex-col items-center mt-auto gap-4">
+          <div className="w-full flex flex-col items-center mt-auto gap-2">
             {/* Service Cards (Stacked Vertically on mobile, horizontal grid on tablet) */}
             <div className="w-full max-w-[230px] md:max-w-[620px] flex flex-col md:grid md:grid-cols-3 gap-1 md:gap-3.5">
               {[
