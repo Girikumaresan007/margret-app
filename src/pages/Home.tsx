@@ -420,19 +420,6 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-
-              {/* Book Event Button */}
-              <Link
-                to="/contact"
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontWeight: 700,
-                  background: 'linear-gradient(to right, #754C24 0%, #C49A6C 100%)'
-                }}
-                className="w-full md:max-w-[400px] text-center text-white py-3 px-6 rounded-full text-[13px] md:text-[14px] tracking-wider uppercase shadow-md active:scale-[0.98] transition-all mb-1"
-              >
-                BOOK YOUR EVENT NOW
-              </Link>
             </div>
           </div>
 
