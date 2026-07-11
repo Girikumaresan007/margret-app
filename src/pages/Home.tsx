@@ -190,48 +190,66 @@ export default function Home() {
         </div>
 
         {/* Content panel */}
-        <div className="relative z-10 flex flex-col justify-between pl-4 sm:pl-8 md:pl-10 lg:pl-12 pr-4 pt-28 pb-16 min-h-screen w-full">
+        <div className="relative z-10 flex flex-col justify-between pl-4 sm:pl-8 md:pl-10 lg:pl-12 pr-4 pt-24 pb-6 md:pb-8 min-h-screen w-full">
 
           {/* Left top elements - limited width to prevent overlapping text */}
-          <div className="w-full md:max-w-[50%] lg:max-w-[48%] flex flex-col my-auto">
+          <div className="w-full md:max-w-[50%] lg:max-w-[48%] flex flex-col pt-5 my-auto">
 
             {/* 1 ▸ BADGES */}
             <motion.div initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}
-              className="flex flex-nowrap items-center gap-x-5 mb-7">
+              className="flex flex-nowrap items-center mb-4.5">
               {[
                 { Icon: Gem, label: 'Premium Quality' },
                 { Icon: Star, label: 'Advanced Technology' },
                 { Icon: Lightbulb, label: 'Creative Design' },
                 { Icon: Headphones, label: 'Reliable Support' },
-              ].map(({ Icon, label }, i) => (
-                <span key={i} className="flex items-center gap-[6px] text-[12.5px] font-bold text-gray-800 whitespace-nowrap">
-                  <Icon size={14} strokeWidth={2.0} className="text-[#B8860B] shrink-0" />
-                  {label}
-                </span>
+              ].map(({ Icon, label }, i, arr) => (
+                <div key={i} className="flex items-center">
+                  <span
+                    style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500 }}
+                    className="flex items-center gap-[6px] text-[12.5px] text-black whitespace-nowrap">
+                    <Icon size={14} strokeWidth={2.0} className="text-[#B8860B] shrink-0" />
+                    {label}
+                  </span>
+                  {i < arr.length - 1 && (
+                    <div className="h-3.5 w-[1px] bg-[#B8860B]/25 mx-5" />
+                  )}
+                </div>
               ))}
             </motion.div>
 
             {/* 2 ▸ HEADING */}
-            <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.08 }} className="mb-5">
-              <h1 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 800, lineHeight: 1.06 }}
-                className="text-[2rem] md:text-[2.5rem] lg:text-[2.9rem] text-[#1A1A1A] tracking-tight whitespace-nowrap">
+            <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.08 }} className="mb-3.5">
+              <h1 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 700, lineHeight: 1.06 }}
+                className="text-[2.8rem] md:text-[3.8rem] lg:text-[4.5rem] text-[#1A1A1A] tracking-tight whitespace-nowrap">
                 We Create Moments<br />You Remember
               </h1>
-              <p style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.1 }}
-                className="text-[1.8rem] md:text-[2.2rem] lg:text-[2.6rem] text-[#B8860B] mt-0.5">
+              <p style={{ 
+                fontFamily: '"Cormorant Garamond", serif', 
+                fontWeight: 700, 
+                fontStyle: 'italic', 
+                lineHeight: 1.1,
+                background: 'linear-gradient(to bottom, #C69C6D 0%, #5C3A21 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                display: 'inline-block'
+              }}
+                className="text-[2.2rem] md:text-[3rem] lg:text-[3.6rem] mt-0.5">
                 Forever
               </p>
               <div className="w-12 h-[3px] rounded-full bg-[#B8860B] mt-4" />
             </motion.div>
 
             {/* 3 ▸ DESCRIPTION */}
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.2 }} className="mb-6">
-              <p className="text-gray-800 font-semibold text-[14px] leading-[1.75] max-w-[460px]">
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.2 }} className="mb-3">
+              <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 400 }}
+                className="text-gray-800 text-[14px] leading-[1.75] max-w-[460px]">
                 Professional LED, Audio &amp; Visual solutions for weddings,<br />
                 corporate events, conferences, product launches,<br />
                 live shows and every celebration.
               </p>
-              <p className="text-[#9C6A20] font-bold text-[13.5px] mt-2">
+              <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600 }}
+                className="text-[#9C6A20] font-semibold text-[13.5px] mt-2">
                 Bringing your vision to life with perfection.
               </p>
             </motion.div>
@@ -239,7 +257,7 @@ export default function Home() {
           </div>
 
           {/* 4 ▸ SERVICE CARDS - individual glass cards */}
-          <div className="w-full max-w-[690px] grid grid-cols-3 gap-2 sm:gap-4 mt-6 mb-6">
+          <div className="w-full max-w-[690px] grid grid-cols-3 gap-2 sm:gap-4 mt-3 mb-3.5">
             {[
               { Icon: Monitor,   title: 'LED Wall & Screens', desc: ['High resolution displays', 'for stunning visuals'] },
               { Icon: Volume2,   title: 'Audio Excellence',   desc: ['Crystal clear sound', 'that connects'] },
@@ -250,15 +268,15 @@ export default function Home() {
                 initial={{ opacity: 0, y: 16 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ duration: 0.5, delay: 0.32 + i * 0.1 }}
-                whileHover={{ y: -4, boxShadow: '0 12px 30px rgba(184,134,11,0.08)' }}
-                className="bg-gradient-to-br from-[#FAF6F0]/90 to-white/20 backdrop-blur-md border border-[#B8860B]/12 rounded-2xl md:rounded-3xl py-3 px-2 sm:py-5 sm:px-3 md:py-6 md:px-3.5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 shadow-[0_8px_25px_rgba(184,134,11,0.04)] cursor-default transition-all duration-300"
+                whileHover={{ y: -3, boxShadow: '0 14px 30px -4px rgba(0,0,0,0.08), 0 6px 16px -2px rgba(184,134,11,0.04)' }}
+                className="bg-gradient-to-br from-[#FAF6F0]/40 to-white/10 backdrop-blur-md border border-[#B8860B]/35 rounded-2xl md:rounded-3xl py-3 px-2 sm:py-5 sm:px-3 md:py-6 md:px-3.5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_4px_12px_-2px_rgba(184,134,11,0.03)] cursor-default transition-all duration-300"
               >
                 <div className="w-9 h-9 sm:w-[50px] sm:h-[50px] rounded-full bg-[#FAF6F0]/40 flex items-center justify-center shadow-sm shrink-0 border border-white/80">
                   <Icon className="w-5 h-5 sm:w-[26px] sm:h-[26px] text-[#8B5A2B]" strokeWidth={1.8} />
                 </div>
                 <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
-                  <p style={{ fontFamily: 'Poppins, sans-serif' }} className="text-[8px] sm:text-[10px] md:text-[11px] font-extrabold text-[#1A1A1A] leading-tight whitespace-nowrap">{title}</p>
-                  <p className="hidden md:block text-[9.5px] md:text-[10px] text-gray-700 font-semibold mt-1 leading-snug">
+                  <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600 }} className="text-[8px] sm:text-[10px] md:text-[11px] text-[#1A1A1A] leading-tight whitespace-nowrap">{title}</p>
+                  <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 400 }} className="hidden md:block text-[9.5px] md:text-[10px] text-gray-700 mt-1 leading-snug">
                     {desc[0]}<br />{desc[1]}
                   </p>
                 </div>
@@ -271,7 +289,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.52 }}
-            className="w-full max-w-[760px] bg-gradient-to-r from-[#FAF6F0]/90 via-[#FAF6F0]/65 to-white/20 backdrop-blur-md border border-[#B8860B]/12 rounded-2xl md:rounded-3xl py-5 px-3 md:py-6 md:px-4 flex flex-col sm:flex-row items-stretch justify-between shadow-[0_10px_35px_rgba(184,134,11,0.06)] gap-4 sm:gap-0 mt-auto mb-4"
+            className="w-full max-w-[760px] bg-gradient-to-r from-[#FAF6F0]/40 via-[#FAF6F0]/20 to-white/10 backdrop-blur-md border border-[#B8860B]/12 rounded-2xl md:rounded-3xl py-5 px-3 md:py-6 md:px-4 flex flex-col sm:flex-row items-stretch justify-between shadow-[0_10px_35px_rgba(184,134,11,0.06)] gap-4 sm:gap-0 mt-auto mb-1"
           >
             {[
               { Icon: LaurelWreathStar, num: '15+', label: 'Years Experience', size: 38 },
@@ -284,9 +302,9 @@ export default function Home() {
                   <div className="w-[50px] h-[50px] rounded-full bg-[#FAF6F0]/40 flex items-center justify-center shadow-sm shrink-0 border border-white/80">
                     <Icon className="text-[#8B5A2B]" size={size} />
                   </div>
-                  <div className="flex flex-col">
-                    <p style={{ fontFamily: 'Poppins, sans-serif' }} className="text-[1.2rem] md:text-[1.3rem] font-extrabold text-[#1A1A1A] leading-none">{num}</p>
-                    <p className="text-[9.5px] md:text-[10px] text-gray-700 font-bold mt-1 whitespace-nowrap leading-none">{label}</p>
+                   <div className="flex flex-col">
+                    <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700 }} className="text-[1.2rem] md:text-[1.3rem] text-[#1A1A1A] leading-none">{num}</p>
+                    <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500 }} className="text-[9.5px] md:text-[10px] text-gray-700 mt-1 whitespace-nowrap leading-none">{label}</p>
                   </div>
                 </div>
                 {i < arr.length - 1 && (
