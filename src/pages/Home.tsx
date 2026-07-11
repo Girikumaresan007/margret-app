@@ -196,7 +196,7 @@ export default function Home() {
           <div
             className="absolute inset-0 block lg:hidden"
             style={{
-              background: 'linear-gradient(to bottom, #FAF6F0 0%, #FAF6F0 12%, transparent 22%, transparent 55%, #FAF6F0 66%, #FAF6F0 100%)'
+              background: 'linear-gradient(to bottom, #FAF6F0 0%, #FAF6F0 16%, transparent 28%, transparent 55%, #FAF6F0 66%, #FAF6F0 100%)'
             }}
           />
           <div
@@ -336,7 +336,7 @@ export default function Home() {
         </div>
 
         {/* Mobile Content panel (Visible under lg) */}
-        <div className="relative z-10 flex lg:hidden flex-col justify-between px-4 sm:px-6 pt-20 pb-16 md:pb-6 min-h-[100dvh] md:min-h-screen w-full">
+        <div className="relative z-10 flex lg:hidden flex-col justify-between px-4 sm:px-6 pt-20 pb-4 md:pb-6 min-h-[100dvh] md:min-h-screen w-full">
           {/* Top text block */}
           <div className="w-full flex flex-col items-center text-center mt-2">
             <h1 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 800, lineHeight: 1.1 }}
@@ -356,7 +356,11 @@ export default function Home() {
               className="text-[8.5vw] min-[375px]:text-[2.0rem] sm:text-[2.4rem] md:text-[2.7rem] mt-1">
               Forever
             </p>
-            <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500 }}
+            <p style={{
+              fontFamily: "'Poppins', sans-serif",
+              fontWeight: 500,
+              textShadow: '0 0 8px #FAF6F0, 0 0 15px #FAF6F0, 0 0 25px #FAF6F0'
+            }}
               className="text-gray-900 text-[3.1vw] min-[375px]:text-[12px] sm:text-[14.5px] md:text-[16px] leading-[1.45] max-w-[360px] sm:max-w-[420px] md:max-w-[520px] mt-2.5">
               Professional LED, Audio &amp; Visual solutions for weddings,<br />
               conferences and every celebration.
