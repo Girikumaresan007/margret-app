@@ -336,7 +336,7 @@ export default function Home() {
         </div>
 
         {/* Mobile Content panel (Visible under lg) */}
-        <div className="relative z-10 flex lg:hidden flex-col justify-between px-4 sm:px-6 pt-20 pb-3 md:pb-6 min-h-[100dvh] md:min-h-screen w-full">
+        <div className="relative z-10 flex lg:hidden flex-col justify-between px-4 sm:px-6 pt-20 pb-3 md:pb-6 min-h-[100svh] md:min-h-screen w-full">
           {/* Top text block */}
           <div className="w-full flex flex-col items-center text-center mt-2">
             <h1 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 800, lineHeight: 1.1 }}
