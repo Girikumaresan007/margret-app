@@ -190,14 +190,14 @@ export default function Home() {
         </div>
 
         {/* Content panel */}
-        <div className="relative z-10 flex flex-col justify-between pl-4 sm:pl-8 md:pl-10 lg:pl-12 pr-4 pt-24 pb-6 md:pb-8 min-h-screen w-full">
+        <div className="relative z-10 flex flex-col justify-between pl-4 sm:pl-8 md:pl-10 lg:pl-12 pr-4 pt-20 pb-4 md:pb-5 min-h-screen w-full">
 
           {/* Left top elements - limited width to prevent overlapping text */}
-          <div className="w-full md:max-w-[50%] lg:max-w-[48%] flex flex-col pt-5 my-auto">
+          <div className="w-full md:max-w-[50%] lg:max-w-[48%] flex flex-col pt-3 my-auto">
 
             {/* 1 ▸ BADGES */}
             <motion.div initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}
-              className="flex flex-nowrap items-center mb-4.5">
+              className="flex flex-nowrap items-center mb-3">
               {[
                 { Icon: Gem, label: 'Premium Quality' },
                 { Icon: Star, label: 'Advanced Technology' },
@@ -219,9 +219,9 @@ export default function Home() {
             </motion.div>
 
             {/* 2 ▸ HEADING */}
-            <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.08 }} className="mb-3.5">
+            <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.08 }} className="mb-2.5">
               <h1 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 700, lineHeight: 1.06 }}
-                className="text-[2.8rem] md:text-[3.8rem] lg:text-[4.5rem] text-[#1A1A1A] tracking-tight whitespace-nowrap">
+                className="text-[2.4rem] sm:text-[2.8rem] md:text-[3.2rem] lg:text-[4rem] text-[#1A1A1A] tracking-tight whitespace-nowrap">
                 We Create Moments<br />You Remember
               </h1>
               <p style={{ 
@@ -234,22 +234,22 @@ export default function Home() {
                 WebkitTextFillColor: 'transparent',
                 display: 'inline-block'
               }}
-                className="text-[2.2rem] md:text-[3rem] lg:text-[3.6rem] mt-0.5">
+                className="text-[1.8rem] sm:text-[2.2rem] md:text-[2.5rem] lg:text-[3rem] mt-0.5">
                 Forever
               </p>
-              <div className="w-12 h-[3px] rounded-full bg-[#B8860B] mt-4" />
+              <div className="w-10 h-[3px] rounded-full bg-[#B8860B] mt-3" />
             </motion.div>
 
             {/* 3 ▸ DESCRIPTION */}
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.2 }} className="mb-3">
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.2 }} className="mb-2">
               <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 400 }}
-                className="text-gray-800 text-[14px] leading-[1.75] max-w-[460px]">
+                className="text-gray-800 text-[14px] leading-[1.5] max-w-[460px]">
                 Professional LED, Audio &amp; Visual solutions for weddings,<br />
                 corporate events, conferences, product launches,<br />
                 live shows and every celebration.
               </p>
               <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600 }}
-                className="text-[#9C6A20] font-semibold text-[13.5px] mt-2">
+                className="text-[#9C6A20] font-semibold text-[13.5px] mt-1.5">
                 Bringing your vision to life with perfection.
               </p>
             </motion.div>
@@ -257,7 +257,7 @@ export default function Home() {
           </div>
 
           {/* 4 ▸ SERVICE CARDS - individual glass cards */}
-          <div className="w-full max-w-[690px] grid grid-cols-3 gap-2 sm:gap-4 mt-3 mb-3.5">
+          <div className="w-full max-w-[690px] grid grid-cols-3 gap-2 sm:gap-4 mt-2.5 mb-2.5">
             {[
               { Icon: Monitor,   title: 'LED Wall & Screens', desc: ['High resolution displays', 'for stunning visuals'] },
               { Icon: Volume2,   title: 'Audio Excellence',   desc: ['Crystal clear sound', 'that connects'] },
@@ -269,7 +269,7 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ duration: 0.5, delay: 0.32 + i * 0.1 }}
                 whileHover={{ y: -3, boxShadow: '0 14px 30px -4px rgba(0,0,0,0.08), 0 6px 16px -2px rgba(184,134,11,0.04)' }}
-                className="bg-gradient-to-br from-[#FAF6F0]/40 to-white/10 backdrop-blur-md border border-[#B8860B]/35 rounded-2xl md:rounded-3xl py-3 px-2 sm:py-5 sm:px-3 md:py-6 md:px-3.5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_4px_12px_-2px_rgba(184,134,11,0.03)] cursor-default transition-all duration-300"
+                className="bg-gradient-to-br from-[#FAF6F0]/40 to-white/10 backdrop-blur-md border border-[#B8860B]/35 rounded-2xl md:rounded-3xl py-3 px-2 sm:py-4.5 sm:px-3 md:py-4.5 md:px-3.5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_4px_12px_-2px_rgba(184,134,11,0.03)] cursor-default transition-all duration-300"
               >
                 <div className="w-9 h-9 sm:w-[50px] sm:h-[50px] rounded-full bg-[#FAF6F0]/40 flex items-center justify-center shadow-sm shrink-0 border border-white/80">
                   <Icon className="w-5 h-5 sm:w-[26px] sm:h-[26px] text-[#8B5A2B]" strokeWidth={1.8} />
@@ -289,7 +289,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.52 }}
-            className="w-full max-w-[760px] bg-gradient-to-r from-[#FAF6F0]/40 via-[#FAF6F0]/20 to-white/10 backdrop-blur-md border border-[#B8860B]/12 rounded-2xl md:rounded-3xl py-5 px-3 md:py-6 md:px-4 flex flex-col sm:flex-row items-stretch justify-between shadow-[0_10px_35px_rgba(184,134,11,0.06)] gap-4 sm:gap-0 mt-auto mb-1"
+            className="w-full max-w-[760px] bg-gradient-to-r from-[#FAF6F0]/40 via-[#FAF6F0]/20 to-white/10 backdrop-blur-md border border-[#B8860B]/12 rounded-2xl md:rounded-3xl py-4 px-3 md:py-4.5 md:px-4 flex flex-col sm:flex-row items-stretch justify-between shadow-[0_10px_35px_rgba(184,134,11,0.06)] gap-4 sm:gap-0 mt-auto mb-1"
           >
             {[
               { Icon: LaurelWreathStar, num: '15+', label: 'Years Experience', size: 38 },
