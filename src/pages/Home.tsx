@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { TestimonialsSection } from '../components/ui/testimonial-v2';
-import { ArrowRight, Star, CheckCircle2, Play, Users, ShieldCheck, Zap, Heart, Settings, Briefcase, Music, Disc, Gift, Rocket, GraduationCap, Sparkles, Trophy, MonitorPlay, Volume2, Lightbulb, Cpu, Layers, Activity, Presentation, Megaphone, Monitor, Gem, Headphones, CalendarCheck } from 'lucide-react';
+import { ArrowRight, Star, CheckCircle2, Play, Users, ShieldCheck, Zap, Heart, Settings, Briefcase, Music, Disc, Gift, Rocket, GraduationCap, Sparkles, Trophy, MonitorPlay, Volume2, Lightbulb, Cpu, Layers, Activity, Presentation, Megaphone, Monitor, Gem, Headphones, CalendarCheck, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SERVICES, TESTIMONIALS, PACKAGES } from '../constants';
 import { cn } from '../lib/utils';
@@ -176,28 +176,47 @@ export default function Home() {
 
         {/* Full-width background photo */}
         <div className="absolute inset-0 z-0">
+          {/* Desktop view image */}
           <img
             src="/hero%20pic.png"
             alt="Hero Background"
-            className="w-full h-full object-cover"
+            className="hidden lg:block w-full h-full object-cover"
             style={{ objectPosition: '65% center' }}
             fetchPriority="high"
           />
-          {/* Near hard-cut — cream to photo with almost zero smoke */}
-          <div className="absolute inset-0" style={{
-            background: 'linear-gradient(to right, #FAF6F0 0%, #FAF6F0 42%, transparent 46%)'
-          }} />
+          {/* Mobile view image */}
+          <img
+            src="/mobile-pic.png"
+            alt="Hero Background"
+            className="block lg:hidden w-full h-full object-cover"
+            style={{ objectPosition: 'center center' }}
+            fetchPriority="high"
+          />
+          {/* Responsive gradient overlay */}
+          <div
+            className="absolute inset-0 block lg:hidden"
+            style={{
+              background: 'linear-gradient(to bottom, #FAF6F0 0%, #FAF6F0 22%, transparent 32%, transparent 55%, #FAF6F0 66%, #FAF6F0 100%)'
+            }}
+          />
+          <div
+            className="absolute inset-0 hidden lg:block"
+            style={{
+              background: 'linear-gradient(to right, #FAF6F0 0%, #FAF6F0 42%, transparent 46%)'
+            }}
+          />
         </div>
 
         {/* Content panel */}
-        <div className="relative z-10 flex flex-col justify-between pl-4 sm:pl-8 md:pl-10 lg:pl-12 pr-4 pt-20 pb-4 md:pb-5 min-h-screen w-full">
+        {/* Desktop Content Panel (Visible on lg and larger) */}
+        <div className="hidden lg:flex relative z-10 flex-col justify-between pl-12 pr-4 pt-20 pb-5 min-h-screen w-full">
 
           {/* Left top elements - limited width to prevent overlapping text */}
-          <div className="w-full md:max-w-[50%] lg:max-w-[48%] flex flex-col pt-3 my-auto">
+          <div className="w-full lg:max-w-[48%] flex flex-col pt-3 my-auto">
 
             {/* 1 ▸ BADGES */}
             <motion.div initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}
-              className="flex flex-nowrap items-center mb-3">
+              className="flex flex-wrap md:flex-nowrap items-center gap-x-3 gap-y-1.5 md:gap-x-0 mb-2.5">
               {[
                 { Icon: Gem, label: 'Premium Quality' },
                 { Icon: Star, label: 'Advanced Technology' },
@@ -207,27 +226,27 @@ export default function Home() {
                 <div key={i} className="flex items-center">
                   <span
                     style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500 }}
-                    className="flex items-center gap-[6px] text-[12.5px] text-black whitespace-nowrap">
-                    <Icon size={14} strokeWidth={2.0} className="text-[#B8860B] shrink-0" />
+                    className="flex items-center gap-[6px] text-[11px] sm:text-[12.5px] text-black whitespace-nowrap">
+                    <Icon size={13} strokeWidth={2.0} className="text-[#B8860B] shrink-0" />
                     {label}
                   </span>
                   {i < arr.length - 1 && (
-                    <div className="h-3.5 w-[1px] bg-[#B8860B]/25 mx-5" />
+                    <div className="hidden md:block h-3.5 w-[1px] bg-[#B8860B]/25 mx-5" />
                   )}
                 </div>
               ))}
             </motion.div>
 
             {/* 2 ▸ HEADING */}
-            <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.08 }} className="mb-2.5">
+            <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.08 }} className="mt-2.5 mb-4.5">
               <h1 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 700, lineHeight: 1.06 }}
                 className="text-[2.4rem] sm:text-[2.8rem] md:text-[3.2rem] lg:text-[4rem] text-[#1A1A1A] tracking-tight whitespace-nowrap">
                 We Create Moments<br />You Remember
               </h1>
-              <p style={{ 
-                fontFamily: '"Cormorant Garamond", serif', 
-                fontWeight: 700, 
-                fontStyle: 'italic', 
+              <p style={{
+                fontFamily: '"Cormorant Garamond", serif',
+                fontWeight: 700,
+                fontStyle: 'italic',
                 lineHeight: 1.1,
                 background: 'linear-gradient(to bottom, #C69C6D 0%, #5C3A21 100%)',
                 WebkitBackgroundClip: 'text',
@@ -259,14 +278,14 @@ export default function Home() {
           {/* 4 ▸ SERVICE CARDS - individual glass cards */}
           <div className="w-full max-w-[690px] grid grid-cols-3 gap-2 sm:gap-4 mt-2.5 mb-2.5">
             {[
-              { Icon: Monitor,   title: 'LED Wall & Screens', desc: ['High resolution displays', 'for stunning visuals'] },
-              { Icon: Volume2,   title: 'Audio Excellence',   desc: ['Crystal clear sound', 'that connects'] },
-              { Icon: Lightbulb, title: 'Lighting Design',    desc: ['Dynamic lighting', 'for every atmosphere'] },
+              { Icon: Monitor, title: 'LED Wall & Screens', desc: ['High resolution displays', 'for stunning visuals'] },
+              { Icon: Volume2, title: 'Audio Excellence', desc: ['Crystal clear sound', 'that connects'] },
+              { Icon: Lightbulb, title: 'Lighting Design', desc: ['Dynamic lighting', 'for every atmosphere'] },
             ].map(({ Icon, title, desc }, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 16 }} 
-                animate={{ opacity: 1, y: 0 }} 
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.32 + i * 0.1 }}
                 whileHover={{ y: -3, boxShadow: '0 14px 30px -4px rgba(0,0,0,0.08), 0 6px 16px -2px rgba(184,134,11,0.04)' }}
                 className="bg-gradient-to-br from-[#FAF6F0]/40 to-white/10 backdrop-blur-md border border-[#B8860B]/35 rounded-2xl md:rounded-3xl py-3 px-2 sm:py-4.5 sm:px-3 md:py-4.5 md:px-3.5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_4px_12px_-2px_rgba(184,134,11,0.03)] cursor-default transition-all duration-300"
@@ -289,7 +308,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.52 }}
-            className="w-full max-w-[760px] bg-gradient-to-r from-[#FAF6F0]/40 via-[#FAF6F0]/20 to-white/10 backdrop-blur-md border border-[#B8860B]/12 rounded-2xl md:rounded-3xl py-4 px-3 md:py-4.5 md:px-4 flex flex-col sm:flex-row items-stretch justify-between shadow-[0_10px_35px_rgba(184,134,11,0.06)] gap-4 sm:gap-0 mt-auto mb-1"
+            className="w-full max-w-[760px] bg-gradient-to-r from-[#FAF6F0]/40 via-[#FAF6F0]/20 to-white/10 backdrop-blur-md border border-[#B8860B]/12 rounded-2xl md:rounded-3xl py-4 px-3 md:py-4.5 md:px-4 grid grid-cols-2 gap-y-3.5 gap-x-2 sm:flex sm:flex-row sm:items-stretch sm:justify-between sm:gap-0 mt-auto mb-1"
           >
             {[
               { Icon: LaurelWreathStar, num: '15+', label: 'Years Experience', size: 38 },
@@ -297,12 +316,12 @@ export default function Home() {
               { Icon: CustomUsers, num: '500+', label: 'Happy Clients', size: 35 },
               { Icon: CustomSupport, num: '24/7', label: 'Support', size: 30 },
             ].map(({ Icon, num, label, size }, i, arr) => (
-              <div key={i} className="flex flex-1 items-center justify-between sm:justify-center">
+              <div key={i} className="flex flex-1 items-center justify-center">
                 <div className="flex items-center gap-2 md:gap-2.5 px-2.5 md:px-3.5">
                   <div className="w-[50px] h-[50px] rounded-full bg-[#FAF6F0]/40 flex items-center justify-center shadow-sm shrink-0 border border-white/80">
                     <Icon className="text-[#8B5A2B]" size={size} />
                   </div>
-                   <div className="flex flex-col">
+                  <div className="flex flex-col">
                     <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700 }} className="text-[1.2rem] md:text-[1.3rem] text-[#1A1A1A] leading-none">{num}</p>
                     <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500 }} className="text-[9.5px] md:text-[10px] text-gray-700 mt-1 whitespace-nowrap leading-none">{label}</p>
                   </div>
@@ -313,6 +332,109 @@ export default function Home() {
               </div>
             ))}
           </motion.div>
+
+        </div>
+
+        {/* Mobile Content panel (Visible under lg) */}
+        <div className="relative z-10 flex lg:hidden flex-col justify-between px-4 sm:px-6 pt-16 pb-3 min-h-screen w-full">
+          {/* Top text block */}
+          <div className="w-full flex flex-col items-center text-center mt-2">
+            <h1 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 800, lineHeight: 1.1 }}
+              className="text-[10.5vw] min-[375px]:text-[2.45rem] sm:text-[2.85rem] md:text-[3.25rem] text-[#1A1A1A] tracking-tight">
+              We Create Moments<br />You Remember
+            </h1>
+            <p style={{
+              fontFamily: '"Cormorant Garamond", serif',
+              fontWeight: 800,
+              fontStyle: 'italic',
+              lineHeight: 1.1,
+              background: 'linear-gradient(to bottom, #8B5A2B 0%, #4A2E1B 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              display: 'inline-block'
+            }}
+              className="text-[8.5vw] min-[375px]:text-[2.0rem] sm:text-[2.4rem] md:text-[2.7rem] mt-1">
+              Forever
+            </p>
+            <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500 }}
+              className="text-gray-900 text-[3.1vw] min-[375px]:text-[12px] sm:text-[14.5px] md:text-[16px] leading-[1.45] max-w-[360px] sm:max-w-[420px] md:max-w-[520px] mt-2.5">
+              Professional LED, Audio &amp; Visual solutions for weddings,<br />
+              conferences and every celebration.
+            </p>
+          </div>
+
+          {/* Bottom Group (Cards + Stats + Button) - pushed to bottom using mt-auto */}
+          <div className="w-full flex flex-col items-center mt-auto gap-4">
+            {/* Service Cards (Stacked Vertically on mobile, horizontal grid on tablet) */}
+            <div className="w-full max-w-[280px] md:max-w-[620px] flex flex-col md:grid md:grid-cols-3 gap-2 md:gap-3.5">
+              {[
+                { Icon: Monitor, title: 'LED Wall & Screens' },
+                { Icon: Volume2, title: 'Audio Excellence' },
+                { Icon: Lightbulb, title: 'Lighting Design' },
+              ].map(({ Icon, title }, i) => (
+                <div
+                  key={i}
+                  className="bg-[#FFFDF9] border border-[#B8860B]/30 rounded-2xl py-2.5 px-4.5 flex items-center justify-between shadow-[0_4px_12px_rgba(184,134,11,0.07),0_2px_4px_rgba(0,0,0,0.02)] cursor-pointer active:scale-[0.98] transition-all"
+                >
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-8 h-8 rounded-full bg-[#FAF6F0] flex items-center justify-center border border-[#B8860B]/18 shrink-0">
+                      <Icon className="w-4 h-4 text-[#8B5A2B]" strokeWidth={1.8} />
+                    </div>
+                    <span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600 }} className="text-[12.5px] text-[#1A1A1A] tracking-tight">
+                      {title}
+                    </span>
+                  </div>
+                  <ChevronDown className="w-4 h-4 text-[#8B5A2B]" strokeWidth={2.0} />
+                </div>
+              ))}
+            </div>
+
+            {/* Stats + Button Container */}
+            <div className="w-full max-w-[390px] md:max-w-[680px] flex flex-col items-center">
+              {/* Stats row */}
+              <div className="w-full grid grid-cols-4 items-start mb-3.5 md:mb-5 relative">
+                {[
+                  { Icon: LaurelWreathStar, num: '15+', label: 'Years Experience', size: 23, tabSize: 26 },
+                  { Icon: CustomCalendar, num: '1000+', label: 'Events', size: 19, tabSize: 22 },
+                  { Icon: CustomUsers, num: '500+', label: 'Clients', size: 21, tabSize: 24 },
+                  { Icon: CustomSupport, num: '24/7', label: 'Support', size: 19, tabSize: 22 },
+                ].map(({ Icon, num, label, size, tabSize }, i, arr) => (
+                  <div key={i} className="flex flex-col items-center text-center relative px-0.5 md:px-2">
+                    {/* Circular icon container */}
+                    <div className="w-[36px] md:w-[42px] h-[36px] md:h-[42px] rounded-full bg-[#FAF6F0]/80 flex items-center justify-center border border-[#B8860B]/15 shadow-sm mb-1.5">
+                      <Icon className="text-[#8B5A2B] block md:hidden" size={size} />
+                      <Icon className="text-[#8B5A2B] hidden md:block" size={tabSize} />
+                    </div>
+                    {/* Number */}
+                    <span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700 }} className="text-[15px] md:text-[18px] text-[#1A1A1A] leading-none">
+                      {num}
+                    </span>
+                    {/* Label */}
+                    <span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500 }} className="text-[9.5px] md:text-[11px] text-gray-600 mt-1 uppercase tracking-tight leading-tight">
+                      {label}
+                    </span>
+                    {/* Divider line */}
+                    {i < arr.length - 1 && (
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 h-10 md:h-12 w-[1px] bg-[#B8860B]/40" />
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Book Event Button */}
+              <Link
+                to="/contact"
+                style={{
+                  fontFamily: "'Poppins', sans-serif",
+                  fontWeight: 700,
+                  background: 'linear-gradient(to right, #754C24 0%, #C49A6C 100%)'
+                }}
+                className="w-full md:max-w-[400px] text-center text-white py-3 px-6 rounded-full text-[13px] md:text-[14px] tracking-wider uppercase shadow-md active:scale-[0.98] transition-all mb-1"
+              >
+                BOOK YOUR EVENT NOW
+              </Link>
+            </div>
+          </div>
 
         </div>
 
