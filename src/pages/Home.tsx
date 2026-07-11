@@ -172,7 +172,7 @@ export default function Home() {
   return (
     <div className="relative">
       {/* ══ Hero Section ══ */}
-      <section className="relative min-h-screen overflow-hidden bg-[#FAF6F0]">
+      <section className="relative min-h-[100svh] md:min-h-screen overflow-hidden bg-[#FAF6F0]">
 
         {/* Full-width background photo */}
         <div className="absolute inset-0 z-0">
