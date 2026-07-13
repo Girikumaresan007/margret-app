@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { Shuffle } from 'lucide-react';
+import { Shuffle, Maximize2 } from 'lucide-react';
 
 // Fisher-Yates shuffle helper
 const shuffleArray = <T,>(arr: T[]): T[] => {
@@ -591,6 +591,19 @@ export function ScrollGallery() {
                   willChange: 'transform',
                 }}
               />
+
+              {/* Expand Button in Corner */}
+              <button
+                onPointerDown={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightbox(sl);
+                }}
+                className="absolute top-5 right-5 z-30 w-11 h-11 rounded-full flex items-center justify-center bg-black/45 hover:bg-gold text-white hover:text-black border border-white/10 hover:border-gold transition-all duration-300 backdrop-blur-md active:scale-90 shadow-lg cursor-pointer"
+                title="Expand image"
+              >
+                <Maximize2 size={18} />
+              </button>
 
               {/* Bottom gradient */}
               <div className="absolute inset-0 pointer-events-none"
