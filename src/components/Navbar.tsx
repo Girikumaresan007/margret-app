@@ -20,6 +20,25 @@ export default function Navbar() {
   const location = useLocation();
   const navRef = useRef<HTMLElement>(null);
 
+  const handleNavLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
+    const isHash = path.includes('#');
+    const targetPathname = isHash ? path.split('#')[0] : path;
+    const targetHash = isHash ? path.split('#')[1] : '';
+
+    if (location.pathname === targetPathname) {
+      e.preventDefault();
+      if (targetHash) {
+        const element = document.getElementById(targetHash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      setIsOpen(false);
+    }
+  };
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
@@ -69,6 +88,7 @@ export default function Navbar() {
         <motion.div whileHover={{ scale: 1.02 }} transition={{ type: 'spring', stiffness: 300 }}>
           <Link to="/" className="flex items-center gap-2 lg:gap-3 group">
             <img
+              id="navbar-logo"
               src="/logo.png"
               alt="Margret AV Logo"
               className="h-12 lg:h-14 w-auto object-contain flex-shrink-0 -translate-y-[1px] lg:-translate-y-[2px]"
@@ -95,6 +115,7 @@ export default function Navbar() {
             <Link
               key={link.name}
               to={link.path}
+              onClick={(e) => handleNavLinkClick(e, link.path)}
               className="nav-link-item text-sm font-medium text-ink hover:text-gold transition-colors relative group opacity-0"
             >
               {link.name}
@@ -150,6 +171,7 @@ export default function Navbar() {
               >
                 <Link
                   to={link.path}
+                  onClick={(e) => handleNavLinkClick(e, link.path)}
                   className="text-xl font-display font-semibold text-ink hover:text-gold transition-colors inline-block relative py-1 group"
                 >
                   {link.name}

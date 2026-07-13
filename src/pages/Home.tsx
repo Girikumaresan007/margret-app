@@ -128,6 +128,27 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
+  // Force GSAP ScrollTrigger to recalculate trigger positions at key intervals after mount to handle layout shifts
+  useEffect(() => {
+    const refreshGSAP = () => ScrollTrigger.refresh();
+    
+    // Refresh immediately and at staggered intervals
+    refreshGSAP();
+    const t1 = setTimeout(refreshGSAP, 150);
+    const t2 = setTimeout(refreshGSAP, 400);
+    const t3 = setTimeout(refreshGSAP, 1000);
+    const t4 = setTimeout(refreshGSAP, 2000);
+
+    window.addEventListener('load', refreshGSAP);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+      window.removeEventListener('load', refreshGSAP);
+    };
+  }, []);
 
   // GSAP ScrollTrigger: Mission cards scrub reveal
   useEffect(() => {
@@ -184,19 +205,27 @@ export default function Home() {
             style={{ objectPosition: '65% center' }}
             fetchPriority="high"
           />
-          {/* Mobile view image */}
+          {/* Mobile Medium & Tablet view image */}
           <img
             src="/mobile-pic.png"
             alt="Hero Background"
-            className="block lg:hidden w-full h-full object-cover"
-            style={{ objectPosition: 'center center' }}
+            className="hidden min-[340px]:block lg:hidden w-full h-full object-cover"
+            style={{ objectPosition: 'center 48%' }}
+            fetchPriority="high"
+          />
+          {/* Mobile Small view image (<= 340px screens, e.g. 320px) */}
+          <img
+            src="/mobile%20small%20pic%20(1).png"
+            alt="Hero Background"
+            className="block min-[340px]:hidden w-full h-full object-cover"
+            style={{ objectPosition: 'center 48%' }}
             fetchPriority="high"
           />
           {/* Responsive gradient overlay */}
           <div
             className="absolute inset-0 block lg:hidden"
             style={{
-              background: 'linear-gradient(to bottom, #FAF6F0 0%, #FAF6F0 16%, transparent 28%, transparent 55%, #FAF6F0 66%, #FAF6F0 100%)'
+              background: 'linear-gradient(to bottom, #FAF6F0 0%, #FAF6F0 16%, transparent 28%, transparent 68%, #FAF6F0 82%, #FAF6F0 100%)'
             }}
           />
           <div
@@ -348,10 +377,11 @@ export default function Home() {
               fontWeight: 800,
               fontStyle: 'italic',
               lineHeight: 1.1,
-              background: 'linear-gradient(to bottom, #8B5A2B 0%, #4A2E1B 100%)',
+              background: 'linear-gradient(to bottom, #C69C6D 0%, #5C3A21 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              display: 'inline-block'
+              display: 'inline-block',
+              filter: 'drop-shadow(0 0 8px #FAF6F0) drop-shadow(0 0 16px #FAF6F0) drop-shadow(0 0 24px #FAF6F0)'
             }}
               className="text-[8.5vw] min-[375px]:text-[2.0rem] sm:text-[2.4rem] md:text-[2.7rem] mt-1">
               Forever

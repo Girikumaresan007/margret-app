@@ -23,6 +23,43 @@ const particles = [
 
 export default function SplashScreen({ onComplete }: SplashScreenProps) {
   const [phase, setPhase] = useState<'show' | 'animate' | 'exit'>('show');
+  const [logoDest, setLogoDest] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const fallbackScale = window.innerWidth >= 768 ? (56 / 195) : (48 / 145);
+      return {
+        x: -(window.innerWidth / 2 - 80),
+        y: -(window.innerHeight / 2 - 30),
+        scale: fallbackScale
+      };
+    }
+    return { x: -500, y: -300, scale: 0.25 };
+  });
+
+  useEffect(() => {
+    if (phase === 'animate' && typeof window !== 'undefined') {
+      const navbarLogo = document.getElementById('navbar-logo');
+      if (navbarLogo) {
+        const rect = navbarLogo.getBoundingClientRect();
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        
+        const splashLogoInitialSize = window.innerWidth >= 768 ? 195 : 145;
+        const targetCenterX = rect.left + rect.width / 2;
+        const targetCenterY = rect.top + rect.height / 2;
+        
+        const destX = targetCenterX - centerX;
+        const destY = targetCenterY - centerY;
+        const scale = rect.height / splashLogoInitialSize;
+        
+        setLogoDest({ x: destX, y: destY, scale });
+      } else {
+        const fallbackScale = window.innerWidth >= 768 ? (56 / 195) : (48 / 145);
+        const fallbackX = -(window.innerWidth / 2 - 80);
+        const fallbackY = -(window.innerHeight / 2 - 30);
+        setLogoDest({ x: fallbackX, y: fallbackY, scale: fallbackScale });
+      }
+    }
+  }, [phase]);
 
   useEffect(() => {
     // Add class to body to hide navbar logo during splash flight
@@ -303,14 +340,12 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         animate={
           phase === 'show'
             ? { opacity: 1, scale: 1, x: 0, y: 0 }
-            : (phase === 'animate' || phase === 'exit')
-              ? {
+            : {
                 opacity: 1,
-                scale: 0.25,
-                x: typeof window !== 'undefined' ? -(window.innerWidth / 2 - 80) : -500,
-                y: typeof window !== 'undefined' ? -(window.innerHeight / 2 - 30) : -300,
+                scale: logoDest.scale,
+                x: logoDest.x,
+                y: logoDest.y,
               }
-              : { opacity: 0, scale: 0.25, x: typeof window !== 'undefined' ? -(window.innerWidth / 2 - 80) : -500, y: typeof window !== 'undefined' ? -(window.innerHeight / 2 - 30) : -300 }
         }
         transition={
           phase === 'show'
