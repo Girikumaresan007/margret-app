@@ -487,7 +487,7 @@ export default function Home() {
           {/* Bottom Group (Cards + Stats + Button) - pushed to bottom using mt-auto */}
           <div className="w-full flex flex-col items-center mt-auto gap-2">
             {/* Service Cards (Stacked Vertically on mobile, horizontal grid on tablet) */}
-            <div className="w-full max-w-[250px] md:max-w-[620px] flex flex-col md:grid md:grid-cols-3 gap-1 md:gap-3.5">
+            <div className="w-full max-w-[210px] md:max-w-[620px] flex flex-col md:grid md:grid-cols-3 gap-1 md:gap-3.5">
               {[
                 { Icon: Monitor, title: 'LED Wall & Screens' },
                 { Icon: Volume2, title: 'Audio Excellence' },
@@ -500,17 +500,16 @@ export default function Home() {
                   transition={{ duration: 0.5, delay: 0.8 + i * 0.1, ease: 'easeOut' }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="bg-[#FFFDF9] border border-[#B8860B]/30 rounded-xl md:rounded-2xl py-1.5 md:py-2.5 px-3.5 md:px-4.5 flex items-center justify-between shadow-[0_4px_12px_rgba(184,134,11,0.07),0_2px_4px_rgba(0,0,0,0.02)] cursor-pointer active:scale-[0.98] transition-all"
+                  className="bg-[#FFFDF9] border border-[#B8860B]/30 rounded-xl md:rounded-2xl py-1.5 md:py-2.5 px-3.5 md:px-4.5 flex items-center justify-center shadow-[0_4px_12px_rgba(184,134,11,0.07),0_2px_4px_rgba(0,0,0,0.02)] cursor-pointer active:scale-[0.98] transition-all"
                 >
-                  <div className="flex items-center gap-2 md:gap-3.5">
+                  <div className="flex items-center gap-2 md:gap-3.5 w-[152px] md:w-[170px] shrink-0">
                     <div className="w-7 h-7 md:w-8 h-8 rounded-full bg-[#FAF6F0] flex items-center justify-center border border-[#B8860B]/18 shrink-0">
                       <Icon className="w-3.5 h-3.5 md:w-4 h-4 text-[#8B5A2B]" strokeWidth={1.8} />
                     </div>
-                    <span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600 }} className="text-[11.5px] md:text-[12.5px] text-[#1A1A1A] tracking-tight">
+                    <span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 600 }} className="text-[11.5px] md:text-[12.5px] text-[#1A1A1A] tracking-tight whitespace-nowrap">
                       {title}
                     </span>
                   </div>
-                  <ChevronDown className="w-3.5 h-3.5 md:w-4 h-4 text-[#8B5A2B]" strokeWidth={2.0} />
                 </motion.div>
               ))}
             </div>
