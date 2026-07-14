@@ -336,7 +336,7 @@ export default function About() {
             <div className="relative group p-4">
               <div className="absolute inset-0 bg-gold rounded-3xl translate-x-4 translate-y-4 transition-transform group-hover:translate-x-6 group-hover:translate-y-6" />
               <img
-                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800"
+                src="/about ceo pic.png"
                 alt="Founder & CEO"
                 className="relative rounded-3xl object-cover w-full aspect-[4/5] z-10"
               />
