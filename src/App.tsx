@@ -36,8 +36,8 @@ export default function App() {
   const [phase, setPhase] = useState<'loading' | 'splash' | 'ready'>('loading');
 
   useEffect(() => {
-    // Loading screen shows for 2 seconds, then transitions to splash
-    const timer = setTimeout(() => setPhase('splash'), 2000);
+    // Loading screen shows for 600ms, then transitions to splash
+    const timer = setTimeout(() => setPhase('splash'), 600);
     return () => clearTimeout(timer);
   }, []);
 
@@ -57,6 +57,9 @@ export default function App() {
   }, [phase]);
 
   const handleSplashComplete = () => {
+    if (typeof window !== 'undefined') {
+      (window as any).__splashPlayed = true;
+    }
     setPhase('ready');
   };
 

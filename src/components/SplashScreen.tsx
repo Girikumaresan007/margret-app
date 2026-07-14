@@ -42,15 +42,15 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         const rect = navbarLogo.getBoundingClientRect();
         const centerX = window.innerWidth / 2;
         const centerY = window.innerHeight / 2;
-        
+
         const splashLogoInitialSize = window.innerWidth >= 768 ? 195 : 145;
         const targetCenterX = rect.left + rect.width / 2;
         const targetCenterY = rect.top + rect.height / 2;
-        
+
         const destX = targetCenterX - centerX;
         const destY = targetCenterY - centerY;
         const scale = rect.height / splashLogoInitialSize;
-        
+
         setLogoDest({ x: destX, y: destY, scale });
       } else {
         const fallbackScale = window.innerWidth >= 768 ? (56 / 195) : (48 / 145);
@@ -65,10 +65,10 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     // Add class to body to hide navbar logo during splash flight
     document.body.classList.add('splash-active');
 
-    // Phase 1: Show the logo centered for 2 seconds
+    // Phase 1: Show the logo centered for 1800ms
     const showTimer = setTimeout(() => {
       setPhase('animate');
-    }, 2000);
+    }, 1800);
 
     return () => {
       document.body.classList.remove('splash-active');
@@ -89,10 +89,14 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
 
   useEffect(() => {
     if (phase === 'exit') {
+      if (typeof window !== 'undefined') {
+        (window as any).__splashPlayed = true;
+      }
+      // Dispatch event IMMEDIATELY when fade-out starts, so Home can animate in sync with the fade
+      window.dispatchEvent(new CustomEvent('splashComplete'));
+
       // Phase 3: Unmount splash screen once flight is fully complete (~1.0s total flight time + buffer)
       const completeTimer = setTimeout(() => {
-        // Dispatch event BEFORE calling onComplete so Home can start its animation
-        window.dispatchEvent(new CustomEvent('splashComplete'));
         onComplete();
       }, 500);
 
@@ -341,11 +345,11 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
           phase === 'show'
             ? { opacity: 1, scale: 1, x: 0, y: 0 }
             : {
-                opacity: 1,
-                scale: logoDest.scale,
-                x: logoDest.x,
-                y: logoDest.y,
-              }
+              opacity: 1,
+              scale: logoDest.scale,
+              x: logoDest.x,
+              y: logoDest.y,
+            }
         }
         transition={
           phase === 'show'

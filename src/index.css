@@ -27,7 +27,7 @@
 :root {
   background-color: #F5F2ED;
   color: #1A1A1A;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 body {
@@ -37,6 +37,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeSpeed;
+}
+
+body.scroll-pending main {
+  opacity: 0 !important;
+  visibility: hidden !important;
 }
 
 h1,

@@ -30,10 +30,10 @@ export default function Navbar() {
       if (targetHash) {
         const element = document.getElementById(targetHash);
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+          element.scrollIntoView({ behavior: 'auto' });
         }
       } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'auto' });
       }
       setIsOpen(false);
     }

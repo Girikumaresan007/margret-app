@@ -46,11 +46,15 @@ export default function ScrollToTop() {
     if (hash) {
       const targetId = decodeURIComponent(hash.slice(1));
       
+      // Mark body as scroll-pending to hide content until scrolling is resolved
+      document.body.classList.add('scroll-pending');
+
       const performScroll = () => {
         const element = document.getElementById(targetId);
         if (element) {
-          scrollElement(element, isSamePage);
+          scrollElement(element, false);
           ScrollTrigger.refresh();
+          document.body.classList.remove('scroll-pending');
           return true;
         }
         return false;
@@ -66,12 +70,16 @@ export default function ScrollToTop() {
           if (!done && retries < 15) {
             retries++;
             setTimeout(tryScroll, 60);
+          } else {
+            // Remove scroll-pending class if max retries reached or succeeded
+            document.body.classList.remove('scroll-pending');
           }
         };
         setTimeout(tryScroll, 50);
       }
     } else {
       // No hash: scroll to top instantly
+      document.body.classList.remove('scroll-pending');
       scrollWindow(0, 0, false);
       setTimeout(() => ScrollTrigger.refresh(), 50);
 

@@ -114,12 +114,81 @@ const techMarqueeItems = [
   { name: "Professional Crew", icon: Users }
 ];
 
+// Reusable high-performance split text component using framer-motion
+function SplitText({ text, delayOffset = 0, duration = 0.55, startTrigger = true }: { text: string; delayOffset?: number; duration?: number; startTrigger?: boolean }) {
+  const words = text.split(' ');
+  return (
+    <span className="inline-block">
+      {words.map((word, wordIdx) => (
+        <span key={wordIdx} className="inline-block whitespace-nowrap">
+          {word.split('').map((char, charIdx) => {
+            const delay = delayOffset + wordIdx * 0.08 + charIdx * 0.025;
+            return (
+              <motion.span
+                key={charIdx}
+                initial={{ opacity: 0, y: '35%', rotateX: -15 }}
+                animate={startTrigger ? { opacity: 1, y: 0, rotateX: 0 } : { opacity: 0, y: '35%', rotateX: -15 }}
+                transition={{
+                  duration: duration,
+                  delay: delay,
+                  ease: [0.215, 0.61, 0.355, 1], // easeOutCubic
+                }}
+                className="inline-block origin-bottom transition-colors duration-200 hover:text-[#B8860B]"
+                style={{ backfaceVisibility: 'hidden' }}
+              >
+                {char}
+              </motion.span>
+            );
+          })}
+          {wordIdx < words.length - 1 && (
+            <span className="inline-block" style={{ width: '0.24em' }}>
+              &nbsp;
+            </span>
+          )}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 export default function Home() {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [playVideo1, setPlayVideo1] = useState(false);
   const [playVideo2, setPlayVideo2] = useState(false);
   const missionRef = useRef<HTMLElement>(null);
   const servicesRef = useRef<HTMLElement>(null);
+  const [startAnimations, setStartAnimations] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !!(window as any).__splashPlayed;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    if ((window as any).__splashPlayed) {
+      setStartAnimations(true);
+      return;
+    }
+
+    const handleSplash = () => {
+      setStartAnimations(true);
+      (window as any).__splashPlayed = true;
+    };
+
+    window.addEventListener('splashComplete', handleSplash, { once: true });
+    
+    // Fallback: trigger after 3.5 seconds in case splash completes or is skipped
+    const fallback = setTimeout(() => {
+      setStartAnimations(true);
+    }, 3500);
+
+    return () => {
+      window.removeEventListener('splashComplete', handleSplash);
+      clearTimeout(fallback);
+    };
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -244,7 +313,7 @@ export default function Home() {
           <div className="w-full lg:max-w-[48%] flex flex-col pt-3 my-auto">
 
             {/* 1 ▸ BADGES */}
-            <motion.div initial={{ opacity: 0, y: -14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}
+            <motion.div initial={{ opacity: 0, y: -14 }} animate={startAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: -14 }} transition={{ duration: 0.55 }}
               className="flex flex-wrap md:flex-nowrap items-center gap-x-3 gap-y-1.5 md:gap-x-0 mb-2.5">
               {[
                 { Icon: Gem, label: 'Premium Quality' },
@@ -267,29 +336,39 @@ export default function Home() {
             </motion.div>
 
             {/* 2 ▸ HEADING */}
-            <motion.div initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75, delay: 0.08 }} className="mt-2.5 mb-4.5">
+            <div className="mt-2.5 mb-4.5">
               <h1 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 700, lineHeight: 1.06 }}
                 className="text-[2.4rem] sm:text-[2.8rem] md:text-[3.2rem] lg:text-[4rem] text-[#1A1A1A] tracking-tight whitespace-nowrap">
-                We Create Moments<br />You Remember
+                <SplitText text="We Create Moments" delayOffset={0.05} startTrigger={startAnimations} />
+                <br />
+                <SplitText text="You Remember" delayOffset={0.35} startTrigger={startAnimations} />
               </h1>
-              <p style={{
-                fontFamily: '"Cormorant Garamond", serif',
-                fontWeight: 700,
-                fontStyle: 'italic',
-                lineHeight: 1.1,
-                background: 'linear-gradient(to bottom, #C69C6D 0%, #5C3A21 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                display: 'inline-block'
-              }}
+              <motion.p
+                initial={{ opacity: 0, scale: 0.8, filter: 'blur(4px)' }}
+                animate={startAnimations ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : { opacity: 0, scale: 0.8, filter: 'blur(4px)' }}
+                transition={{ duration: 0.6, delay: 0.55, ease: 'easeOut' }}
+                style={{
+                  fontFamily: '"Cormorant Garamond", serif',
+                  fontWeight: 700,
+                  fontStyle: 'italic',
+                  lineHeight: 1.1,
+                  background: 'linear-gradient(to bottom, #EAD09D 0%, #B8860B 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  display: 'inline-block'
+                }}
                 className="text-[1.8rem] sm:text-[2.2rem] md:text-[2.5rem] lg:text-[3rem] mt-0.5">
                 Forever
-              </p>
-              <div className="w-10 h-[3px] rounded-full bg-[#B8860B] mt-3" />
-            </motion.div>
+              </motion.p>
+              <motion.div
+                initial={{ width: 0, opacity: 0 }}
+                animate={startAnimations ? { width: 40, opacity: 1 } : { width: 0, opacity: 0 }}
+                transition={{ duration: 0.5, delay: 0.7 }}
+                className="w-10 h-[3px] rounded-full bg-[#B8860B] mt-3" />
+            </div>
 
             {/* 3 ▸ DESCRIPTION */}
-            <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.65, delay: 0.2 }} className="mb-2">
+            <motion.div initial={{ opacity: 0, y: 18 }} animate={startAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }} transition={{ duration: 0.65, delay: 0.65 }} className="mb-2">
               <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 400 }}
                 className="text-gray-800 text-[14px] leading-[1.5] max-w-[460px]">
                 Professional LED, Audio &amp; Visual solutions for weddings,<br />
@@ -314,8 +393,8 @@ export default function Home() {
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.32 + i * 0.1 }}
+                animate={startAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                transition={{ duration: 0.5, delay: 0.8 + i * 0.1 }}
                 whileHover={{ y: -3, boxShadow: '0 14px 30px -4px rgba(0,0,0,0.08), 0 6px 16px -2px rgba(184,134,11,0.04)' }}
                 className="bg-gradient-to-br from-[#FAF6F0]/40 to-white/10 backdrop-blur-md border border-[#B8860B]/35 rounded-2xl md:rounded-3xl py-3 px-2 sm:py-4.5 sm:px-3 md:py-4.5 md:px-3.5 flex flex-col sm:flex-row items-center gap-2 sm:gap-3 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.06),0_4px_12px_-2px_rgba(184,134,11,0.03)] cursor-default transition-all duration-300"
               >
@@ -334,9 +413,9 @@ export default function Home() {
 
           {/* 5 ▸ STATS - combined single wide glass card */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.52 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={startAnimations ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.7, delay: 0.95, ease: 'easeOut' }}
             className="w-full max-w-[760px] bg-gradient-to-r from-[#FAF6F0]/40 via-[#FAF6F0]/20 to-white/10 backdrop-blur-md border border-[#B8860B]/12 rounded-2xl md:rounded-3xl py-4 px-3 md:py-4.5 md:px-4 grid grid-cols-2 gap-y-3.5 gap-x-2 sm:flex sm:flex-row sm:items-stretch sm:justify-between sm:gap-0 mt-auto mb-1"
           >
             {[
@@ -345,20 +424,30 @@ export default function Home() {
               { Icon: CustomUsers, num: '500+', label: 'Happy Clients', size: 35 },
               { Icon: CustomSupport, num: '24/7', label: 'Support', size: 30 },
             ].map(({ Icon, num, label, size }, i, arr) => (
-              <div key={i} className="flex flex-1 items-center justify-center">
-                <div className="flex items-center gap-2 md:gap-2.5 px-2.5 md:px-3.5">
-                  <div className="w-[50px] h-[50px] rounded-full bg-[#FAF6F0]/40 flex items-center justify-center shadow-sm shrink-0 border border-white/80">
-                    <Icon className="text-[#8B5A2B]" size={size} />
-                  </div>
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                animate={startAnimations ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.9, y: 10 }}
+                transition={{ duration: 0.5, delay: 1.1 + i * 0.1, ease: 'easeOut' }}
+                className="flex flex-1 items-center justify-center"
+              >
+                <div className="flex items-center gap-2 md:gap-2.5 px-2.5 md:px-3.5 group/stat cursor-pointer">
+                  <motion.div
+                    whileHover={{ scale: 1.1, backgroundColor: 'rgba(250,246,240,0.7)' }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                    className="w-[50px] h-[50px] rounded-full bg-[#FAF6F0]/40 flex items-center justify-center shadow-sm shrink-0 border border-white/80"
+                  >
+                    <Icon className="text-[#8B5A2B] group-hover/stat:text-[#B8860B] transition-colors" size={size} />
+                  </motion.div>
                   <div className="flex flex-col">
                     <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 700 }} className="text-[1.2rem] md:text-[1.3rem] text-[#1A1A1A] leading-none">{num}</p>
-                    <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500 }} className="text-[9.5px] md:text-[10px] text-gray-700 mt-1 whitespace-nowrap leading-none">{label}</p>
+                    <p style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 500 }} className="text-[9.5px] md:text-[10px] text-gray-700 mt-1 whitespace-nowrap leading-none group-hover/stat:text-black transition-colors">{label}</p>
                   </div>
                 </div>
                 {i < arr.length - 1 && (
                   <div className="hidden sm:block h-12 w-[1px] bg-[#B8860B]/18 self-center ml-auto" />
                 )}
-              </div>
+              </motion.div>
             ))}
           </motion.div>
 
@@ -367,25 +456,32 @@ export default function Home() {
         {/* Mobile Content panel (Visible under lg) */}
         <div className="relative z-10 flex lg:hidden flex-col justify-between px-4 sm:px-6 pt-[74px] pb-3 md:pb-6 min-h-[100svh] md:min-h-screen w-full">
           {/* Top text block */}
+          {/* Top text block */}
           <div className="w-full flex flex-col items-center text-center mt-1">
             <h1 style={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 800, lineHeight: 1.1 }}
               className="text-[10.5vw] min-[375px]:text-[2.45rem] sm:text-[2.85rem] md:text-[3.25rem] text-[#1A1A1A] tracking-tight">
-              We Create Moments<br />You Remember
+              <SplitText text="We Create Moments" delayOffset={0.05} startTrigger={startAnimations} />
+              <br />
+              <SplitText text="You Remember" delayOffset={0.35} startTrigger={startAnimations} />
             </h1>
-            <p style={{
-              fontFamily: '"Cormorant Garamond", serif',
-              fontWeight: 800,
-              fontStyle: 'italic',
-              lineHeight: 1.1,
-              background: 'linear-gradient(to bottom, #C69C6D 0%, #5C3A21 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              display: 'inline-block',
-              filter: 'drop-shadow(0 0 8px #FAF6F0) drop-shadow(0 0 16px #FAF6F0) drop-shadow(0 0 24px #FAF6F0)'
-            }}
+            <motion.p
+              initial={{ opacity: 0, scale: 0.8, filter: 'blur(4px)' }}
+              animate={startAnimations ? { opacity: 1, scale: 1, filter: 'blur(0px)' } : { opacity: 0, scale: 0.8, filter: 'blur(4px)' }}
+              transition={{ duration: 0.6, delay: 0.55, ease: 'easeOut' }}
+              style={{
+                fontFamily: '"Cormorant Garamond", serif',
+                fontWeight: 800,
+                fontStyle: 'italic',
+                lineHeight: 1.1,
+                background: 'linear-gradient(to bottom, #EAD09D 0%, #B8860B 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                display: 'inline-block',
+                filter: 'drop-shadow(0 0 8px #FAF6F0) drop-shadow(0 0 16px #FAF6F0) drop-shadow(0 0 24px #FAF6F0)'
+              }}
               className="text-[8.5vw] min-[375px]:text-[2.0rem] sm:text-[2.4rem] md:text-[2.7rem] mt-1">
               Forever
-            </p>
+            </motion.p>
           </div>
 
           {/* Bottom Group (Cards + Stats + Button) - pushed to bottom using mt-auto */}
@@ -397,8 +493,13 @@ export default function Home() {
                 { Icon: Volume2, title: 'Audio Excellence' },
                 { Icon: Lightbulb, title: 'Lighting Design' },
               ].map(({ Icon, title }, i) => (
-                <div
+                <motion.div
                   key={i}
+                  initial={{ opacity: 0, y: 12, scale: 0.96 }}
+                  animate={startAnimations ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 12, scale: 0.96 }}
+                  transition={{ duration: 0.5, delay: 0.8 + i * 0.1, ease: 'easeOut' }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   className="bg-[#FFFDF9] border border-[#B8860B]/30 rounded-xl md:rounded-2xl py-1.5 md:py-2.5 px-3.5 md:px-4.5 flex items-center justify-between shadow-[0_4px_12px_rgba(184,134,11,0.07),0_2px_4px_rgba(0,0,0,0.02)] cursor-pointer active:scale-[0.98] transition-all"
                 >
                   <div className="flex items-center gap-2 md:gap-3.5">
@@ -410,7 +511,7 @@ export default function Home() {
                     </span>
                   </div>
                   <ChevronDown className="w-3.5 h-3.5 md:w-4 h-4 text-[#8B5A2B]" strokeWidth={2.0} />
-                </div>
+                </motion.div>
               ))}
             </div>
 
@@ -424,7 +525,13 @@ export default function Home() {
                   { Icon: CustomUsers, num: '500+', label: 'Clients', size: 21, tabSize: 24 },
                   { Icon: CustomSupport, num: '24/7', label: 'Support', size: 19, tabSize: 22 },
                 ].map(({ Icon, num, label, size, tabSize }, i, arr) => (
-                  <div key={i} className="flex flex-col items-center text-center relative px-0.5 md:px-2">
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, scale: 0.9, y: 8 }}
+                    animate={startAnimations ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.9, y: 8 }}
+                    transition={{ duration: 0.45, delay: 1.05 + i * 0.08, ease: 'easeOut' }}
+                    className="flex flex-col items-center text-center relative px-0.5 md:px-2"
+                  >
                     {/* Circular icon container */}
                     <div className="w-[36px] md:w-[42px] h-[36px] md:h-[42px] rounded-full bg-[#FAF6F0]/80 flex items-center justify-center border border-[#B8860B]/15 shadow-sm mb-1.5">
                       <Icon className="text-[#8B5A2B] block md:hidden" size={size} />
@@ -442,7 +549,7 @@ export default function Home() {
                     {i < arr.length - 1 && (
                       <div className="absolute right-0 top-1/2 -translate-y-1/2 h-10 md:h-12 w-[1px] bg-[#B8860B]/40" />
                     )}
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>

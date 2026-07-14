@@ -146,7 +146,7 @@ export default function About() {
           className="absolute inset-0 origin-center overflow-hidden"
         >
           <img
-            src="/con-2.webp"
+            src="/about image.png"
             alt="Premium LED Wall and Stage Production"
             className="w-full h-full object-cover"
           />
